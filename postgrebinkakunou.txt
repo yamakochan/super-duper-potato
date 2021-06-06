@@ -1,0 +1,43 @@
+どちらの方法が適切かを決定するためには、それぞれの方法における制限を理解しなければなりません。 bytea データ型は非常に巨大なバイナリデータを格納するのには適していません。bytea 型の列は 1 ギガバイトまでのバイナリデータを保存できますが、そういった巨大な値を処理する時、非常に多量のメモリ （RAM） が必要になります。 ラージオブジェクトによるバイナリデータの格納方法は、非常に巨大な値を格納するのに適していますが、こちらの場合も制限があります。 特に、ラージオブジェクトを含む行を削除しても、ラージオブジェクトは削除されません。 ラージオブジェクトを削除するためには、別途操作を行わなければなりません。 ラージオブジェクトにはまた、セキュリティに関する問題がいくつかあります。 データベースに接続した全てのユーザは、ラージオブジェクトを含む行を参照、変更する権限がなくても、全てのラージオブジェクトを参照、変更することができるからです。
+
+7.2 は bytea データ型をサポートする JDBC ドライバの最初のリリースです。 7.2 におけるこの機能の導入により、以前のリリースの動作と違いが発生しています。 7.2 における getBytes()、setBytes()、getBinaryStream() および setBinaryStream() メソッドは bytea データ型に対して操作を行います。 7.1 でのこれらのメソッドは、ラージオブジェクトに関連した OID データ型に対して操作を行います。 Connection の compatible プロパティを 7.1 という値に設定することで、ドライバを古い 7.1 の動作に戻すことができます。
+
+bytea データ型を使用するには、単に、getBytes()、setBytes()、getBinaryStream()、setBinaryStream() メソッドを使用して下さい。
+
+ラージオブジェクト機能を使用するためには、PostgreSQL JDBC ドライバで提供される LargeObject API を使用、または、getBLOB() と setBLOB() メソッドを使用して下さい。
+
+Important: PostgreSQL では、SQL トランザクション内でラージオブジェクトをアクセスしなければなりません。 入力パラメータとして false を指定した setAutoCommit() メソッドを使用して、トランザクションを開くことができます。
+
+Note: 将来の JDBC ドライバでは、getBLOB() と setBLOB() メソッドはラージオブジェクトと関係せず、bytea データ型に対する操作になります。 ですから、ラージオブジェクトを使用する予定ならば、LargeObject API を使用することを推奨します。
+
+Example 5-4. バイナリデータの例
+
+例として、画像のファイル名を持つテーブルがあり、また、bytea 列に画像を格納したいという場合を考えます。
+
+CREATE TABLE images (imgname text, img bytea);
+画像を挿入するには、以下のようにします。
+
+File file = new File("myimage.gif");
+FileInputStream fis = new FileInputStream(file);
+PreparedStatement ps = conn.prepareStatement("INSERT INTO images VALUES (?, ?)");
+ps.setString(1, file.getName());
+ps.setBinaryStream(2, fis, file.length());
+ps.executeUpdate();
+ps.close();
+fis.close();
+ここで、setBinaryStream() はストリームから bytea 型の列へバイト集合を転送します。 また、画像の内容が既に byte[] 内にある場合、setBytes() メソッドを使用してもこれを行うことができます。
+
+画像の取り出しはもっと簡単です。 （ここでは PreparedStatement を使用していますが、Statement クラスを使用しても同じことができます。
+
+PreparedStatement ps = con.prepareStatement("SELECT img FROM images WHERE imgname=?");
+ps.setString((1, "myimage.gif");
+ResultSet rs = ps.executeQuery();
+if (rs != null) {
+    while(rs.next()) {
+        byte[] imgBytes = rs.getBytes(1);
+        // ここで、何らかの方法でストリームを使う
+    }
+    rs.close();
+}
+ps.close();
+ここで、バイナリデータは byte[] として取り出されました。 InputStream を使用しても可能です。

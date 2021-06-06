@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta caraset="UTF-8">
+    <link rel="stylesheet" href="index.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes">
+    <title>CardGame</title>
+</head>
+<body>
+    <div id="view_canvas" class="canvasHolder" style="display: none;">
+        <canvas id="myCanvas" width="1100" height="850"></canvas>
+        <!-- <canvas id="myCanvas" width="800" height="600"></canvas> -->
+        <!-- <canvas id="myCanvas" width="320" height="400"></canvas> -->
+        <!-- <canvas id="myCanvas" width="500" height="500"></canvas> -->
+    </div>
+
+
+    <!--<h1>Marbles</h1>--> 
+    <div id="view_login" class="container">
+        <div>
+            <img border="0" src="./image/game_title.png" width="420" height="200" alt="cardgame" class="xtitle">
+        <div/>
+
+        <div id="blocks">
+            <div id="blockA">
+                <div class="name_iptxt">
+                    <label class="ef1">
+                    <input type="text" id="username_text" placeholder="Name">
+                    </label>
+                </div>
+
+            	<div class="room_select">
+                	<select id="room_list">
+                	  <option value=0>ROOM01</option>
+                	  <option value=1>ROOM02</option>
+                	  <option value=2>ROOM03</option>
+                	</select>
+                	<button id="room_in_out">in</button>
+            	</div>
+            </div>
+
+            <div id="members">
+                <p>- Room member -<p/>
+                <ul id="member_list" class="mem_list">
+                </ul>
+            </div>
+        </div>
+
+
+    	<div>
+            <button type="button" id="game_start" class="start_btn" >Start Game</button>
+    	</div>
+
+        <div id="footer">
+            <div>
+                <hr>
+            </div>
+            <div class="msg_iptxt">
+                <label class="ef2">
+                <input type="text" id="message_text" disabled="true" placeholder="Message">
+                </label>
+                <button type="button" id="message_send" disabled="true">Send</button>
+            </div>
+
+            <div id="message_list" class="msg_list">
+            </div>
+            <div>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <!-- ｊｓを反映させる -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script src="/js/client.js"></script>
+    <script src="/js/card-base.js"></script>
+    <script src="/js/card-main_obj.js"></script>
+    <script src="/js/card-button.js"></script>
+</body>
+</html>

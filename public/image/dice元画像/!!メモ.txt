@@ -1,0 +1,4 @@
+・shoeboxのanimation frame sheetで作成。
+・settings advancedで fraes alpha をfalseに変更
+
+※spritesだとうまくいかない..frameの指定（２次元配列）がうまくいってない模様。
