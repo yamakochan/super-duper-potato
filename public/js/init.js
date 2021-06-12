@@ -4,7 +4,6 @@ function init() {
     cns_boadHeight = 1281;
 	if(window.innerWidth < cns_boadWidth){
 		cns_stageWidth = window.innerWidth;
-
 	}else{
 		cns_stageWidth = cns_boadWidth;
 	}
@@ -15,8 +14,8 @@ function init() {
 	}
 
 	const canvasElement = document.getElementById("myCanvas");
-	canvasElement.setAttrigute("width" ,cns_stageWidth);
-	canvasElement.setAttrigute("height" ,cns_stageHeight);
+	canvasElement.setAttribute("width" ,cns_stageWidth);
+	canvasElement.setAttribute("height" ,cns_stageHeight);
 
 	stage = new createjs.Stage(canvasElement);
 
