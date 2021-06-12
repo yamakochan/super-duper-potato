@@ -17,7 +17,7 @@ function init() {
 	canvasElement.setAttribute("width" ,cns_stageWidth);
 	canvasElement.setAttribute("height" ,cns_stageHeight);
 
-	stage = new createjs.Stage(canvasElement);
+	stage = new createjs.StageGL(canvasElement);
 
 	//パスプレフィックス カードパスのプレフィックス
 	cns_passPrefix = ".";
