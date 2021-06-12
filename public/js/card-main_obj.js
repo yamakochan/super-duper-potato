@@ -148,7 +148,7 @@ class Place extends createjs.Container{
 	}
 
     srtPlaceCard(arg_card,arg_nX,arg_nY){
-    	createjs.Sound.play("srthand");
+    	createjs.Sound.play("place");
 	 	arg_card.moveCard(arg_nX, arg_nY);
 
     	this.removeChild(arg_card);
@@ -253,7 +253,6 @@ class Cemetary extends createjs.Container{
 		 		xcardcnt++;
 			}	
 	 	}
-
 	 	this.spread = true;
 	}
 }
@@ -280,6 +279,7 @@ class Card extends createjs.Container{
         this.gray.graphics.beginFill("darkgray");
 		this.gray.graphics.drawRoundRect(this.x, this.y, cns_cardWidth, cns_cardHeight, 0, 0);
 		this.gray.alpha = 0.5;
+		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
         this.addChild(this.gray); // 表示リストに追加
 
         this.faceUp();
@@ -385,25 +385,33 @@ class Card extends createjs.Container{
  	faceUp(){
 		this.head.visible = true;
 		this.tail.visible = false;
+		this.gray.uncache();
 		this.gray.visible = false;
+		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
  	}
 
  	faceDown(){
 		this.head.visible = false;
 		this.tail.visible = true;
+		this.gray.uncache();
 		this.gray.visible = false;
+		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
  	}
 
  	faceGray(){
 		this.head.visible = true;
 		this.tail.visible = false;
+		this.gray.uncache();
 		this.gray.visible = true;
+		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
  	}
 
  	hide(){
 		this.head.visible = false;
 		this.tail.visible = false;
+		this.gray.uncache();
 		this.gray.visible = false;
+		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
  	}
 
  	cloneCard(arg_card){
@@ -446,7 +454,7 @@ class OtherPlace extends createjs.Container{
 	}
 
     srtPlaceCard(arg_piece,arg_nX,arg_nY){
-    	createjs.Sound.play("piece");
+    	createjs.Sound.play("srthand");
 	 	arg_piece.movePiece(arg_nX, arg_nY);
 
     	this.removeChild(arg_piece);
@@ -470,7 +478,7 @@ class Piece extends createjs.Container{
 		this.shape.graphics.drawRoundRect(0, 0, 30, 30, 0, 0);
 		this.shape.shadow = new createjs.Shadow(arg_color, 1, 1, 3);
 		this.shape.alpha = 1;
-
+		this.shape.cache(-2,-2,34,34);
         this.addChild(this.shape); // 表示リストに追加
 
 	    this.text =  new createjs.Text(arg_no, "14px sans-serif", "GhostWhite");
@@ -478,6 +486,7 @@ class Piece extends createjs.Container{
 		this.text.textBaseline = "top";
 		this.text.x = 8;
 		this.text.y = 10;
+		this.text.cache(0,0,15,20);
 		this.addChild(this.text);
 
         // this.on('tick',this.update,this);

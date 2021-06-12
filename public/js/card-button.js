@@ -8,6 +8,7 @@ class CancelButton extends createjs.Container{
         this.buttonShape.graphics.beginFill("hsl(300, 70%, 50%)");
 		this.buttonShape.graphics.drawRoundRect(0, 0, cns_buttonWidth, cns_buttonHeight, 5, 5);
 		this.buttonShape.alpha = 0.5;
+		this.buttonShape.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
 		this.addChild(this.buttonShape); 
 
 	    this.buttonText =  new createjs.Text("cancel", "14px sans-serif", "GhostWhite");
@@ -16,6 +17,7 @@ class CancelButton extends createjs.Container{
 		this.buttonText.x = 26;
 		this.buttonText.y = 8;
 		this.buttonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		this.buttonText.cache(0,0,cns_buttonWidth-26,cns_buttonHeight-8);
 		this.addChild(this.buttonText);
 
         // this.on('tick',this.update,this);
@@ -43,6 +45,7 @@ class AbstButton extends createjs.Container{
         this.buttonShape.graphics.beginLinearGradientFill([this.color,"aliceblue",this.color],[0.4,0.6,1.0],50,0,50,30);
 		this.buttonShape.graphics.drawRoundRect(0, 0, cns_buttonWidth, cns_buttonHeight, 5, 5);
 		this.buttonShape.alpha = this.offAlpha;
+		this.buttonShape.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
 		this.addChild(this.buttonShape); 
 
 	    this.buttonText =  new createjs.Text(arg_text, "14px sans-serif", "GhostWhite");
@@ -51,6 +54,7 @@ class AbstButton extends createjs.Container{
 		this.buttonText.x = cns_buttonWidth / 2 - this.text.length * 5;
 		this.buttonText.y = 8;
 		this.buttonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		this.buttonText.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
 		this.addChild(this.buttonText);
 
         // this.on('tick',this.update,this);
@@ -62,7 +66,9 @@ class AbstButton extends createjs.Container{
 	}
 
 	handleDown(event){
+		this.buttonShape.uncache();
 		this.buttonShape.alpha = this.onAlpha;
+		this.buttonShape.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.buttonPush   = true;
@@ -72,7 +78,9 @@ class AbstButton extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
 		if(Math.abs(this.dragPointX - stage.mouseX) > 30 || Math.abs(this.dragPointY - stage.mouseY) > 30){
 	        this.buttonPush = false;
+			this.buttonShape.uncache();
 			this.buttonShape.alpha = this.offAlpha;
+			this.buttonShape.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
         }
     }
 
@@ -251,8 +259,11 @@ class DiceButton extends createjs.Container{
 			let diceButtonShape = new createjs.Shape();
 			//グラデーション指定：[色1,色2,色3],[色2開始割合、色3開始割合、色3終了割合],開始位置x,y,終了位置x,y
 	        diceButtonShape.graphics.beginLinearGradientFill(["dimgray","aliceblue","dimgray"],[0.4,0.6,1.0],50,0,50,30);
-			diceButtonShape.graphics.drawRoundRect(20 * i, 0, 19, 30, 5, 5);
+			diceButtonShape.graphics.drawRoundRect(0, 0, 19, 30, 5, 5);
+			diceButtonShape.x = 20 * i;
+			diceButtonShape.y = 0;
 			diceButtonShape.alpha = 0.5;
+			diceButtonShape.cache(0,0,19,30);
 			this.diceButton[i].addChild(diceButtonShape); 
 
 		    let diceButtonText =  new createjs.Text("x" + (i+1), "14px sans-serif", "GhostWhite");
@@ -261,6 +272,7 @@ class DiceButton extends createjs.Container{
 			diceButtonText.x = 1 + 20 * i;
 			diceButtonText.y = 8;
 			diceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+			diceButtonText.cache(0,0,19,30);
 			this.diceButton[i].addChild(diceButtonText);
 
 			this.addChild(this.diceButton[i]);
@@ -272,6 +284,7 @@ class DiceButton extends createjs.Container{
 		diceButtonText.x = 5;
 		diceButtonText.y = -15;
 		diceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		diceButtonText.cache(0,0,40,15);
 		this.addChild(diceButtonText);
 
 		info.addChild(this);
@@ -291,7 +304,9 @@ class DiceButton extends createjs.Container{
 	diceHandleDown1(event){
 		judge.clearButton();
 
+		this.diceButton[0].children[0].uncache();
 		this.diceButton[0].children[0].alpha = 1.0;
+		this.diceButton[0].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.dicePush   = true;
@@ -300,7 +315,9 @@ class DiceButton extends createjs.Container{
 	diceHandleDown2(event){
 		judge.clearButton();
 
+		this.diceButton[1].children[0].uncache();
 		this.diceButton[1].children[0].alpha = 1.0;
+		this.diceButton[1].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.dicePush   = true;
@@ -309,7 +326,9 @@ class DiceButton extends createjs.Container{
 	diceHandleDown3(event){
 		judge.clearButton();
 
+		this.diceButton[2].children[0].uncache();
 		this.diceButton[2].children[0].alpha = 1.0;
+		this.diceButton[2].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.dicePush   = true;
@@ -318,7 +337,9 @@ class DiceButton extends createjs.Container{
 	diceHandleDown4(event){
 		judge.clearButton();
 
+		this.diceButton[3].children[0].uncache();
 		this.diceButton[3].children[0].alpha = 1.0;
+		this.diceButton[3].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.dicePush   = true;
@@ -327,7 +348,9 @@ class DiceButton extends createjs.Container{
 	diceHandleDown5(event){
 		judge.clearButton();
 
+		this.diceButton[4].children[0].uncache();
 		this.diceButton[4].children[0].alpha = 1.0;
+		this.diceButton[4].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.dicePush   = true;
@@ -338,7 +361,9 @@ class DiceButton extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
 		if(Math.abs(this.dragPointX - stage.mouseX) > 15 || Math.abs(this.dragPointY - stage.mouseY) > 15){
 	        this.dicePush = false;
+			this.diceButton[this.no - 1].children[0].uncache();
 			this.diceButton[this.no - 1].children[0].alpha = 0.5;
+			this.diceButton[this.no - 1].children[0].cache(0,0,19,30);
         }
     }
 
@@ -356,7 +381,9 @@ class DiceButton extends createjs.Container{
 						 Math.floor(Math.random() * 6) + 1]
 			});
  		}
+		this.diceButton[this.no - 1].children[0].uncache();
 		this.diceButton[this.no - 1].children[0].alpha = 0.5;
+		this.diceButton[this.no - 1].children[0].cache(0,0,19,30);
  	}
 }
 
@@ -374,8 +401,11 @@ class PieceButton extends createjs.Container{
 			let pieceButtonShape = new createjs.Shape();
 			//グラデーション指定：[色1,色2,色3],[色2開始割合、色3開始割合、色3終了割合],開始位置x,y,終了位置x,y
 	        pieceButtonShape.graphics.beginLinearGradientFill(["#00cccc","aliceblue","#00cccc"],[0.4,0.6,1.0],50,0,50,30);
-			pieceButtonShape.graphics.drawRoundRect(20 * i, 0, 19, 30, 5, 5);
+			pieceButtonShape.graphics.drawRoundRect(0, 0, 19, 30, 5, 5);
+			pieceButtonShape.x = 20 * i;
+			pieceButtonShape.y = 0;
 			pieceButtonShape.alpha = 0.5;
+			pieceButtonShape.cache(0,0,19,30);
 			this.pieceButton[i].addChild(pieceButtonShape); 
 
 			let xtext = i + 1;
@@ -386,6 +416,7 @@ class PieceButton extends createjs.Container{
 			pieceButtonText.x = 4 + 20 * i - Math.floor(i/6) * 3;
 			pieceButtonText.y = 8;
 			pieceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+			pieceButtonText.cache(0,0,15,22);
 			this.pieceButton[i].addChild(pieceButtonText);
 
 			this.addChild(this.pieceButton[i]);
@@ -397,6 +428,7 @@ class PieceButton extends createjs.Container{
 		pieceButtonText.x = 5;
 		pieceButtonText.y = -15;
 		pieceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		pieceButtonText.cache(0,0,40,18);
 		this.addChild(pieceButtonText);
 
 		info.addChild(this);
@@ -417,7 +449,9 @@ class PieceButton extends createjs.Container{
 	pieceHandleDown1(event){
 		judge.clearButton();
 
+		this.pieceButton[0].children[0].uncache();
 		this.pieceButton[0].children[0].alpha = 1.0;
+		this.pieceButton[0].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.piecePush   = true;
@@ -426,7 +460,9 @@ class PieceButton extends createjs.Container{
 	pieceHandleDown2(event){
 		judge.clearButton();
 
+		this.pieceButton[1].children[0].uncache();
 		this.pieceButton[1].children[0].alpha = 1.0;
+		this.pieceButton[1].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.piecePush   = true;
@@ -435,7 +471,9 @@ class PieceButton extends createjs.Container{
 	pieceHandleDown3(event){
 		judge.clearButton();
 
+		this.pieceButton[2].children[0].uncache();
 		this.pieceButton[2].children[0].alpha = 1.0;
+		this.pieceButton[2].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.piecePush   = true;
@@ -444,7 +482,9 @@ class PieceButton extends createjs.Container{
 	pieceHandleDown4(event){
 		judge.clearButton();
 
+		this.pieceButton[3].children[0].uncache();
 		this.pieceButton[3].children[0].alpha = 1.0;
+		this.pieceButton[3].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.piecePush   = true;
@@ -453,7 +493,9 @@ class PieceButton extends createjs.Container{
 	pieceHandleDown5(event){
 		judge.clearButton();
 
+		this.pieceButton[4].children[0].uncache();
 		this.pieceButton[4].children[0].alpha = 1.0;
+		this.pieceButton[4].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.piecePush   = true;
@@ -462,7 +504,9 @@ class PieceButton extends createjs.Container{
 	pieceHandleDown6(event){
 		judge.clearButton();
 
+		this.pieceButton[5].children[0].uncache();
 		this.pieceButton[5].children[0].alpha = 1.0;
+		this.pieceButton[5].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.piecePush   = true;
@@ -473,7 +517,9 @@ class PieceButton extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
 		if(Math.abs(this.dragPointX - stage.mouseX) > 15 || Math.abs(this.dragPointY - stage.mouseY) > 15){
 	        this.piecePush = false;
+			this.pieceButton[this.no - 1].children[0].uncache();
 			this.pieceButton[this.no - 1].children[0].alpha = 0.5;
+			this.pieceButton[this.no - 1].children[0].cache(0,0,19,30);
         }
     }
 
@@ -491,7 +537,9 @@ class PieceButton extends createjs.Container{
 		 		nY: 100
 		 	});
  		}
+		this.pieceButton[this.no - 1].children[0].uncache();
 		this.pieceButton[this.no - 1].children[0].alpha = 0.5;
+		this.pieceButton[this.no - 1].children[0].cache(0,0,19,30);
  	}
 }
 

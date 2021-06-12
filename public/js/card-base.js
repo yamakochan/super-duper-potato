@@ -113,7 +113,7 @@ class Judge{
 		// デッキ表示
 		this.deck = new Deck();
 		layer1.addChild(this.deck);
-	    // deckにカードを追加    
+	    // deckにカードを追加   
 		for (let i = 0; i < argDeckList.length; i++){
 			let xcard = new Card(cns_passPrefix + argDeckList[i],i);
 			xcard.x = cns_layer1Left;

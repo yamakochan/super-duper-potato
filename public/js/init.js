@@ -17,7 +17,7 @@ function init() {
 	canvasElement.setAttribute("width" ,cns_stageWidth);
 	canvasElement.setAttribute("height" ,cns_stageHeight);
 
-	stage = new createjs.Stage(canvasElement);
+	stage = new createjs.StageGL(canvasElement);
 
 	//パスプレフィックス　カードパスのプレフィックス
 	cns_passPrefix = "";
@@ -28,11 +28,11 @@ function init() {
 	cns_tailImage = "./image/card01/tails01.png";
 
 	//サウンド定義
-	createjs.Sound.registerSound("./sounds/place.mp3", "place");
+	createjs.Sound.registerSound("./sounds/place.mp3", "piece");
 	createjs.Sound.registerSound("./sounds/draw.mp3", "draw");
 	createjs.Sound.registerSound("./sounds/srthand.mp3", "srthand");
 	createjs.Sound.registerSound("./sounds/turn.mp3", "turn");
-	createjs.Sound.registerSound("./sounds/piece.mp3", "piece");
+	createjs.Sound.registerSound("./sounds/piece.mp3", "place");
 	createjs.Sound.registerSound("./sounds/dice1.mp3", "dice1");
 	createjs.Sound.registerSound("./sounds/dice2.mp3", "dice2");
 	createjs.Sound.registerSound("./sounds/button.mp3", "button");
@@ -52,22 +52,4 @@ function init() {
 
 	//１秒間に更新するフレーム数を指定。デフォルトは２４fps ＝＞　スマホはこっちで調整
 	// createjs.Ticker.framerate = 40;
-}
-
-function resize(gl) {
-  var realToCSSPixels = window.devicePixelRatio;
-
-  // ブラウザがcanvasでCSSピクセルを表示しているサイズを参照し、
-  // デバイスピクセルに合った描画バッファサイズを計算する。
-  var displayWidth  = Math.floor(gl.canvas.clientWidth  * realToCSSPixels);
-  var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
-
-  // canvasの描画バッファサイズと表示サイズが異なるかどうか確認する。
-  if (gl.canvas.width  !== displayWidth ||
-      gl.canvas.height !== displayHeight) {
-
-    // サイズが違っていたら、同じサイズにする。
-    gl.canvas.width  = displayWidth;
-    gl.canvas.height = displayHeight;
-  }
 }
