@@ -25,7 +25,7 @@ function init() {
 	//イメージ定義
 	cns_diceImage = "../image/dice2.png";
 	cns_boadImage = "../image/boad1281.png";
-	cns_tailImage = "./image/card01/tails01.png";
+	cns_tailImage = "../image/card01/tails01.png";
 
 	//サウンド定義
 	createjs.Sound.registerSound("../sounds/place.mp3", "place");
