@@ -1,0 +1,13 @@
+Header set Vary User-Agent
+RewriteEngine on
+
+RewriteCond %{REQUEST_URI} !/sp/
+RewriteCond %{HTTP_USER_AGENT} (iPod|iPhone|Android|Windows\ Phone)
+RewriteRule ^(.*)$ sp/$1 [L]
+RewriteBase /
+
+RewriteCond %{REQUEST_URI} /sp/
+RewriteCond %{HTTP_USER_AGENT} !(iPod|iPhone|Android|Windows\ Phone)
+RewriteRule ^sp/(.*)$ $1 [L]
+RewriteBase /
+

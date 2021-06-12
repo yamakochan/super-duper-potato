@@ -5,6 +5,6 @@ http://localhost:3000/
 <github>
 https://github.com/yamakochan/super-duper-potato.git
 <heroku>
-https://mighty-beach-13882.herokuapp.com/ | https://git.heroku.com/mighty-beach-13882.git
+https://infinite-scrubland-02817.herokuapp.com/ | https://git.heroku.com/infinite-scrubland-02817.git
 
 
