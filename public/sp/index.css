@@ -109,9 +109,9 @@ ul.mem_list li:before {
 	margin-left: 5px;
 }
 .msg_iptxt input[type='text'] {
-	font: 12px/12px sans-serif;
+	font: 10px/10px sans-serif;
 	box-sizing: border-box;
-	width: 100%;
+	width: 90%;
 	padding: 0.3em;
 	transition: 0.3s;
 	letter-spacing: 1px;

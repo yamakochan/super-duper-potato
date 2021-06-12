@@ -268,7 +268,7 @@ class Card extends createjs.Container{
 		this.moving = 0;  		// 0:静止中、1:操作中
 		this.status = 0;  		// 0:deck、1:hand、2:place、9:cemetary
 
-		this.tail = new createjs.Bitmap("./image/card01/tails01.png");
+		this.tail = new createjs.Bitmap(cns_tailImage);
 		this.tail.shadow = new createjs.Shadow("#000000", 1, 1, 1);
         this.addChild(this.tail); // 表示リストに追加
 
