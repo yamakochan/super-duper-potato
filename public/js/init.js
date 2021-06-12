@@ -19,6 +19,9 @@ function init() {
 
 	stage = new createjs.Stage(canvasElement);
 
+	//パスプレフィックス
+	cns_passPrefix = "";
+
 	//イメージ定義
 	cns_diceImage = "./image/dice2.png";
 	cns_boadImage = "./image/boad1281.png";

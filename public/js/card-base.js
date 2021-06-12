@@ -24,8 +24,8 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 	cns_cemetaryLeft = -130;
 	cns_cemetaryTop = -30;
 
-	cns_layer1Width = 1281;
-	cns_layer1Height = 1281;
+	cns_layer1Width = cns_boadWidth;
+	cns_layer1Height = cns_boadHeight;
 	cns_layer1Left = -1 * cns_layer1Width / 2;
 	cns_layer1Right = cns_layer1Width / 2;
 	cns_layer1Top = -1 * cns_layer1Height / 2;
@@ -115,7 +115,7 @@ class Judge{
 		layer1.addChild(this.deck);
 	    // deckにカードを追加    
 		for (let i = 0; i < argDeckList.length; i++){
-			let xcard = new Card(argDeckList[i],i);
+			let xcard = new Card(cns_passPrefix + argDeckList[i],i);
 			xcard.x = cns_layer1Left;
 			xcard.y = cns_layer1Top;
 			xcard.rotation = cns_rotation;
@@ -128,7 +128,7 @@ class Judge{
 	    // cemetaryにカードを追加    
 	    let j = argDeckList.length;
 		for (let i = 0; i < argCemetaryList.length; i++){
-			let xcard = new Card(argCemetaryList[i],j);
+			let xcard = new Card(cns_passPrefix + argCemetaryList[i],j);
 			xcard.x = cns_layer1Left;
 			xcard.y = cns_layer1Top;
 			xcard.rotation = cns_rotation;
