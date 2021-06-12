@@ -106,10 +106,10 @@ ul.mem_list li:before {
 .msg_iptxt {
 	position: relative;
 	width: 80%;
-	margin-left: 100px;
+	margin-left: 5px;
 }
 .msg_iptxt input[type='text'] {
-	font: 16px/16px sans-serif;
+	font: 12px/12px sans-serif;
 	box-sizing: border-box;
 	width: 100%;
 	padding: 0.3em;
@@ -128,12 +128,12 @@ ul.mem_list li:before {
 .msg_list {
 	padding:0.1em;
 	line-height: 1.0;
-	margin-left: 80px;
+	margin-left: 5px;
 	height: 100px;
 	overflow: auto;
 }
 .msg_list p {
-	font: 12px/12px sans-serif;
+	font: 10px/10px sans-serif;
 	position:relative;
 	padding: 0em 0em 0em 1.3em;
 }
