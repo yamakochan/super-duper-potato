@@ -1,0 +1,12 @@
+RewriteEngine on
+RewriteBase /
+ 
+# スマホなら / → /sp/
+RewriteCond %{REQUEST_URI} !/sp/
+RewriteCond %{HTTP_USER_AGENT} (iPod|iPhone|Android.*Mobile|Windows.*Phone)
+RewriteRule ^(.*)$ sp/$1 [L,R=301]
+ 
+# スマホでなければ /sp/ → /
+RewriteCond %{REQUEST_URI} /sp/
+RewriteCond %{HTTP_USER_AGENT} !(iPod|iPhone|Android.*Mobile|Windows.*Phone)
+RewriteRule ^sp/(.*)$ $1 [L,R=301]
