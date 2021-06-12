@@ -1,37 +1,3 @@
-window.addEventListener('load',init);
-function init() {
-	const canvasElement = document.getElementById("myCanvas");
-	stage = new createjs.Stage(canvasElement);
-	cns_stageWidth = canvasElement.width;
-	cns_stageHeight = canvasElement.height;
-
-	//サウンド定義
-	createjs.Sound.registerSound("./sounds/place.mp3", "place");
-	createjs.Sound.registerSound("./sounds/draw.mp3", "draw");
-	createjs.Sound.registerSound("./sounds/srthand.mp3", "srthand");
-	createjs.Sound.registerSound("./sounds/turn.mp3", "turn");
-	createjs.Sound.registerSound("./sounds/piece.mp3", "piece");
-	createjs.Sound.registerSound("./sounds/dice1.mp3", "dice1");
-	createjs.Sound.registerSound("./sounds/dice2.mp3", "dice2");
-	createjs.Sound.registerSound("./sounds/button.mp3", "button");
-	createjs.Sound.registerSound("./sounds/champion.mp3", "champion");
-	createjs.Sound.registerSound("./sounds/lost.mp3", "lost");
-
-	// createjs.Sound.play("destruction");
-
-	// タッチ操作をサポートしているブラウザーならばタッチ操作を有効にします。
-	if(createjs.Touch.isSupported() == true){
- 		createjs.Touch.enable(stage);
-	}
-
-	createjs.Ticker.addEventListener("tick",stage); //自動更新を有効にする
-
-	//ブラウザの画面更新に適したタイミング「RAF」は１秒間に６０回発生する。60fpsを実現
-	createjs.Ticker.timingMode = createjs.Ticker.RAF; //滑らかに
-
-	//１秒間に更新するフレーム数を指定。デフォルトは２４fps ＝＞　スマホはこっちで調整
-	// createjs.Ticker.framerate = 40;
-}
 
 //自分の部屋のユーザリストを受け取る。自分のplayerNoはグローバルのuserNoをつかう。
 //deckリスト（画像png）cemetaryリスト（画像png）を受け取る。手札数制限を受け取る
@@ -504,7 +470,7 @@ class Dice extends createjs.Container{
 		this.frameWidth = 50;
 		this.frameHeight = 50;
 		this.data = {
-			images: ["./image/dice2.png"],
+			images: [cns_diceImage],
 			frames: {
 			 	width: this.frameWidth,
     			height: this.frameHeight,
@@ -584,7 +550,7 @@ class Background extends createjs.Container{
 		this.hitwallNo = 0; // 1:left/right,2:top/bottom
 
 		// ボード表示
-		let boad = new createjs.Bitmap("./image/boad1281.png");
+		let boad = new createjs.Bitmap(cns_boadImage);
 		boad.alpha = 1;
 		boad.regX = cns_layer1Width / 2;
 		boad.regY = cns_layer1Height / 2;
