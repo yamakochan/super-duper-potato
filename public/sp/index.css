@@ -1,3 +1,7 @@
+input{
+	font-size:16px;
+}
+
 img.xtitle {
 	display: -webkit-box;
 	display: box;
@@ -39,7 +43,7 @@ img.xtitle {
     margin-right: auto;
 }
 .name_iptxt input[type='text'] {
-	font: 15px/24px sans-serif;
+	font: 16px/16px sans-serif;
 	box-sizing: border-box;
 	width: 100%;
 	padding: 0.3em;
@@ -67,7 +71,7 @@ img.xtitle {
     margin-right: auto;
 }
 .room_select select {
-	font: 15px/24px sans-serif;
+	font: 16px/16px sans-serif;
 	box-sizing: border-box;
 	width: 50%;
 	padding-right: : 1em;
@@ -105,7 +109,7 @@ ul.mem_list li:before {
 	margin-left: 100px;
 }
 .msg_iptxt input[type='text'] {
-	font: 15px/24px sans-serif;
+	font: 16px/16px sans-serif;
 	box-sizing: border-box;
 	width: 100%;
 	padding: 0.3em;
@@ -146,7 +150,7 @@ ul.mem_list li:before {
 }
 
 .start_btn {
-	font: 15px/24px sans-serif;
+	font: 16px/16px sans-serif;
 	color: #aaaaaa;
 	position: relative;
 	display: block;
