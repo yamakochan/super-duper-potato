@@ -20,7 +20,7 @@ function init() {
 	stage = new createjs.StageGL(canvasElement);
 	// canvasElement.style.width = String(canvasElement.width / window.devicePixelRatio) + "px";
 	// canvasElement.style.height = String(canvasElement.height / window.devicePixelRatio) + "px";
-	stage.scaleX = stage.scaleY = window.devicePixelRatio;
+	stage.scaleX = stage.scaleY = 1 / window.devicePixelRatio;
 
 	//パスプレフィックス カードパスのプレフィックス
 	cns_passPrefix = ".";
