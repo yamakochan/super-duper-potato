@@ -657,11 +657,13 @@ class Background extends createjs.Container{
 			if(this.dx == 0 && this.dy == 0 && this.prey2 == layer1.y && this.prex2 == layer1.x){
 				if(judge.end == 0){
 					//   自陣への移動ー＞すまほ用
-					// let nX = cns_layer1InitX;
-					// let nY = cns_layer1InitY; 
-					// let duration = 1000;
-					// createjs.Tween.get(layer1, {override:true})
-					// .to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
+					if(cns_sp){
+						let nX = cns_layer1InitX;
+						let nY = cns_layer1InitY; 
+						let duration = 1000;
+						createjs.Tween.get(layer1, {override:true})
+						.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
+					}
 				}else{
 					judge.end = 2;
 					clearStage();

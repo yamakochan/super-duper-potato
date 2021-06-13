@@ -1,5 +1,6 @@
 window.addEventListener('load',init);
 function init() {
+	cns_sp = false;
     cns_boadWidth = 1281;
     cns_boadHeight = 1281;
     cns_scale = 1;
