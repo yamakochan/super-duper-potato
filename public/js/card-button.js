@@ -12,12 +12,20 @@ class CancelButton extends createjs.Container{
 		this.addChild(this.buttonShape); 
 
 	    this.buttonText =  new createjs.Text("cancel", "14px sans-serif", "GhostWhite");
-		this.buttonText.textAlign = "left";
-		this.buttonText.textBaseline = "top";
-		this.buttonText.x = 26;
-		this.buttonText.y = 8;
-		this.buttonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
-		this.buttonText.cache(0,0,cns_buttonWidth-26,cns_buttonHeight-8);
+		this.buttonText.textAlign = "center";
+		this.buttonText.textBaseline = "middle";
+		this.buttonText.x = cns_buttonWidth / 2;
+		this.buttonText.y = cns_buttonHeight / 2;
+		// this.buttonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		this.buttonText.cache(-1 * cns_buttonWidth / 2, -1 * cns_buttonHeight / 2, cns_buttonWidth, cns_buttonHeight);
+
+	    this.buttonTextShadow =  new createjs.Text("cancel", "14px sans-serif", "dimgray");
+		this.buttonTextShadow.textAlign = "center";
+		this.buttonTextShadow.textBaseline = "middle";
+		this.buttonTextShadow.x = cns_buttonWidth / 2 + 1;
+		this.buttonTextShadow.y = cns_buttonHeight / 2 + 1;
+		this.buttonTextShadow.cache(-1 * cns_buttonWidth / 2 + 1, -1 * cns_buttonHeight / 2 + 1, cns_buttonWidth, cns_buttonHeight);
+		this.addChild(this.buttonTextShadow);
 		this.addChild(this.buttonText);
 
         // this.on('tick',this.update,this);
@@ -49,12 +57,20 @@ class AbstButton extends createjs.Container{
 		this.addChild(this.buttonShape); 
 
 	    this.buttonText =  new createjs.Text(arg_text, "14px sans-serif", "GhostWhite");
-		this.buttonText.textAlign = "left";
-		this.buttonText.textBaseline = "top";
-		this.buttonText.x = cns_buttonWidth / 2 - this.text.length * 5;
-		this.buttonText.y = 8;
-		this.buttonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
-		this.buttonText.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
+		this.buttonText.textAlign = "center";
+		this.buttonText.textBaseline = "middle";
+		this.buttonText.x = cns_buttonWidth / 2;
+		this.buttonText.y = cns_buttonHeight / 2;
+		// this.buttonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		this.buttonText.cache(-1 * cns_buttonWidth / 2,-1 * cns_buttonHeight / 2, cns_buttonWidth, cns_buttonHeight);
+
+	    this.buttonTextShadow =  new createjs.Text(arg_text, "14px sans-serif", "dimgray");
+		this.buttonTextShadow.textAlign = "center";
+		this.buttonTextShadow.textBaseline = "middle";
+		this.buttonTextShadow.x = cns_buttonWidth / 2 + 1;
+		this.buttonTextShadow.y = cns_buttonHeight / 2 + 1;
+		this.buttonTextShadow.cache(-1 * cns_buttonWidth / 2 + 1,-1 * cns_buttonHeight / 2 + 1, cns_buttonWidth, cns_buttonHeight);
+		this.addChild(this.buttonTextShadow);
 		this.addChild(this.buttonText);
 
         // this.on('tick',this.update,this);
@@ -267,12 +283,20 @@ class DiceButton extends createjs.Container{
 			this.diceButton[i].addChild(diceButtonShape); 
 
 		    let diceButtonText =  new createjs.Text("x" + (i+1), "14px sans-serif", "GhostWhite");
-			diceButtonText.textAlign = "left";
-			diceButtonText.textBaseline = "top";
-			diceButtonText.x = 1 + 20 * i;
-			diceButtonText.y = 8;
-			diceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
-			diceButtonText.cache(0,0,19,30);
+			diceButtonText.textAlign = "center";
+			diceButtonText.textBaseline = "middle";
+			diceButtonText.x = 20 * i + 9.5;
+			diceButtonText.y = 15;
+			// diceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+			diceButtonText.cache(-9.5,-15,19,30);
+
+		    let diceButtonTextShadow =  new createjs.Text("x" + (i+1), "14px sans-serif", "dimgray");
+			diceButtonTextShadow.textAlign = "center";
+			diceButtonTextShadow.textBaseline = "middle";
+			diceButtonTextShadow.x = 20 * i + 10.5;
+			diceButtonTextShadow.y = 16;
+			diceButtonTextShadow.cache(-8.5,-14,18,29);
+			this.diceButton[i].addChild(diceButtonTextShadow);
 			this.diceButton[i].addChild(diceButtonText);
 
 			this.addChild(this.diceButton[i]);
@@ -283,8 +307,16 @@ class DiceButton extends createjs.Container{
 		diceButtonText.textBaseline = "top";
 		diceButtonText.x = 5;
 		diceButtonText.y = -15;
-		diceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		// diceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
 		diceButtonText.cache(0,0,40,15);
+
+	    let diceButtonTextShadow =  new createjs.Text("Dice", "15px sans-serif", "dimgray");
+		diceButtonTextShadow.textAlign = "left";
+		diceButtonTextShadow.textBaseline = "top";
+		diceButtonTextShadow.x = 6;
+		diceButtonTextShadow.y = -14;
+		diceButtonTextShadow.cache(0,0,40,15);
+		this.addChild(diceButtonTextShadow);
 		this.addChild(diceButtonText);
 
 		info.addChild(this);
@@ -411,12 +443,20 @@ class PieceButton extends createjs.Container{
 			let xtext = i + 1;
 			if (xtext == 6){xtext = 10;};
 		    let pieceButtonText =  new createjs.Text(xtext, "14px sans-serif", "GhostWhite");
-			pieceButtonText.textAlign = "left";
-			pieceButtonText.textBaseline = "top";
-			pieceButtonText.x = 4 + 20 * i - Math.floor(i/6) * 3;
-			pieceButtonText.y = 8;
-			pieceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
-			pieceButtonText.cache(0,0,15,22);
+			pieceButtonText.textAlign = "center";
+			pieceButtonText.textBaseline = "middle";
+			pieceButtonText.x = 20 * i + 9.5;
+			pieceButtonText.y = 15;
+			// pieceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+			pieceButtonText.cache(-9.5, -15, 19, 30);
+
+		    let pieceButtonTextShadow =  new createjs.Text(xtext, "14px sans-serif", "dimgray");
+			pieceButtonTextShadow.textAlign = "center";
+			pieceButtonTextShadow.textBaseline = "middle";
+			pieceButtonTextShadow.x = 20 * i + 10.5;
+			pieceButtonTextShadow.y = 16;
+			pieceButtonTextShadow.cache(-8.5, -14, 19, 30);
+			this.pieceButton[i].addChild(pieceButtonTextShadow);
 			this.pieceButton[i].addChild(pieceButtonText);
 
 			this.addChild(this.pieceButton[i]);
@@ -427,8 +467,15 @@ class PieceButton extends createjs.Container{
 		pieceButtonText.textBaseline = "top";
 		pieceButtonText.x = 5;
 		pieceButtonText.y = -15;
-		pieceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		// pieceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
 		pieceButtonText.cache(0,0,40,18);
+	    let pieceButtonTextShadow =  new createjs.Text("piece", "15px sans-serif", "dimgray");
+		pieceButtonTextShadow.textAlign = "left";
+		pieceButtonTextShadow.textBaseline = "top";
+		pieceButtonTextShadow.x = 6;
+		pieceButtonTextShadow.y = -14;
+		pieceButtonTextShadow.cache(0,0,40,18);
+		this.addChild(pieceButtonTextShadow);
 		this.addChild(pieceButtonText);
 
 		info.addChild(this);

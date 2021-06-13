@@ -151,8 +151,18 @@ class Judge{
 		    this.score[i].textBaseline = "top";
 		    this.score[i].x = (cns_stageWidth - 20) / cns_players * (i) + 10;
 		    this.score[i].y = 10;
-			this.score[i].shadow = new createjs.Shadow("#000000", 3, 3, 5);
-			this.score[i].cache(-2,-2,150,30);
+			// this.score[i].shadow = new createjs.Shadow("#000000", 3, 3, 5);
+			this.score[i].cache(0,0,150,30);
+
+	    	let scoreShadow =  new createjs.Text("", "14px sans-serif", "dimgray");
+			scoreShadow.text = xplayer.playerName + ": " + this.playerList[i].score;
+		    scoreShadow.textAlign = "left";
+		    scoreShadow.textBaseline = "top";
+		    scoreShadow.x = (cns_stageWidth - 20) / cns_players * (i) + 11;
+		    scoreShadow.y = 11;
+			scoreShadow.cache(0,0,150,30);
+
+		    info.addChild(scoreShadow);
 		    info.addChild(this.score[i]);
 		}
 
@@ -365,10 +375,8 @@ class Judge{
 		this.playerList[data.player].live = false;
 
 		let xscore = this.score[data.player].clone();
-		xscore.shadow = null;
 		xscore.color = "dimgray";
 		xscore.outline = 1;
-		xscore.alpha = 0.7;
 		xscore.cache(-2,-2,150,30);
 		info.addChild(xscore);
 
@@ -400,7 +408,7 @@ class Judge{
 		}
 		if(liveCount == 1){
 			if(cns_myPlayerIndex == winner){
-				let notice1 = new Notice(0,-250,"CHANPION!!","GhostWhite",100,1000);
+				let notice1 = new Notice(0,-250,"CHANPION!!","GhostWhite",100,2000);
 				createjs.Sound.play("champion");
 			}else{
 			}
@@ -564,8 +572,16 @@ class Background extends createjs.Container{
 		this.XYinfo.textBaseline = "top";
 		this.XYinfo.x = cns_stageWidth - 200;
 		this.XYinfo.y = cns_stageHeight　- 30;
-		this.XYinfo.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		// this.XYinfo.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+
+		this.XYinfoShadow =  this.XYinfo.clone();
+		this.XYinfoShadow.color = "dimgray";
+		this.XYinfoShadow.x = this.XYinfoShadow.x + 1;
+		this.XYinfoShadow.y = this.XYinfoShadow.y + 1;
+		this.XYinfoShadow.cache(-2,-2,200,30);
 		this.XYinfo.cache(-2,-2,200,30);
+
+		info.addChild(this.XYinfoShadow);
 		info.addChild(this.XYinfo);
 
 
@@ -714,10 +730,13 @@ class Background extends createjs.Container{
 
 	pieceaction(){
 		this.XYinfo.uncache();
+		this.XYinfoShadow.uncache();
 		let mouse_x = Math.floor((stage.mouseX - layer1.x) * 100) / 100;
 		let mouse_y = Math.floor((stage.mouseY - layer1.y) * 100) / 100;
 		this.XYinfo.text = "X:" + mouse_x + "  Y:" + mouse_y;
+		this.XYinfoShadow.text = "X:" + mouse_x + "  Y:" + mouse_y;
 		this.XYinfo.cache(-2,-2,200,30);
+		this.XYinfoShadow.cache(-2,-2,200,30);
 	}
 }
 
@@ -729,14 +748,25 @@ class Notice extends createjs.Container{
 		this.display = true;
 		this.displayCount = 0;
 		this.time = arg_time;
+		this.size = arg_size;
 		
-	    this.noticeText =  new createjs.Text(arg_text, arg_size + "px sans-serif", arg_color);
+	    this.noticeText =  new createjs.Text(arg_text, this.size + "px sans-serif", arg_color);
 		this.noticeText.textAlign = "center";
 		this.noticeText.textBaseline = "middle";
 		this.noticeText.x = 0;
 		this.noticeText.y = 0;
-		this.noticeText.shadow = new createjs.Shadow("dimgray", 3, 3, 5);
+		// this.noticeText.shadow = new createjs.Shadow("dimgray", 3, 3, 5);
 		this.noticeText.alpha = 0;
+
+		this.noticeTextShadow = this.noticeText.clone();
+		this.noticeTextShadow.color = "dimgray";
+		this.noticeTextShadow.x = 3;
+		this.noticeTextShadow.y = 3;
+
+		this.noticeText.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
+		this.noticeTextShadow.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
+
+		this.addChild(this.noticeTextShadow);
 		this.addChild(this.noticeText);
 
 		info.addChild(this);
@@ -745,9 +775,12 @@ class Notice extends createjs.Container{
 	}
 
 	update(){
+		this.noticeText.uncache();
+		this.noticeTextShadow.uncache();
 		if (this.display){
 			if(this.noticeText.alpha < 0.8){
 				this.noticeText.alpha = this.noticeText.alpha + 0.1;
+				this.noticeTextShadow.alpha = this.noticeTextShadow.alpha + 0.1;
 			}else{
 				this.display = false;
 			}
@@ -755,6 +788,7 @@ class Notice extends createjs.Container{
 			if(this.displayCount > this.time){
 				if(this.noticeText.alpha > 0){
 					this.noticeText.alpha = this.noticeText.alpha - 0.1;
+					this.noticeTextShadow.alpha = this.noticeTextShadow.alpha - 0.1;
 				}else{
 					this.off;
 					info.removeChild(this);
@@ -763,5 +797,7 @@ class Notice extends createjs.Container{
 				this.displayCount++;
 			}
 		}
+		this.noticeText.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
+		this.noticeTextShadow.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
 	}
 }

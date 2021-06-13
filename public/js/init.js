@@ -28,11 +28,11 @@ function init() {
 	cns_tailImage = "./image/card01/tails01.png";
 
 	//サウンド定義
-	createjs.Sound.registerSound("./sounds/place.mp3", "piece");
+	createjs.Sound.registerSound("./sounds/piece.mp3", "piece");
 	createjs.Sound.registerSound("./sounds/draw.mp3", "draw");
 	createjs.Sound.registerSound("./sounds/srthand.mp3", "srthand");
 	createjs.Sound.registerSound("./sounds/turn.mp3", "turn");
-	createjs.Sound.registerSound("./sounds/piece.mp3", "place");
+	createjs.Sound.registerSound("./sounds/place.mp3", "place");
 	createjs.Sound.registerSound("./sounds/dice1.mp3", "dice1");
 	createjs.Sound.registerSound("./sounds/dice2.mp3", "dice2");
 	createjs.Sound.registerSound("./sounds/button.mp3", "button");

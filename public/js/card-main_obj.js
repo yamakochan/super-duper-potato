@@ -338,9 +338,9 @@ class Card extends createjs.Container{
 				}else{
 					if(this.status == 9){
 						if(judge.cemetary.spread){
-							this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"close","hsl(300, 40%, 50%)");
+							this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"close","hsl(150, 40%, 50%)");
 						}else{
-							this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"spread","hsl(300, 40%, 50%)");
+							this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"spread","hsl(30, 40%, 50%)");
 						}
 						judge.registerButton(this.cemetaryButton);
 					}
@@ -476,17 +476,35 @@ class Piece extends createjs.Container{
 		this.shape = new createjs.Shape();
         this.shape.graphics.beginFill("#00cccc");
 		this.shape.graphics.drawRoundRect(0, 0, 30, 30, 0, 0);
-		this.shape.shadow = new createjs.Shadow(arg_color, 1, 1, 3);
+		// this.shape.shadow = new createjs.Shadow(arg_color, 1, 1, 3);
 		this.shape.alpha = 1;
-		this.shape.cache(-2,-2,34,34);
+
+		this.shapeShadow = new createjs.Shape();
+		this.shapeShadow.graphics.beginFill(arg_color);
+		this.shapeShadow.graphics.drawRoundRect(0, 0, 30, 30, 0, 0);
+		this.shapeShadow.x = this.shapeShadow.x + 1;
+		this.shapeShadow.y = this.shapeShadow.y + 2;
+
+		this.shape.cache(0,0,30,30);
+		this.shapeShadow.cache(0,0,32,32);
+        this.addChild(this.shapeShadow); // 表示リストに追加
         this.addChild(this.shape); // 表示リストに追加
 
 	    this.text =  new createjs.Text(arg_no, "14px sans-serif", "GhostWhite");
-		this.text.textAlign = "left";
-		this.text.textBaseline = "top";
-		this.text.x = 8;
-		this.text.y = 10;
-		this.text.cache(0,0,15,20);
+		this.text.textAlign = "center";
+		this.text.textBaseline = "middle";
+		this.text.x = 15;
+		this.text.y = 15;
+
+		this.textShadow = this.text.clone();
+		this.textShadow.color = "dimgray";
+		this.textShadow.x = this.text.x - 1;
+		this.textShadow.y = this.text.y - 1;
+
+		this.text.cache(-15,-15,30,30);
+		this.textShadow.cache(-15,-15,30,30);
+
+		this.addChild(this.textShadow);
 		this.addChild(this.text);
 
         // this.on('tick',this.update,this);
