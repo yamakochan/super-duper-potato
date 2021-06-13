@@ -2,12 +2,12 @@ window.addEventListener('load',init);
 function init() {
 	cns_boadWidth = 1281;
     cns_boadHeight = 1281;
-	if(window.innerWidth < cns_boadWidth){
-		cns_stageWidth = window.innerWidth;
+	if(window.innerWidth * window.devicePixelRatio < cns_boadWidth){
+		cns_stageWidth = window.innerWidth * window.devicePixelRatio;
 	}else{
 		cns_stageWidth = cns_boadWidth;
 	}
-	if(window.innerHeight < cns_boadHeight){
+	if(window.innerHeight * window.devicePixelRatio < cns_boadHeight){
 		cns_stageHeight = window.innerHeight;
 	}else{
 		cns_stageHeight = cns_boadHeight;
@@ -18,14 +18,9 @@ function init() {
 	canvasElement.setAttribute("height" ,cns_stageHeight);
 
 	stage = new createjs.StageGL(canvasElement);
-
-	if(window.devicePixelRatio){
-		canvasElement.width = cns_stageWidth * window.devicePixelRatio;
-		canvasElement.height = cns_stageHeight  * window.devicePixelRatio;
-		canvasElement.style.width = String(canvasElement.width / window.devicePixelRatio) + "px";
-		canvasElement.style.height = String(canvasElement.height / window.devicePixelRatio) + "px";
-		stage.scaleX = stage.scaleY = window.devicePixelRatio;
-	}
+	// canvasElement.style.width = String(canvasElement.width / window.devicePixelRatio) + "px";
+	// canvasElement.style.height = String(canvasElement.height / window.devicePixelRatio) + "px";
+	stage.scaleX = stage.scaleY = window.devicePixelRatio;
 
 	//パスプレフィックス カードパスのプレフィックス
 	cns_passPrefix = ".";
