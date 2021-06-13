@@ -2,7 +2,7 @@ window.addEventListener('load',init);
 function init() {
 	cns_boadWidth = 1281;
     cns_boadHeight = 1281;
-    cns_scale = 2;    
+    cns_scale = 1.5;    
 	if(window.innerWidth * cns_scale < cns_boadWidth){
 		cns_stageWidth = window.innerWidth * cns_scale;
 	}else{
