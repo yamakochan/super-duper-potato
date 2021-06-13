@@ -2,7 +2,7 @@ window.addEventListener('load',init);
 function init() {
 	cns_boadWidth = 1281;
     cns_boadHeight = 1281;
-    cns_scale = 1.2;    
+    cns_scale = 1.0;    
 	if(window.innerWidth * cns_scale < cns_boadWidth){
 		cns_stageWidth = window.innerWidth * cns_scale;
 	}else{
@@ -44,7 +44,7 @@ function init() {
 	createjs.Sound.registerSound("../sounds/lost.mp3", "lost");
 
 	// スピード
-	cns_speed = 2;          //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  
+	cns_speed = 3;          //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  
 	cns_friction = 3 / 50;  //background 摩擦係数（fps60のとき1/50。fpsが小さいと係数は大きくする必要がある）
 	cns_duration = 300;     //teenの期間　
 
