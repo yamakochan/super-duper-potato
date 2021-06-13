@@ -2,7 +2,7 @@ window.addEventListener('load',init);
 function init() {
 	cns_boadWidth = 1281;
     cns_boadHeight = 1281;
-    cns_scale = 1.5;    
+    cns_scale = 1.2;    
 	if(window.innerWidth * cns_scale < cns_boadWidth){
 		cns_stageWidth = window.innerWidth * cns_scale;
 	}else{
@@ -53,8 +53,8 @@ function init() {
 	createjs.Ticker.addEventListener("tick",stage); //自動更新を有効にする
 
 	//ブラウザの画面更新に適したタイミング「RAF」は１秒間に６０回発生する。60fpsを実現
-	createjs.Ticker.timingMode = createjs.Ticker.RAF; //滑らかに
+	// createjs.Ticker.timingMode = createjs.Ticker.RAF; //滑らかに
 
 	//１秒間に更新するフレーム数を指定。デフォルトは２４fps ＝＞　スマホはこっちで調整
-	// createjs.Ticker.framerate = 40;
+	createjs.Ticker.framerate = 40;
 }
