@@ -124,7 +124,7 @@ class CncrCardButton extends AbstButton{
 
  	buttonCommand(){
  		let xplayer = null;
- 		if(this.text == "trash" || this.text == "draw"){
+ 		if(this.text == "trash" || this.text == "draw" || this.text == "spread"){
  			xplayer = cns_myPlayerIndex;
  		}
 		socket.emit("serverButtonAction", {

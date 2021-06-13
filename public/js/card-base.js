@@ -269,7 +269,7 @@ class Judge{
 			this.cemetary.addCemetaryCard(tempCard);
 		}
 		if(data.text == "spread"){
-			this.cemetary.spreadCemetaryCard();
+			this.cemetary.spreadCemetaryCard(this.playerList[data.player].playerRotation);
 		}
 		if(data.text == "close"){
 			this.cemetary.closeCemetaryCard();

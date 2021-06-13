@@ -209,11 +209,12 @@ class Cemetary extends createjs.Container{
 	closeCemetaryCard(){
     	createjs.Sound.play("draw");
 	 	for(let i = 0; i < this.cemetaryCard.length; i++){
+	 		this.cemetaryCard[i].rotation = cns_rotation;
 	 		this.cemetaryCard[i].moveCard(cns_cemetaryLeft, cns_cemetaryTop); 		
 		 	this.spread = false;
 	 	}
 	}
-	spreadCemetaryCard(){
+	spreadCemetaryCard(arg_rotation){
     	createjs.Sound.play("draw");
 	 	let xcards   = new Array(4);
 	 	let xlines   = Math.ceil(this.cemetaryCard.length / Math.floor(cns_handWidth / cns_cardWidth));
@@ -249,6 +250,7 @@ class Cemetary extends createjs.Container{
 			}
 
 		 	for(let j = 0; j < xcards[i]; j++){
+		 		this.cemetaryCard[xcardcnt].rotation = this.cemetaryCard[xcardcnt].rotation - arg_rotation;
 		 		this.cemetaryCard[xcardcnt].moveCard(xspreadLeft + xcardWidth * j, xspreadTop + cns_cardHeight * 2 / 3 * i);
 		 		xcardcnt++;
 			}	
