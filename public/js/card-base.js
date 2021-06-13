@@ -567,7 +567,7 @@ class Background extends createjs.Container{
 
         //マウスポインタの座標表示用
 		this.XYinfo =  new createjs.Text("", "14px sans-serif", "GhostWhite");
-		this.XYinfo.text = "X:" + (stage.mouseX - layer1.x) + "  Y:" + (stage.mouseY - layer1.y);
+		this.XYinfo.text = "X:" + (stage.mouseX * cns_scale - layer1.x) + "  Y:" + (stage.mouseY * cns_scale - layer1.y);
 		this.XYinfo.textAlign = "left";
 		this.XYinfo.textBaseline = "top";
 		this.XYinfo.x = cns_stageWidth - 200;
@@ -600,8 +600,8 @@ class Background extends createjs.Container{
         this.dy = 0;
         this.accx = 0;
         this.accy = 0;
-        this.dragPointX = stage.mouseX - layer1.x;
-        this.dragPointY = stage.mouseY - layer1.y;
+        this.dragPointX = stage.mouseX * cns_scale - layer1.x;
+        this.dragPointY = stage.mouseY * cns_scale - layer1.y;
     	// this.prePointX = stage.x;
     	// this.prePointY = stage.y;
     // swipeの速度測定用
@@ -616,7 +616,7 @@ class Background extends createjs.Container{
     // this.activate だとダメなのはなぜ？？？
 		if(background.activate){
     // マウス追従　ドラッグ開始地点との補正あり
-        	layer1.x = (stage.mouseX - this.dragPointX);
+        	layer1.x = (stage.mouseX * cns_scale - this.dragPointX);
         	if(layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin){
         		layer1.x = (cns_layer1Left - cns_layer1SideMargin) * -1;
         	}else{
@@ -628,7 +628,7 @@ class Background extends createjs.Container{
 	        	}
         	}
 
-        	layer1.y = (stage.mouseY - this.dragPointY);
+        	layer1.y = (stage.mouseY * cns_scale - this.dragPointY);
         	if(layer1.y * -1 < cns_layer1Top - cns_layer1VertMargin){
         		layer1.y = (cns_layer1Top - cns_layer1VertMargin) * -1;
         	}else{
@@ -731,8 +731,8 @@ class Background extends createjs.Container{
 	pieceaction(){
 		this.XYinfo.uncache();
 		this.XYinfoShadow.uncache();
-		let mouse_x = Math.floor((stage.mouseX - layer1.x) * 100) / 100;
-		let mouse_y = Math.floor((stage.mouseY - layer1.y) * 100) / 100;
+		let mouse_x = Math.floor((stage.mouseX * cns_scale - layer1.x) * 100) / 100;
+		let mouse_y = Math.floor((stage.mouseY * cns_scale - layer1.y) * 100) / 100;
 		this.XYinfo.text = "X:" + mouse_x + "  Y:" + mouse_y;
 		this.XYinfoShadow.text = "X:" + mouse_x + "  Y:" + mouse_y;
 		this.XYinfo.cache(-2,-2,200,30);

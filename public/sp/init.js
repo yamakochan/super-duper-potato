@@ -2,13 +2,14 @@ window.addEventListener('load',init);
 function init() {
 	cns_boadWidth = 1281;
     cns_boadHeight = 1281;
-	if(window.innerWidth * window.devicePixelRatio < cns_boadWidth){
-		cns_stageWidth = window.innerWidth * window.devicePixelRatio;
+    cns_scale = 2;    
+	if(window.innerWidth * cns_scale < cns_boadWidth){
+		cns_stageWidth = window.innerWidth * cns_scale;
 	}else{
 		cns_stageWidth = cns_boadWidth;
 	}
-	if(window.innerHeight * window.devicePixelRatio < cns_boadHeight){
-		cns_stageHeight = window.innerHeight * window.devicePixelRatio;
+	if(window.innerHeight * cns_scale < cns_boadHeight){
+		cns_stageHeight = window.innerHeight * cns_scale;
 	}else{
 		cns_stageHeight = cns_boadHeight;
 	}
@@ -20,7 +21,7 @@ function init() {
 	stage = new createjs.StageGL(canvasElement);
 	// canvasElement.style.width = String(canvasElement.width / window.devicePixelRatio) + "px";
 	// canvasElement.style.height = String(canvasElement.height / window.devicePixelRatio) + "px";
-	stage.scaleX = stage.scaleY = 1 / window.devicePixelRatio;
+	stage.scaleX = stage.scaleY = 1 / cns_scale;
 
 	//パスプレフィックス カードパスのプレフィックス
 	cns_passPrefix = ".";

@@ -85,14 +85,14 @@ class AbstButton extends createjs.Container{
 		this.buttonShape.uncache();
 		this.buttonShape.alpha = this.onAlpha;
 		this.buttonShape.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.buttonPush   = true;
  	}
 
     handleMove(event){
     // マウス追従　ドラッグ開始地点との補正あり
-		if(Math.abs(this.dragPointX - stage.mouseX) > 30 || Math.abs(this.dragPointY - stage.mouseY) > 30){
+		if(Math.abs(this.dragPointX - stage.mouseX * cns_scale) > 30 || Math.abs(this.dragPointY - stage.mouseY * cns_scale) > 30){
 	        this.buttonPush = false;
 			this.buttonShape.uncache();
 			this.buttonShape.alpha = this.offAlpha;
@@ -339,8 +339,8 @@ class DiceButton extends createjs.Container{
 		this.diceButton[0].children[0].uncache();
 		this.diceButton[0].children[0].alpha = 1.0;
 		this.diceButton[0].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.dicePush   = true;
 	    this.no = 1;
  	}
@@ -350,8 +350,8 @@ class DiceButton extends createjs.Container{
 		this.diceButton[1].children[0].uncache();
 		this.diceButton[1].children[0].alpha = 1.0;
 		this.diceButton[1].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.dicePush   = true;
 	    this.no = 2;
  	}
@@ -361,8 +361,8 @@ class DiceButton extends createjs.Container{
 		this.diceButton[2].children[0].uncache();
 		this.diceButton[2].children[0].alpha = 1.0;
 		this.diceButton[2].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.dicePush   = true;
 	    this.no = 3;
  	}
@@ -372,8 +372,8 @@ class DiceButton extends createjs.Container{
 		this.diceButton[3].children[0].uncache();
 		this.diceButton[3].children[0].alpha = 1.0;
 		this.diceButton[3].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.dicePush   = true;
 	    this.no = 4;
  	}
@@ -383,15 +383,15 @@ class DiceButton extends createjs.Container{
 		this.diceButton[4].children[0].uncache();
 		this.diceButton[4].children[0].alpha = 1.0;
 		this.diceButton[4].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.dicePush   = true;
 	    this.no = 5;
  	}
 
     diceHandleMove(event){
     // マウス追従　ドラッグ開始地点との補正あり
-		if(Math.abs(this.dragPointX - stage.mouseX) > 15 || Math.abs(this.dragPointY - stage.mouseY) > 15){
+		if(Math.abs(this.dragPointX - stage.mouseX * cns_scale) > 15 || Math.abs(this.dragPointY - stage.mouseY * cns_scale) > 15){
 	        this.dicePush = false;
 			this.diceButton[this.no - 1].children[0].uncache();
 			this.diceButton[this.no - 1].children[0].alpha = 0.5;
@@ -499,8 +499,8 @@ class PieceButton extends createjs.Container{
 		this.pieceButton[0].children[0].uncache();
 		this.pieceButton[0].children[0].alpha = 1.0;
 		this.pieceButton[0].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.piecePush   = true;
 	    this.no = 1;
  	}
@@ -510,8 +510,8 @@ class PieceButton extends createjs.Container{
 		this.pieceButton[1].children[0].uncache();
 		this.pieceButton[1].children[0].alpha = 1.0;
 		this.pieceButton[1].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.piecePush   = true;
 	    this.no = 2;
  	}
@@ -521,8 +521,8 @@ class PieceButton extends createjs.Container{
 		this.pieceButton[2].children[0].uncache();
 		this.pieceButton[2].children[0].alpha = 1.0;
 		this.pieceButton[2].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.piecePush   = true;
 	    this.no = 3;
  	}
@@ -532,8 +532,8 @@ class PieceButton extends createjs.Container{
 		this.pieceButton[3].children[0].uncache();
 		this.pieceButton[3].children[0].alpha = 1.0;
 		this.pieceButton[3].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.piecePush   = true;
 	    this.no = 4;
  	}
@@ -543,8 +543,8 @@ class PieceButton extends createjs.Container{
 		this.pieceButton[4].children[0].uncache();
 		this.pieceButton[4].children[0].alpha = 1.0;
 		this.pieceButton[4].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.piecePush   = true;
 	    this.no = 5;
  	}
@@ -554,15 +554,15 @@ class PieceButton extends createjs.Container{
 		this.pieceButton[5].children[0].uncache();
 		this.pieceButton[5].children[0].alpha = 1.0;
 		this.pieceButton[5].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
+	    this.dragPointX = stage.mouseX * cns_scale;
+	    this.dragPointY = stage.mouseY * cns_scale;
 	    this.piecePush   = true;
 	    this.no = 6;
  	}
 
     pieceHandleMove(event){
     // マウス追従　ドラッグ開始地点との補正あり
-		if(Math.abs(this.dragPointX - stage.mouseX) > 15 || Math.abs(this.dragPointY - stage.mouseY) > 15){
+		if(Math.abs(this.dragPointX - stage.mouseX * cns_scale) > 15 || Math.abs(this.dragPointY - stage.mouseY * cns_scale) > 15){
 	        this.piecePush = false;
 			this.pieceButton[this.no - 1].children[0].uncache();
 			this.pieceButton[this.no - 1].children[0].alpha = 0.5;
