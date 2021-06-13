@@ -56,5 +56,5 @@ function init() {
 	// createjs.Ticker.timingMode = createjs.Ticker.RAF; //滑らかに
 
 	//１秒間に更新するフレーム数を指定。デフォルトは２４fps ＝＞　スマホはこっちで調整
-	createjs.Ticker.framerate = 40;
+	createjs.Ticker.framerate = 60;
 }
