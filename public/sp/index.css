@@ -124,10 +124,11 @@ ul.mem_list li:before {
 	width: 80%;
 	margin-left: 5px;
 }
+
 .msg_iptxt input[type='text'] {
-	font: 6px/6px sans-serif;
+	font: 15px/15px sans-serif;
 	box-sizing: border-box;
-	width: 90%;
+	width: 100%;
 	padding: 0.3em;
 	transition: 0.3s;
 	letter-spacing: 1px;
@@ -136,6 +137,7 @@ ul.mem_list li:before {
 	border-bottom: 2px solid #aaaaaa;
 	background: transparent;
 }
+
 .ef2 input[type='text']:focus {
 	border-bottom: 2px solid #da3c41;
 	outline: none;
