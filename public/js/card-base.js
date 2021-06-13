@@ -169,7 +169,7 @@ class Judge{
 		this.pieceButton = new PieceButton(10,150);
 
 		//resign
-		this.resignButton = new ResignButton(cns_stageWidth / 2 - cns_buttonWidth - 10,45);
+		this.resignButton = new ResignButton(cns_stageWidth - cns_buttonWidth - 10,45);
 	}
 
 	playCard(data){
