@@ -39,7 +39,12 @@ function init() {
 	createjs.Sound.registerSound("./sounds/button.mp3", "button");
 	createjs.Sound.registerSound("./sounds/champion.mp3", "champion");
 	createjs.Sound.registerSound("./sounds/lost.mp3", "lost");
-	// createjs.Sound.play("destruction");
+
+	// スピード
+	cns_speed = 1;          //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  
+	cns_friction = 1 / 50;  //background 摩擦係数（fps60のとき1/50。fpsが小さいと係数は大きくする必要がある）
+	cns_duration = 300;     //teenの期間　
+
 
 	// タッチ操作をサポートしているブラウザーならばタッチ操作を有効にします。
 	if(createjs.Touch.isSupported() == true){

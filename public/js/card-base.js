@@ -11,10 +11,6 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 	cns_players = argUserList.length;		//プレイヤー数
 	cns_handCards = argHandCards;           //手札の数制限、あとで直す。（外からもらう）
 
-	cns_speed = 1;          //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  
-	cns_friction = 1 / 50;  //background 摩擦係数（fps60のとき1/50。fpsが小さいと係数は大きくする必要がある）
-	cns_duration = 300;     //teenの期間　
-
 	cns_cardWidth = 100;
 	cns_cardHeight = 140;
 

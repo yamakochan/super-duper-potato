@@ -43,7 +43,10 @@ function init() {
 	createjs.Sound.registerSound("../sounds/champion.mp3", "champion");
 	createjs.Sound.registerSound("../sounds/lost.mp3", "lost");
 
-	// createjs.Sound.play("destruction");
+	// スピード
+	cns_speed = 2;          //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  
+	cns_friction = 3 / 50;  //background 摩擦係数（fps60のとき1/50。fpsが小さいと係数は大きくする必要がある）
+	cns_duration = 300;     //teenの期間　
 
 	// タッチ操作をサポートしているブラウザーならばタッチ操作を有効にします。
 	if(createjs.Touch.isSupported() == true){
@@ -53,8 +56,8 @@ function init() {
 	createjs.Ticker.addEventListener("tick",stage); //自動更新を有効にする
 
 	//ブラウザの画面更新に適したタイミング「RAF」は１秒間に６０回発生する。60fpsを実現
-	// createjs.Ticker.timingMode = createjs.Ticker.RAF; //滑らかに
+	createjs.Ticker.timingMode = createjs.Ticker.RAF; //滑らかに
 
 	//１秒間に更新するフレーム数を指定。デフォルトは２４fps ＝＞　スマホはこっちで調整
-	createjs.Ticker.framerate = 60;
+	// createjs.Ticker.framerate = 60;
 }
