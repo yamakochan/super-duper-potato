@@ -8,7 +8,7 @@ function init() {
 		cns_stageWidth = cns_boadWidth;
 	}
 	if(window.innerHeight * window.devicePixelRatio < cns_boadHeight){
-		cns_stageHeight = window.innerHeight;
+		cns_stageHeight = window.innerHeight * window.devicePixelRatio;
 	}else{
 		cns_stageHeight = cns_boadHeight;
 	}
