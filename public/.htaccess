@@ -1,7 +1,0 @@
-# SP location
-RewriteEngine On
-RewriteCond %{REQUEST_URI} !^/sp/.*$
-RewriteCond %{HTTP_USER_AGENT} (iPhone|iPod|Android.*Mobile|BlackBerry|Windows.Phone) [NC]
-RewriteCond %{HTTP_USER_AGENT} !iPad [NC]
-RewriteCond %{HTTP_COOKIE} !viewmode=pc
-RewriteRule ^(.*)$ /sp/$1 [R=301,L]

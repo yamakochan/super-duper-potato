@@ -1,3 +1,5 @@
+#herokuではhtaccess効かない
+
 RewriteEngine on
 RewriteBase /
  

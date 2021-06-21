@@ -1,5 +1,12 @@
 window.addEventListener('load',init);
 function init() {
+	if (window.innerWidth > 767) {
+		let xlocarr  = document.location.href.split("/");
+		let xlocarr1 = xlocarr.slice(0,-2);
+		let xlocation = xlocarr1.join("/");
+    	document.location.href = xlocation + "/";
+	}
+
 	cns_sp = true;
 	cns_boadWidth = 1281;
     cns_boadHeight = 1281;
