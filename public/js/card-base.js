@@ -589,7 +589,53 @@ class Background extends createjs.Container{
 
         // すまほでは使わない
         this.on("dblclick", this.handledblclick,this);
+
+        // すまほ用
+        this.on("touchstart", this.handleTS,this);
+        this.on("touchmove", this.handleTM,this);
+        this.on("touchend", this.handleTE,this);
     }
+
+    handleTS(event){
+		if (event.touches.length >= 2) {
+			this.notActivate();
+	        this.p1 = event.touches[0];
+	        this.p2 = event.touches[1];
+	        this.pinchDist = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
+	    }
+ 	}
+
+    handleTM(event){
+		if (event.touches.length >= 2) {
+	        this.p1 = event.touches[0];
+	        this.p2 = event.touches[1];
+	        this.pinchDist2 = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
+	        this.scale = this.pinchDist / this.pinchDist2;
+
+	        if(this.scale < 1){
+	        	this.scale = 1;
+	        }
+	        cns_scale = this.scale;
+			if(window.innerWidth * cns_scale < cns_boadWidth){
+				cns_stageWidth = window.innerWidth * cns_scale;
+			}else{
+				cns_stageWidth = cns_boadWidth;
+			}
+			if(window.innerHeight * cns_scale < cns_boadHeight){
+				cns_stageHeight = window.innerHeight * cns_scale;
+			}else{
+				cns_stageHeight = cns_boadHeight;
+			}
+
+			canvasElement.setAttribute("width" ,cns_stageWidth);
+			canvasElement.setAttribute("height" ,cns_stageHeight);
+			stage.scaleX = stage.scaleY = 1 / cns_scale;
+	    }
+ 	}
+
+    handleTE(event){
+	    this.Activate();
+ 	}
 
     handleDown(event){
         this.dx = 0;

@@ -2,10 +2,6 @@ window.addEventListener('load',init);
 function init() {
 	if (window.innerWidth <= 767) {
 		let xlocarr  = document.location.href.split("/");
-		// let xlocarr1 = xlocarr.slice(0,-2);
-		// let xloctail = xlocarr.slice(-1);
-		// let xlocation = xlocarr1.join("/");
-  //   	document.location.href = xlocation + "/sp/" + xloctail;
 		let xlocarr1 = xlocarr.slice(0,-1);
 		let xlocation = xlocarr1.join("/");
     	document.location.href = xlocation + "/sp/";
