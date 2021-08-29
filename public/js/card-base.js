@@ -582,9 +582,9 @@ class Background extends createjs.Container{
 
 
         this.on('tick',this.update,this);
-    	// this.on("mousedown", this.handleDown,this);
-     //    this.on("pressmove", this.handleMove,this);
-     //    this.on("pressup", this.handleUp,this);
+    	this.addEventListener("mousedown", this.handleDown);
+        this.on("pressmove", this.handleMove,this);
+        this.on("pressup", this.handleUp,this);
 
         // すまほでは使わない
         this.on("dblclick", this.handledblclick,this);
