@@ -643,6 +643,7 @@ class Background extends createjs.Container{
  	}
 
     handleDown(event){
+    	let notice0 = new Notice(0,50,"handleDown","GhostWhite",10,60);
         this.dx = 0;
         this.dy = 0;
         this.accx = 0;
