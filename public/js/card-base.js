@@ -592,7 +592,7 @@ class Background extends createjs.Container{
     }
 
     handleDown(event){
-    	let notice0 = new Notice(0,50,"handleDown","GhostWhite",10,60);
+    	let notice0 = new Notice(0,50,"handleDown","GhostWhite",10,0);
         this.dx = 0;
         this.dy = 0;
         this.accx = 0;
@@ -608,7 +608,8 @@ class Background extends createjs.Container{
 		this.prey2 = layer1.y;
 		this.hitwall = false;
     // swipeの速度測定用
-		if (event.nativeEvent.targetTouches.length >= 2) {
+	    let notice0 = new Notice(0,0,event.nativeEvent.targetTouches.length,"GhostWhite",10,30);
+		if (cns_sp && event.nativeEvent.targetTouches.length >= 2) {
 	        this.p1 = event.nativeEvent.targetTouches[0];
 	        this.p2 = event.nativeEvent.targetTouches[1];
 	        this.pinchDist = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
@@ -620,7 +621,7 @@ class Background extends createjs.Container{
     // this.activate だとダメなのはなぜ？？？
 		if(background.activate){
     // マウス追従　ドラッグ開始地点との補正あり
-    		if(event.nativeEvent.targetTouches.length < 2){
+    		if(!cns_sp || event.nativeEvent.targetTouches.length < 2){
 	        	layer1.x = (stage.mouseX * cns_scale - this.dragPointX);
 	        	if(layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin){
 	        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) * -1;
