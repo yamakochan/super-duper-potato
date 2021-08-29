@@ -591,7 +591,7 @@ class Background extends createjs.Container{
         this.on("dblclick", this.handledblclick,this);
 
         // すまほ用
-        this.on("touchstart", this.handleTS,this);
+        this.addEventListener("touchstart", this.handleTS);
         this.on("touchmove", this.handleTM,this);
         this.on("touchend", this.handleTE,this);
     }
