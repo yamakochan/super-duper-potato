@@ -592,7 +592,6 @@ class Background extends createjs.Container{
     }
 
     handleDown(event){
-    	let notice0 = new Notice(0,50,"handleDown","GhostWhite",10,30);
         this.dx = 0;
         this.dy = 0;
         this.accx = 0;
@@ -608,15 +607,10 @@ class Background extends createjs.Container{
 		this.prey2 = layer1.y;
 		this.hitwall = false;
     // swipeの速度測定用
-	    let notice1 = new Notice(0,0,event.nativeEvent.targetTouches.length,"GhostWhite",10,30);
 		if (cns_sp && event.nativeEvent.targetTouches.length >= 2) {
-	    	let notice2 = new Notice(0,100,"1111","GhostWhite",10,30);
 	        this.p1 = event.nativeEvent.targetTouches[0];
-	    	let notice3 = new Notice(0,100,"2222","GhostWhite",10,30);
 	        this.p2 = event.nativeEvent.targetTouches[1];
-	    	let notice4 = new Notice(0,100,"3333","GhostWhite",10,30);
 	        this.pinchDist = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
-	    	let notice5 = new Notice(0,120,this.pinchDist,"GhostWhite",10,30);
 	    }
  	}
 
@@ -655,11 +649,11 @@ class Background extends createjs.Container{
 		        this.p1 = event.nativeEvent.targetTouches[0];
 		        this.p2 = event.nativeEvent.targetTouches[1];
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
-		        this.scale = this.pinchDist / this.pinchDist2;
+		        this.scale = this.pinchDist2 / this.pinchDist;
 
-		        if(this.scale < 1){
-		        	this.scale = 1;
-		        }
+		        // if(this.scale < 1){
+		        // 	this.scale = 1;
+		        // }
 		        cns_scale = this.scale;
 				if(window.innerWidth * cns_scale < cns_boadWidth){
 					cns_stageWidth = window.innerWidth * cns_scale;
