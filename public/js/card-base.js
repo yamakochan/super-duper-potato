@@ -674,8 +674,7 @@ class Background extends createjs.Container{
 				stage.scaleX = stage.scaleY = 1 / cns_scale;
 				background.scaleX = background.scaleY = 1;
 				layer1.scaleX = layer1.scaleY = 1;
-				judge.deck.scaleX = judge.deck.scaleY = 1;
-
+				judge.deck.scaleX = judge.deck.scaleY = 1/cns_scale;
 			}
 		}
     }
