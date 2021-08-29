@@ -591,52 +591,6 @@ class Background extends createjs.Container{
 
     }
 
-    handleTS(event){
-    	let notice0 = new Notice(0,50,"handleTS","GhostWhite",10,60);
-		if (event.touches.length >= 2) {
-			this.notActivate();
-	        this.p1 = event.touches[0];
-	        this.p2 = event.touches[1];
-	        this.pinchDist = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
-	    	let notice0 = new Notice(0,50,this.pinchDist,"GhostWhite",10,60);
-	    }
- 	}
-
-    handleTM(event){
-		event.preventDefault();
-    	let notice0 = new Notice(0,50,"handleTM","GhostWhite",10,60);
-		if (event.touches.length >= 2) {
-	        this.p1 = event.touches[0];
-	        this.p2 = event.touches[1];
-	        this.pinchDist2 = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
-	        this.scale = this.pinchDist / this.pinchDist2;
-
-	        if(this.scale < 1){
-	        	this.scale = 1;
-	        }
-	        cns_scale = this.scale;
-			if(window.innerWidth * cns_scale < cns_boadWidth){
-				cns_stageWidth = window.innerWidth * cns_scale;
-			}else{
-				cns_stageWidth = cns_boadWidth;
-			}
-			if(window.innerHeight * cns_scale < cns_boadHeight){
-				cns_stageHeight = window.innerHeight * cns_scale;
-			}else{
-				cns_stageHeight = cns_boadHeight;
-			}
-
-			canvasElement.setAttribute("width" ,cns_stageWidth);
-			canvasElement.setAttribute("height" ,cns_stageHeight);
-			stage.scaleX = stage.scaleY = 1 / cns_scale;
-	    	let notice0 = new Notice(0,50,stage.scaleX,"GhostWhite",10,60);
-	    }
- 	}
-
-    handleTE(event){
-	    this.Activate();
- 	}
-
     handleDown(event){
     	let notice0 = new Notice(0,50,"handleDown","GhostWhite",10,60);
         this.dx = 0;
@@ -653,38 +607,72 @@ class Background extends createjs.Container{
 		this.prex2 = layer1.x;
 		this.prey2 = layer1.y;
 		this.hitwall = false;
+    // swipeの速度測定用
+		if (event.nativeEvent.targetTouches.length >= 2) {
+	        this.p1 = event.nativeEvent.targetTouches[0];
+	        this.p2 = event.nativeEvent.targetTouches[1];
+	        this.pinchDist = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
+	    	let notice0 = new Notice(0,0,this.pinchDist,"GhostWhite",10,60);
+	    }
  	}
 
     handleMove(event){
     // this.activate だとダメなのはなぜ？？？
 		if(background.activate){
     // マウス追従　ドラッグ開始地点との補正あり
-        	layer1.x = (stage.mouseX * cns_scale - this.dragPointX);
-        	if(layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin){
-        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) * -1;
-        	}else{
-	        	if(layer1.x  * -1 > cns_layer1Right - cns_stageWidth + cns_layer1SideMargin){
-	        		layer1.x = (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) * -1;
+    		if(event.nativeEvent.targetTouches.length < 2){
+	        	layer1.x = (stage.mouseX * cns_scale - this.dragPointX);
+	        	if(layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin){
+	        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) * -1;
 	        	}else{
-					this.prex2 = this.prex;
-					this.prex = layer1.x;
+		        	if(layer1.x  * -1 > cns_layer1Right - cns_stageWidth + cns_layer1SideMargin){
+		        		layer1.x = (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) * -1;
+		        	}else{
+						this.prex2 = this.prex;
+						this.prex = layer1.x;
+		        	}
 	        	}
-        	}
 
-        	layer1.y = (stage.mouseY * cns_scale - this.dragPointY);
-        	if(layer1.y * -1 < cns_layer1Top - cns_layer1VertMargin){
-        		layer1.y = (cns_layer1Top - cns_layer1VertMargin) * -1;
-        	}else{
-	        	if(layer1.y  * -1 > cns_layer1Bottom - cns_stageHeight + cns_layer1VertMargin){
-	        		layer1.y = (cns_layer1Bottom - cns_stageHeight + cns_layer1VertMargin) * -1;
+	        	layer1.y = (stage.mouseY * cns_scale - this.dragPointY);
+	        	if(layer1.y * -1 < cns_layer1Top - cns_layer1VertMargin){
+	        		layer1.y = (cns_layer1Top - cns_layer1VertMargin) * -1;
 	        	}else{
-					this.prey2 = this.prey;
-					this.prey = layer1.y;
+		        	if(layer1.y  * -1 > cns_layer1Bottom - cns_stageHeight + cns_layer1VertMargin){
+		        		layer1.y = (cns_layer1Bottom - cns_stageHeight + cns_layer1VertMargin) * -1;
+		        	}else{
+						this.prey2 = this.prey;
+						this.prey = layer1.y;
+		        	}
 	        	}
-        	}
 
-        	layer2.x = layer1.x;
-        	layer2.y = layer1.y;       	
+	        	layer2.x = layer1.x;
+	        	layer2.y = layer1.y;       	
+			}else{
+		        this.p1 = event.nativeEvent.targetTouches[0];
+		        this.p2 = event.nativeEvent.targetTouches[1];
+		        this.pinchDist2 = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
+		        this.scale = this.pinchDist / this.pinchDist2;
+
+		        if(this.scale < 1){
+		        	this.scale = 1;
+		        }
+		        cns_scale = this.scale;
+				if(window.innerWidth * cns_scale < cns_boadWidth){
+					cns_stageWidth = window.innerWidth * cns_scale;
+				}else{
+					cns_stageWidth = cns_boadWidth;
+				}
+				if(window.innerHeight * cns_scale < cns_boadHeight){
+					cns_stageHeight = window.innerHeight * cns_scale;
+				}else{
+					cns_stageHeight = cns_boadHeight;
+				}
+
+				canvasElement.setAttribute("width" ,cns_stageWidth);
+				canvasElement.setAttribute("height" ,cns_stageHeight);
+				stage.scaleX = stage.scaleY = 1 / cns_scale;
+		    	let notice0 = new Notice(0,50,stage.scaleX,"GhostWhite",10,60);
+			}
 		}
     }
 
