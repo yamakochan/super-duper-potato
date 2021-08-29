@@ -597,16 +597,19 @@ class Background extends createjs.Container{
     }
 
     handleTS(event){
+    	let notice0 = new Notice(0,50,"handleTS","GhostWhite",10,60);
 		if (event.touches.length >= 2) {
 			this.notActivate();
 	        this.p1 = event.touches[0];
 	        this.p2 = event.touches[1];
 	        this.pinchDist = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
+	    	let notice0 = new Notice(0,50,this.pinchDist,"GhostWhite",10,60);
 	    }
  	}
 
     handleTM(event){
 		event.preventDefault();
+    	let notice0 = new Notice(0,50,"handleTM","GhostWhite",10,60);
 		if (event.touches.length >= 2) {
 	        this.p1 = event.touches[0];
 	        this.p2 = event.touches[1];
@@ -631,6 +634,7 @@ class Background extends createjs.Container{
 			canvasElement.setAttribute("width" ,cns_stageWidth);
 			canvasElement.setAttribute("height" ,cns_stageHeight);
 			stage.scaleX = stage.scaleY = 1 / cns_scale;
+	    	let notice0 = new Notice(0,50,stage.scaleX,"GhostWhite",10,60);
 	    }
  	}
 
