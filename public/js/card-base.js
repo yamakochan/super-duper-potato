@@ -615,7 +615,7 @@ class Background extends createjs.Container{
 	    	let notice3 = new Notice(0,100,"2222","GhostWhite",10,30);
 	        this.p2 = event.nativeEvent.targetTouches[1];
 	    	let notice4 = new Notice(0,100,"3333","GhostWhite",10,30);
-	        this.pinchDist = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
+	        this.pinchDist = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 	    	let notice5 = new Notice(0,120,this.pinchDist,"GhostWhite",10,30);
 	    }
  	}
@@ -654,7 +654,7 @@ class Background extends createjs.Container{
 			}else{
 		        this.p1 = event.nativeEvent.targetTouches[0];
 		        this.p2 = event.nativeEvent.targetTouches[1];
-		        this.pinchDist2 = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
+		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist / this.pinchDist2;
 
 		        if(this.scale < 1){
