@@ -621,7 +621,7 @@ class Background extends createjs.Container{
     // this.activate だとダメなのはなぜ？？？
 		if(background.activate){
     // マウス追従　ドラッグ開始地点との補正あり
-    		if(!pinch){
+    		if(!this.pinch){
 	        	layer1.x = (stage.mouseX * cns_scale - this.dragPointX);
 	        	if(layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin){
 	        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) * -1;
@@ -678,7 +678,7 @@ class Background extends createjs.Container{
 
 	handleUp(event) {
 		if(background.activate){
-			if(!pinch){
+			if(!this.pinch){
 				this.dx = (this.prex - this.prex2) / 20 * cns_speed;
 				this.dy = (this.prey - this.prey2) / 20 * cns_speed;
 				if(Math.abs(this.dx) > 5){this.dx = this.dx / Math.abs(this.dx) * 5};
