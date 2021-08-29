@@ -671,11 +671,10 @@ class Background extends createjs.Container{
 
 				canvasElement.setAttribute("width" ,cns_stageWidth);
 				canvasElement.setAttribute("height" ,cns_stageHeight);
-				stage.scaleX = stage.scaleY = 1 / cns_scale;
-				stage.update(); 
-				background.scaleX = background.scaleY = 1;
-				layer1.scaleX = layer1.scaleY = 1/cns_scale;
-				judge.deck.scaleX = judge.deck.scaleY = 1/cns_scale;
+				stage.scale(1 / cns_scale,1 / cns_scale);
+				// stage.scaleX = stage.scaleY = 1 / cns_scale;
+
+				//！！background しか拡大、縮小しない。。。なぜ？？？
 			}
 		}
     }
