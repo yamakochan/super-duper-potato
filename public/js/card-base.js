@@ -592,7 +592,7 @@ class Background extends createjs.Container{
     }
 
     handleDown(event){
-    	let notice0 = new Notice(0,50,"handleDown","GhostWhite",10,0);
+    	let notice0 = new Notice(0,50,"handleDown","GhostWhite",10,30);
         this.dx = 0;
         this.dy = 0;
         this.accx = 0;
@@ -610,10 +610,13 @@ class Background extends createjs.Container{
     // swipeの速度測定用
 	    let notice1 = new Notice(0,0,event.nativeEvent.targetTouches.length,"GhostWhite",10,30);
 		if (cns_sp && event.nativeEvent.targetTouches.length >= 2) {
+	    	let notice2 = new Notice(0,100,"1111","GhostWhite",10,30);
 	        this.p1 = event.nativeEvent.targetTouches[0];
+	    	let notice2 = new Notice(0,100,"2222","GhostWhite",10,30);
 	        this.p2 = event.nativeEvent.targetTouches[1];
+	    	let notice2 = new Notice(0,100,"3333","GhostWhite",10,30);
 	        this.pinchDist = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
-	    	let notice2 = new Notice(0,0,this.pinchDist,"GhostWhite",10,60);
+	    	let notice2 = new Notice(0,120,this.pinchDist,"GhostWhite",10,30);
 	    }
  	}
 
