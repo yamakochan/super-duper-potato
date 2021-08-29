@@ -10,7 +10,7 @@ function init() {
 	cns_sp = true;
 	cns_boadWidth = 1281;
     cns_boadHeight = 1281;
-    cns_scale = 1.0;    
+    cns_scale = 2.0;    
 	if(window.innerWidth * cns_scale < cns_boadWidth){
 		cns_stageWidth = window.innerWidth * cns_scale;
 	}else{
