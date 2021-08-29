@@ -608,9 +608,12 @@ class Background extends createjs.Container{
 		this.hitwall = false;
     // swipeの速度測定用
 		if (cns_sp && event.nativeEvent.targetTouches.length >= 2) {
+			this.pinch = true;
 	        this.p1 = event.nativeEvent.targetTouches[0];
 	        this.p2 = event.nativeEvent.targetTouches[1];
 	        this.pinchDist = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
+	    }else{
+			this.pinch = false;
 	    }
  	}
 
@@ -618,7 +621,7 @@ class Background extends createjs.Container{
     // this.activate だとダメなのはなぜ？？？
 		if(background.activate){
     // マウス追従　ドラッグ開始地点との補正あり
-    		if(!cns_sp || event.nativeEvent.targetTouches.length < 2){
+    		if(!pinch){
 	        	layer1.x = (stage.mouseX * cns_scale - this.dragPointX);
 	        	if(layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin){
 	        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) * -1;
@@ -669,38 +672,40 @@ class Background extends createjs.Container{
 				canvasElement.setAttribute("width" ,cns_stageWidth);
 				canvasElement.setAttribute("height" ,cns_stageHeight);
 				stage.scaleX = stage.scaleY = 1 / cns_scale;
-		    	let notice0 = new Notice(0,50,stage.scaleX,"GhostWhite",10,60);
 			}
 		}
     }
 
 	handleUp(event) {
 		if(background.activate){
-			this.dx = (this.prex - this.prex2) / 4 * cns_speed;;
-			this.dy = (this.prey - this.prey2) / 4 * cns_speed;;
-			if(this.dx > 60){this.dx = 60};
-			if(this.dy > 60){this.dy = 60};
-			if(Math.abs(this.dx) > 8){this.dx = this.dx / Math.abs(this.dx) * 8};
-			if(Math.abs(this.dy) > 8){this.dy = this.dy / Math.abs(this.dy) * 8};
-			if(this.dx != 0 || this.dy != 0){
-				this.accx = this.dx / (Math.abs(this.dx) + Math.abs(this.dy)) * cns_friction;
-				this.accy = this.dy / (Math.abs(this.dx) + Math.abs(this.dy)) * cns_friction;
-			}
-			// if(this.dx == 0 && this.dy == 0 && this.activate){
-			if(this.dx == 0 && this.dy == 0 && this.prey2 == layer1.y && this.prex2 == layer1.x){
-				if(judge.end == 0){
-					//   自陣への移動ー＞すまほ用
-					if(cns_sp){
-						let nX = cns_layer1InitX;
-						let nY = cns_layer1InitY; 
-						let duration = 1000;
-						createjs.Tween.get(layer1, {override:true})
-						.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
-					}
+			if(!pinch){
+				this.dx = (this.prex - this.prex2) / 20 * cns_speed;
+				this.dy = (this.prey - this.prey2) / 20 * cns_speed;
+				if(Math.abs(this.dx) > 5){this.dx = this.dx / Math.abs(this.dx) * 5};
+				if(Math.abs(this.dy) > 5){this.dy = this.dy / Math.abs(this.dy) * 5};
+				if(this.dx != 0 || this.dy != 0){
+					this.accx = this.dx / (Math.abs(this.dx) + Math.abs(this.dy)) * cns_friction;
+					this.accy = this.dy / (Math.abs(this.dx) + Math.abs(this.dy)) * cns_friction;
 				}else{
-					judge.end = 2;
-					clearStage();
-					createjs.Sound.stop("champion");
+					this.accx = 0;
+					this.accy = 0;
+				}
+				// if(this.dx == 0 && this.dy == 0 && this.activate){
+				if(this.dx == 0 && this.dy == 0 && this.prey2 == layer1.y && this.prex2 == layer1.x){
+					if(judge.end == 0){
+						//   自陣への移動ー＞すまほ用
+						if(cns_sp){
+							let nX = cns_layer1InitX;
+							let nY = cns_layer1InitY; 
+							let duration = 1000;
+							createjs.Tween.get(layer1, {override:true})
+							.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
+						}
+					}else{
+						judge.end = 2;
+						clearStage();
+						createjs.Sound.stop("champion");
+					}
 				}
 			}
 		}else{
