@@ -608,12 +608,12 @@ class Background extends createjs.Container{
 		this.prey2 = layer1.y;
 		this.hitwall = false;
     // swipeの速度測定用
-	    let notice0 = new Notice(0,0,event.nativeEvent.targetTouches.length,"GhostWhite",10,30);
+	    let notice1 = new Notice(0,0,event.nativeEvent.targetTouches.length,"GhostWhite",10,30);
 		if (cns_sp && event.nativeEvent.targetTouches.length >= 2) {
 	        this.p1 = event.nativeEvent.targetTouches[0];
 	        this.p2 = event.nativeEvent.targetTouches[1];
 	        this.pinchDist = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
-	    	let notice0 = new Notice(0,0,this.pinchDist,"GhostWhite",10,60);
+	    	let notice2 = new Notice(0,0,this.pinchDist,"GhostWhite",10,60);
 	    }
  	}
 
