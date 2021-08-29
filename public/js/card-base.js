@@ -606,6 +606,7 @@ class Background extends createjs.Container{
  	}
 
     handleTM(event){
+		event.preventDefault();
 		if (event.touches.length >= 2) {
 	        this.p1 = event.touches[0];
 	        this.p2 = event.touches[1];
