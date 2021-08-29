@@ -612,11 +612,11 @@ class Background extends createjs.Container{
 		if (cns_sp && event.nativeEvent.targetTouches.length >= 2) {
 	    	let notice2 = new Notice(0,100,"1111","GhostWhite",10,30);
 	        this.p1 = event.nativeEvent.targetTouches[0];
-	    	let notice2 = new Notice(0,100,"2222","GhostWhite",10,30);
+	    	let notice3 = new Notice(0,100,"2222","GhostWhite",10,30);
 	        this.p2 = event.nativeEvent.targetTouches[1];
-	    	let notice2 = new Notice(0,100,"3333","GhostWhite",10,30);
+	    	let notice4 = new Notice(0,100,"3333","GhostWhite",10,30);
 	        this.pinchDist = Math.abs(p1.pageX - p2.pageX) + Math.abs(p1.pageY - p2.pageY);
-	    	let notice2 = new Notice(0,120,this.pinchDist,"GhostWhite",10,30);
+	    	let notice5 = new Notice(0,120,this.pinchDist,"GhostWhite",10,30);
 	    }
  	}
 
