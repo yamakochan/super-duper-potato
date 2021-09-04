@@ -124,8 +124,10 @@ class CncrCardButton extends AbstButton{
 
  	buttonCommand(){
  		let xplayer = null;
+ 		this.card.nonreactiveCard();
  		if(this.text == "trash" || this.text == "draw" || this.text == "spread"){
  			xplayer = cns_myPlayerIndex;
+	 		this.card.reactiveCard();
  		}
 		socket.emit("serverButtonAction", {
 			player: xplayer,
