@@ -168,8 +168,7 @@ class Deck extends createjs.Container{
 		xcard.faceDown();
 
 	 	this.deckCard[this.deckCard.length] = xcard;
-	 	stage.addChild(xcard);
-	 	// this.addChild(xcard);
+	 	this.addChild(xcard);
 
     	createjs.Sound.play("place");
 	 	xcard.moveCard(arg_nX, arg_nY);
