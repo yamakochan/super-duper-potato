@@ -435,9 +435,9 @@ class Card extends createjs.Container{
 
  	reactiveCard(){
 		setTimeout(()=>{
-		   	this.on("mousedown", this.handleDown,this);
-	        this.on("pressmove", this.handleMove,this);
-	        this.on("pressup", this.handleUp,this);
+		   	this.mousedownListener = this.on("mousedown", this.handleDown,this);
+	        this.pressmoveListener = this.on("pressmove", this.handleMove,this);
+	        this.pressupListener = this.on("pressup", this.handleUp,this);
 		}, 1000);
 	}
 }

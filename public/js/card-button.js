@@ -123,12 +123,15 @@ class CncrCardButton extends AbstButton{
 	}
 
  	buttonCommand(){
- 		let xplayer = null;
+ 		let xplayer = cns_myPlayerIndex;
  		this.card.nonreactiveCard();
- 		if(this.text == "trash" || this.text == "draw" || this.text == "spread"){
- 			xplayer = cns_myPlayerIndex;
-	 		this.card.reactiveCard();
- 		}
+	 	this.card.reactiveCard();
+ 		// let xplayer = null;
+ 		// this.card.nonreactiveCard();
+ 		// if(this.text == "trash" || this.text == "draw" || this.text == "spread" || this.text == "close"){
+ 		// 	xplayer = cns_myPlayerIndex;
+	 	// 	this.card.reactiveCard();
+ 		// }
 		socket.emit("serverButtonAction", {
 			player: xplayer,
 	 		no: this.card.no,
