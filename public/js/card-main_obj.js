@@ -383,11 +383,11 @@ class Card extends createjs.Container{
 		this.off();
 		createjs.Tween.get(this, {override:true})
 		.to({x:newX, y:newY}, cns_duration, createjs.Ease.cubicOut)
-		.call(function(){
-		   	this.on("mousedown", this.handleDown,this);
-	        this.on("pressmove", this.handleMove,this);
-	        this.on("pressup", this.handleUp,this);
-	    });
+		// .call(function(){
+		//    	this.on("mousedown", this.handleDown,this);
+	 //        this.on("pressmove", this.handleMove,this);
+	 //        this.on("pressup", this.handleUp,this);
+	 //    });
  	}
 
  	faceUp(){
