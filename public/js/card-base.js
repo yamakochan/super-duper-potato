@@ -622,7 +622,7 @@ class Background extends createjs.Container{
 		if(background.activate){
     // マウス追従　ドラッグ開始地点との補正あり
     		if(!this.pinch){
-	        	layer1.x = (stage.mouseX / cns_scale - this.dragPointX);
+	        	layer1.x = (stage.mouseX - this.dragPointX);
 	        	if(layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin){
 	        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) * -1;
 	        	}else{
@@ -634,7 +634,7 @@ class Background extends createjs.Container{
 		        	}
 	        	}
 
-	        	layer1.y = (stage.mouseY / cns_scale - this.dragPointY);
+	        	layer1.y = (stage.mouseY - this.dragPointY);
 	        	if(layer1.y * -1 < cns_layer1Top - cns_layer1VertMargin){
 	        		layer1.y = (cns_layer1Top - cns_layer1VertMargin) * -1;
 	        	}else{
@@ -671,10 +671,9 @@ class Background extends createjs.Container{
 
 				canvasElement.setAttribute("width" ,cns_stageWidth);
 				canvasElement.setAttribute("height" ,cns_stageHeight);
-				stage.updateViewport(canvasElement.width,canvasElement.height);
+				// stage.updateViewport(canvasElement.width,canvasElement.height);
 				stage.scale(1 / cns_scale,1 / cns_scale);
 				// stage.scaleX = stage.scaleY = 1 / cns_scale;
-				stage.updateViewport(canvasElement.width,canvasElement.height);
 
 				//！！background しか拡大、縮小しない。。。なぜ？？？
 			}
