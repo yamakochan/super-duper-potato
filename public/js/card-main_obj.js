@@ -380,7 +380,9 @@ class Card extends createjs.Container{
 		let newX = arg_nX * Math.cos(xrad) - arg_nY * Math.sin(xrad);
 		let newY = arg_nX * Math.sin(xrad) + arg_nY * Math.cos(xrad);
 
-		this.off();
+		this.off("mousedown");
+		this.off("pressmove");
+		this.off("pressup");
 		createjs.Tween.get(this, {override:true})
 		.to({x:newX, y:newY}, cns_duration, createjs.Ease.cubicOut)
 		// .call(function(){
