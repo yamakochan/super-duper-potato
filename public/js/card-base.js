@@ -606,12 +606,13 @@ class Background extends createjs.Container{
 		this.prex2 = layer1.x;
 		this.prey2 = layer1.y;
 		this.hitwall = false;
-    // swipeの速度測定用
+    // マルチタッチ判定
 		if (cns_sp && event.nativeEvent.targetTouches.length >= 2) {
 			this.pinch = true;
 	        this.p1 = event.nativeEvent.targetTouches[0];
 	        this.p2 = event.nativeEvent.targetTouches[1];
 	        this.pinchDist = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
+	        this.pinchDist = this.pinchDist / this.scale;
 	    }else{
 			this.pinch = false;
 	    }
