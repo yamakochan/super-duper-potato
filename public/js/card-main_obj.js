@@ -382,7 +382,7 @@ class Card extends createjs.Container{
 
 		createjs.Tween.get(this, {override:true})
 		.to({x:newX, y:newY}, cns_duration, createjs.Ease.cubicOut)
-		.onStart(()=>{this.off();})
+		.onUpdate(()=>{this.off();})
 		.onComplete(()=>{
 		   	this.on("mousedown", this.handleDown,this);
 	        this.on("pressmove", this.handleMove,this);
