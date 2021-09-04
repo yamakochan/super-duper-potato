@@ -596,8 +596,8 @@ class Background extends createjs.Container{
         this.dy = 0;
         this.accx = 0;
         this.accy = 0;
-        this.dragPointX = stage.mouseX * cns_scale - layer1.x;
-        this.dragPointY = stage.mouseY * cns_scale - layer1.y;
+        this.dragPointX = stage.mouseX - layer1.x;
+        this.dragPointY = stage.mouseY - layer1.y;
     	// this.prePointX = stage.x;
     	// this.prePointY = stage.y;
     // swipeの速度測定用
