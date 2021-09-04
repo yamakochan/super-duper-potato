@@ -380,7 +380,7 @@ class Judge{
 		this.playerList[data.player].place.mouseChildren = false;
 		this.playerList[data.player].otherPlace.mouseChildren = false;
 
-		let notice1 = new Notice(0,0,this.playerList[this.currentPlayer].playerName,"GhostWhite",50,120);
+		let notice1 = new Notice(0,0,this.playerList[data.player].playerName,"GhostWhite",50,120);
 		let notice2 = new Notice(0,50,"は、負け！","GhostWhite",50,120);
 
 		if(data.player == cns_myPlayerIndex){
