@@ -380,16 +380,8 @@ class Card extends createjs.Container{
 		let newX = arg_nX * Math.cos(xrad) - arg_nY * Math.sin(xrad);
 		let newY = arg_nX * Math.sin(xrad) + arg_nY * Math.cos(xrad);
 
-		this.off("mousedown",this.mousedownListener);
-		this.off("pressmove",this.pressmoveListener);
-		this.off("pressup",this.pressupListener);
 		createjs.Tween.get(this, {override:true})
-		.to({x:newX, y:newY}, cns_duration, createjs.Ease.cubicOut)
-		.call(function(){
-		   	this.on("mousedown", this.handleDown,this);
-	        this.on("pressmove", this.handleMove,this);
-	        this.on("pressup", this.handleUp,this);
-	    });
+		.to({x:newX, y:newY}, cns_duration, createjs.Ease.cubicOut);
  	}
 
  	faceUp(){
@@ -434,6 +426,20 @@ class Card extends createjs.Container{
 
 		return xcard;
  	}
+
+ 	nonreactiveCard(){
+ 		this.off("mousedown",this.mousedownListener);
+		this.off("pressmove",this.pressmoveListener);
+		this.off("pressup",this.pressupListener);
+	}
+
+ 	reactiveCard(){
+		setTimeout(()=>{
+		   	this.on("mousedown", this.handleDown,this);
+	        this.on("pressmove", this.handleMove,this);
+	        this.on("pressup", this.handleUp,this);
+		}, 1000);
+	}
 }
 
 class OtherPlace extends createjs.Container{
