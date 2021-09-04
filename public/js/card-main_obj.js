@@ -287,9 +287,9 @@ class Card extends createjs.Container{
         this.faceUp();
 
         // this.on('tick',this.update,this);
-    	this.on("mousedown", this.handleDown,this);
-        this.on("pressmove", this.handleMove,this);
-        this.on("pressup", this.handleUp,this);
+    	this.mousedownListener = this.on("mousedown", this.handleDown,this);
+        this.pressmoveListener = this.on("pressmove", this.handleMove,this);
+        this.pressupListener = this.on("pressup", this.handleUp,this);
 	}
 
 	handleDown(event){
@@ -380,9 +380,9 @@ class Card extends createjs.Container{
 		let newX = arg_nX * Math.cos(xrad) - arg_nY * Math.sin(xrad);
 		let newY = arg_nX * Math.sin(xrad) + arg_nY * Math.cos(xrad);
 
-		this.off("mousedown");
-		this.off("pressmove");
-		this.off("pressup");
+		this.off("mousedown",this.mousedownListener);
+		this.off("pressmove",this.pressmoveListener);
+		this.off("pressup",this.pressupListener);
 		createjs.Tween.get(this, {override:true})
 		.to({x:newX, y:newY}, cns_duration, createjs.Ease.cubicOut)
 		// .call(function(){
