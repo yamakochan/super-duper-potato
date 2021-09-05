@@ -57,7 +57,7 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 
 
 	// layer1 = new createjs.Container();
-	layer1 = new Layer1();
+	layer1 = new createjs.Container();
 	stage.addChild(layer1); 
 	layer1.x = cns_layer1InitX;
 	layer1.y = cns_layer1InitY;
@@ -109,16 +109,6 @@ function rescaleStage(argScale){
 	stage.scale(1 / cns_scale,1 / cns_scale);
 }
 
-class Layer1 extends createjs.Container{
-	constructor(){
-		super();
-	}
-
-	xrescaleStage(argScale){
-		rescaleStage(argScale);
-	}
-}
-
 class Judge{
 	constructor(argUserList, argDeckList,argCemetaryList){
 		this.playerList = [];		
@@ -160,6 +150,10 @@ class Judge{
 			this.cemetary.addCemetaryCard(xcard);
 			j++;
 		}
+
+// 拡大縮小のため、cardとpieceのコンテナはbackgroundのchildにする。
+// card,pieceのイベント処理では、backgraundへのイベント波及を止めるため、stopPropagation()をコール。
+
 
 		// playerを作成　（hand , placeを含む）
     	for (let i = 0; i < cns_players; i++){
@@ -684,24 +678,8 @@ class Background extends createjs.Container{
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist2 / this.pinchDist;
 
-		  //       cns_scale = this.scale;
-				// if(window.innerWidth * cns_scale < cns_boadWidth){
-				// 	cns_stageWidth = window.innerWidth * cns_scale;
-				// }else{
-				// 	cns_stageWidth = cns_boadWidth;
-				// }
-				// if(window.innerHeight * cns_scale < cns_boadHeight){
-				// 	cns_stageHeight = window.innerHeight * cns_scale;
-				// }else{
-				// 	cns_stageHeight = cns_boadHeight;
-				// }
-
-				// canvasElement.setAttribute("width" ,cns_stageWidth);
-				// canvasElement.setAttribute("height" ,cns_stageHeight);
-				// stage.scale(1 / cns_scale,1 / cns_scale);
-
-				layer1.xrescaleStage(this.scale);
-				//！！background しか拡大、縮小しない。。。なぜ？？？
+				rescaleStage(this.scale);
+// ここで直接処理してもいいが、stageの属性変更であるため、一応global functionにする。
 			}
 		}
     }

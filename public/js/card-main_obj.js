@@ -27,6 +27,9 @@ class Player extends createjs.Container{
 		this.addChild(this.otherPlace);
 		background.addChild(this.otherPlace);
 		
+// 拡大縮小のため、cardとpieceのコンテナはbackgroundのchildにする。
+// card,pieceのイベント処理では、backgraundへのイベント波及を止めるため、stopPropagation()をコール。
+
 
 		//player毎の表示位置計算用角度
 		this.playerRotation = 0;
@@ -321,8 +324,8 @@ class Card extends createjs.Container{
 		if(this.status == 1 || this.status == 2 || this.status == 9){
 	 		this.backupPointX = this.x;
 	 		this.backupPointY = this.y;
-	        this.dragPointX = stage.mouseX * cns_scale - this.x;
-	        this.dragPointY = stage.mouseY * cns_scale - this.y;
+	        this.dragPointX = stage.mouseX - this.x;
+	        this.dragPointY = stage.mouseY - this.y;
 	    // 半透明にする
 	        this.alpha = 0.5;
 	    // ドラッグ中ステータス　（透明化）
@@ -330,7 +333,7 @@ class Card extends createjs.Container{
 		}
 		if(this.status == 0){
 			//draw button　表示。。　
-			this.drawButton = new CardButton(this, stage.mouseX * cns_scale - layer1.x, stage.mouseY * cns_scale - layer1.y,"draw","hsl(200, 70%, 50%)");
+			this.drawButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"draw","hsl(200, 70%, 50%)");
 			judge.registerButton(this.drawButton);
 		}
  	}
@@ -340,8 +343,8 @@ class Card extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
 		if(this.status == 1 || this.status == 2 || this.status == 9){
 	    	if(this.moving == 1){
-	        	this.x = stage.mouseX * cns_scale - this.dragPointX;
-	        	this.y = stage.mouseY * cns_scale - this.dragPointY;
+	        	this.x = stage.mouseX - this.dragPointX;
+	        	this.y = stage.mouseY - this.dragPointY;
 	        }
 	        if(this.y < cns_layer1Height - cns_cardHeight * 2){
 	        	this.alpha = 1;
@@ -358,14 +361,14 @@ class Card extends createjs.Container{
 		if((this.status == 1 || this.status == 2 || this.status == 9) && this.moving == 1){
 			if(this.backupPointX == this.x && this.backupPointY == this.y && this.status != 1){
 				if(this.status == 2){
-					this.cemetaryButton = new CardButton(this, stage.mouseX * cns_scale - layer1.x, stage.mouseY * cns_scale - layer1.y,"trash","hsl(250, 40%, 50%)");
+					this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"trash","hsl(250, 40%, 50%)");
 					judge.registerButton(this.cemetaryButton);
 				}else{
 					if(this.status == 9){
 						if(judge.cemetary.spread){
-							this.cemetaryButton = new CardButton(this, stage.mouseX * cns_scale - layer1.x, stage.mouseY * cns_scale - layer1.y,"close","hsl(150, 40%, 50%)");
+							this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"close","hsl(150, 40%, 50%)");
 						}else{
-							this.cemetaryButton = new CardButton(this, stage.mouseX * cns_scale - layer1.x, stage.mouseY * cns_scale - layer1.y,"spread","hsl(30, 40%, 50%)");
+							this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"spread","hsl(30, 40%, 50%)");
 						}
 						judge.registerButton(this.cemetaryButton);
 					}
@@ -547,14 +550,15 @@ class Piece extends createjs.Container{
 	}
 
 	handleDown(event){
+		event.stopPropagation();
 		judge.clearButton();
 	    // 背景選択の非活性化
 		background.notActivate();
 
  		this.backupPointX = this.x;
  		this.backupPointY = this.y;
-        this.dragPointX = stage.mouseX * cns_scale - this.x;
-        this.dragPointY = stage.mouseY * cns_scale - this.y;
+        this.dragPointX = stage.mouseX - this.x;
+        this.dragPointY = stage.mouseY - this.y;
 	    // 半透明にする
         this.alpha = 0.5;
 	    // ドラッグ中ステータス　（透明化）
@@ -563,20 +567,22 @@ class Piece extends createjs.Container{
 
     handleMove(event){
     // マウス追従　ドラッグ開始地点との補正あり
+		event.stopPropagation();
     	if(this.moving == 1){
-        	this.x = stage.mouseX * cns_scale - this.dragPointX;
-        	this.y = stage.mouseY * cns_scale - this.dragPointY;
+        	this.x = stage.mouseX - this.dragPointX;
+        	this.y = stage.mouseY - this.dragPointY;
         }
        	this.alpha = 1;
     }
 
  	handleUp(event){
+		event.stopPropagation();
  		this.alpha = 1;
 
 		if(this.moving == 1){
 			if(this.backupPointX == this.x && this.backupPointY == this.y && this.status != 1){
 				judge.clearButton();
-				this.delPieceButton = new DelPieceButton(this, stage.mouseX * cns_scale - layer2.x, stage.mouseY * cns_scale - layer2.y);
+				this.delPieceButton = new DelPieceButton(this, stage.mouseX - layer2.x, stage.mouseY - layer2.y);
 				judge.registerButton(this.delPieceButton);
 			}else{
 	 			socket.emit("serverPlayPiece", {
