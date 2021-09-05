@@ -642,10 +642,10 @@ class Background extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
     		if(!this.pinch){
 	        	layer1.x = (stage.mouseX - this.dragPointX);
-	        	if(layer1.x > cns_stageWidth / cns_scale - cns_layer1SideMargin)
-	        		layer1.x = cns_stageWidth / cns_scale - cns_layer1SideMargin;
-	        	}else{
-		        	if(layer1.x < cns_stageWidth / cns_scale - cns_layer1SideMargin)
+	        	// if(layer1.x > cns_stageWidth / cns_scale - cns_layer1SideMargin)
+	        	// 	layer1.x = cns_stageWidth / cns_scale - cns_layer1SideMargin;
+	        	// }else{
+		        // 	if(layer1.x < cns_stageWidth / cns_scale - cns_layer1SideMargin)
 
 
 	        	if(layer1.x * -1 < (cns_layer1Left - cns_layer1SideMargin) / cns_scale){
