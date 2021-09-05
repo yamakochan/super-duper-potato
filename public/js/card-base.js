@@ -14,11 +14,17 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 	cns_cardWidth = 100;
 	cns_cardHeight = 140;
 
-	cns_deckLeft = 18;
-	cns_deckTop = -125;
+	// cns_deckLeft = 18;
+	// cns_deckTop = -125;
 
-	cns_cemetaryLeft = -130;
-	cns_cemetaryTop = -30;
+	// cns_cemetaryLeft = -130;
+	// cns_cemetaryTop = -30;
+
+	cns_deckLeft = 68;
+	cns_deckTop = -55;
+
+	cns_cemetaryLeft = -80;
+	cns_cemetaryTop = 40;
 
 	cns_layer1Width = cns_boadWidth;
 	cns_layer1Height = cns_boadHeight;
@@ -33,8 +39,10 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 
 	cns_handMargin = 1; //カード間隔 1pt
 	cns_handWidth = (cns_cardWidth + cns_handMargin) * 5; //card５枚分＋間5pt
-	cns_handLeft = -1 * cns_handWidth / 2;               //手札置き場のX座標
-	cns_handTop = cns_layer1Bottom - cns_cardHeight - 5;  //手札置き場のY座標
+	// cns_handLeft = -1 * cns_handWidth / 2;               //手札置き場のX座標
+	// cns_handTop = cns_layer1Bottom - cns_cardHeight - 5;  //手札置き場のY座標
+	cns_handLeft = 0;               //手札置き場のX座標
+	cns_handTop = cns_layer1Bottom - cns_cardHeight / 2 - 5;  //手札置き場のY座標
 
 	cns_buttonWidth = 100;
 	cns_buttonHeight = 30;
