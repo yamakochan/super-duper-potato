@@ -14,12 +14,6 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 	cns_cardWidth = 100;
 	cns_cardHeight = 140;
 
-	// cns_deckLeft = 18;
-	// cns_deckTop = -125;
-
-	// cns_cemetaryLeft = -130;
-	// cns_cemetaryTop = -30;
-
 	cns_deckLeft = 68;
 	cns_deckTop = -55;
 
@@ -39,8 +33,6 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 
 	cns_handMargin = 1; //カード間隔 1pt
 	cns_handWidth = (cns_cardWidth + cns_handMargin) * 5; //card５枚分＋間5pt
-	// cns_handLeft = -1 * cns_handWidth / 2;               //手札置き場のX座標
-	// cns_handTop = cns_layer1Bottom - cns_cardHeight - 5;  //手札置き場のY座標
 	cns_handLeft = -1 * cns_handWidth / 2 + cns_cardWidth / 2;               //手札置き場のX座標
 	cns_handTop = cns_layer1Bottom - cns_cardHeight / 2 - 5;  //手札置き場のY座標
 
@@ -96,6 +88,24 @@ function clearStage() {
 	stage.removeChild(info);
 
 	endGame();
+}
+
+function rescaleStage(argScale){
+    cns_scale = argScale;
+	if(window.innerWidth * cns_scale < cns_boadWidth){
+		cns_stageWidth = window.innerWidth * cns_scale;
+	}else{
+		cns_stageWidth = cns_boadWidth;
+	}
+	if(window.innerHeight * cns_scale < cns_boadHeight){
+		cns_stageHeight = window.innerHeight * cns_scale;
+	}else{
+		cns_stageHeight = cns_boadHeight;
+	}
+
+	canvasElement.setAttribute("width" ,cns_stageWidth);
+	canvasElement.setAttribute("height" ,cns_stageHeight);
+	stage.scale(1 / cns_scale,1 / cns_scale);
 }
 
 class Judge{
@@ -663,27 +673,23 @@ class Background extends createjs.Container{
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist2 / this.pinchDist;
 
-		        // if(this.scale < 1){
-		        // 	this.scale = 1;
-		        // }
-		        cns_scale = this.scale;
-				if(window.innerWidth * cns_scale < cns_boadWidth){
-					cns_stageWidth = window.innerWidth * cns_scale;
-				}else{
-					cns_stageWidth = cns_boadWidth;
-				}
-				if(window.innerHeight * cns_scale < cns_boadHeight){
-					cns_stageHeight = window.innerHeight * cns_scale;
-				}else{
-					cns_stageHeight = cns_boadHeight;
-				}
+		  //       cns_scale = this.scale;
+				// if(window.innerWidth * cns_scale < cns_boadWidth){
+				// 	cns_stageWidth = window.innerWidth * cns_scale;
+				// }else{
+				// 	cns_stageWidth = cns_boadWidth;
+				// }
+				// if(window.innerHeight * cns_scale < cns_boadHeight){
+				// 	cns_stageHeight = window.innerHeight * cns_scale;
+				// }else{
+				// 	cns_stageHeight = cns_boadHeight;
+				// }
 
-				canvasElement.setAttribute("width" ,cns_stageWidth);
-				canvasElement.setAttribute("height" ,cns_stageHeight);
-				// stage.updateViewport(canvasElement.width,canvasElement.height);
-				stage.scale(1 / cns_scale,1 / cns_scale);
-				// stage.scaleX = stage.scaleY = 1 / cns_scale;
+				// canvasElement.setAttribute("width" ,cns_stageWidth);
+				// canvasElement.setAttribute("height" ,cns_stageHeight);
+				// stage.scale(1 / cns_scale,1 / cns_scale);
 
+				rescaleStage(this.scale);
 				//！！background しか拡大、縮小しない。。。なぜ？？？
 			}
 		}

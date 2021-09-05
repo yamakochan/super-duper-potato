@@ -244,7 +244,7 @@ class Cemetary extends createjs.Container{
 		 	let xspreadLeft = cns_handLeft;
 		 	let xcardWidth  = cns_cardWidth + cns_handMargin;
 			if(xcards[i] < Math.floor(cns_handWidth / cns_cardWidth)){
-			 	xspreadLeft = -1 * (xcards[i] * cns_cardWidth + (xcards[i] - 1) * cns_handMargin) / 2;
+			 	xspreadLeft = -1 * (xcards[i] * cns_cardWidth + (xcards[i] - 1) * cns_handMargin) / 2 + cns_cardWidth / 2;
 			}else{
 			 	xcardWidth = cns_handWidth / xcards[i];
 			}
