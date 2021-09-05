@@ -188,19 +188,6 @@ class Judge{
 
 		//resign
 		this.resignButton = new ResignButton(cns_stageWidth - cns_buttonWidth - 10,45);
-
-
-        this.head = new createjs.Container();
-		let xheadShadow = new createjs.Shape();
-        xheadShadow.graphics.beginFill("black");
-		xheadShadow.graphics.drawRoundRect(this.x-1, this.y-1, cns_cardWidth+2, cns_cardHeight+2, 0, 0);
-		xheadShadow.cache(0,0,cns_cardWidth+2,cns_cardHeight+2);
-		this.head.addChild(new createjs.Bitmap(xheadShadow.cacheCanvas));
-		this.head.regX = cns_cardWidth / 2;
-		this.head.regY = cns_cardHeight / 2;
-        layer1.addChild(this.head); // 表示リストに追加
-
-
 	}
 
 	playCard(data){
