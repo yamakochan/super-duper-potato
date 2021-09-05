@@ -280,8 +280,8 @@ class Card extends createjs.Container{
 		let xheadShadow = new createjs.Shape();
         xheadShadow.graphics.beginFill("black");
 		xheadShadow.graphics.drawRoundRect(this.x-1, this.y-1, cns_cardWidth+2, cns_cardHeight+2, 0, 0);
-		headContainer.addChild(xheadShadow);
 		headContainer.addChild(xheadBitmap);
+		headContainer.addChild(xheadShadow);
 		headContainer.cache(-1,-1,cns_cardWidth+2,cns_cardHeight+2);
 		this.head = new createjs.Bitmap(headContainer.cacheCanvas);
 		this.head.regX = cns_cardWidth / 2;
