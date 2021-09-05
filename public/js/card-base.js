@@ -648,11 +648,11 @@ class Background extends createjs.Container{
 		        // 	if(layer1.x < cns_stageWidth / cns_scale - cns_layer1SideMargin)
 
 
-	        	if(layer1.x * -1 < (cns_layer1Left - cns_layer1SideMargin) / cns_scale){
-	        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) / cns_scale * -1;
+	        	if(layer1.x * -1 < (cns_layer1Left - cns_layer1SideMargin) * cns_scale){
+	        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) * cns_scale * -1;
 	        	}else{
-		        	if(layer1.x  * -1 > (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) / cns_scale){
-		        		layer1.x = (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) / cns_scale * -1;
+		        	if(layer1.x  * -1 > (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) * cns_scale){
+		        		layer1.x = (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) * cns_scale * -1;
 		        	}else{
 						this.prex2 = this.prex;
 						this.prex = layer1.x;
