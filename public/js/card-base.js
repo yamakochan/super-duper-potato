@@ -41,7 +41,7 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 	cns_handWidth = (cns_cardWidth + cns_handMargin) * 5; //card５枚分＋間5pt
 	// cns_handLeft = -1 * cns_handWidth / 2;               //手札置き場のX座標
 	// cns_handTop = cns_layer1Bottom - cns_cardHeight - 5;  //手札置き場のY座標
-	cns_handLeft = 0;               //手札置き場のX座標
+	cns_handLeft = -1 * cns_handWidth / 2 + cns_cardWidth / 2;               //手札置き場のX座標
 	cns_handTop = cns_layer1Bottom - cns_cardHeight / 2 - 5;  //手札置き場のY座標
 
 	cns_buttonWidth = 100;

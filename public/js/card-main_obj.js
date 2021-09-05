@@ -110,7 +110,7 @@ class Hand extends createjs.Container{
 	 	let xhandLeft = cns_handLeft;
 	 	let xcardWidth = cns_cardWidth + cns_handMargin;
 		if(this.handCard.length < Math.floor(cns_handWidth / cns_cardWidth)){
-		 	xhandLeft = -1 * (this.handCard.length * cns_cardWidth + (this.handCard.length - 1) * cns_handMargin) / 2;
+		 	xhandLeft = -1 * (this.handCard.length * cns_cardWidth + (this.handCard.length - 1) * cns_handMargin) / 2 + cns_cardWidth / 2;
 		}else{
 		 	xcardWidth = cns_handWidth / this.handCard.length;
 		}
