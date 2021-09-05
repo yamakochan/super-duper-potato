@@ -56,7 +56,8 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 	}
 
 
-	layer1 = new createjs.Container();
+	// layer1 = new createjs.Container();
+	layer1 = new Layer1();
 	stage.addChild(layer1); 
 	layer1.x = cns_layer1InitX;
 	layer1.y = cns_layer1InitY;
@@ -108,6 +109,16 @@ function rescaleStage(argScale){
 	stage.scale(1 / cns_scale,1 / cns_scale);
 }
 
+class Layer1 extends createjs.Container{
+	constructor(){
+		super();
+	}
+
+	xrescaleStage(argScale){
+		rescaleStage(argScale);
+	}
+}
+
 class Judge{
 	constructor(argUserList, argDeckList,argCemetaryList){
 		this.playerList = [];		
@@ -127,7 +138,6 @@ class Judge{
 		// デッキ表示
 		this.deck = new Deck();
 		layer1.addChild(this.deck);
-		background.addChild(this.deck);
 	    // deckにカードを追加   
 		for (let i = 0; i < argDeckList.length; i++){
 			let xcard = new Card(cns_passPrefix + argDeckList[i],i);
@@ -690,7 +700,7 @@ class Background extends createjs.Container{
 				// canvasElement.setAttribute("height" ,cns_stageHeight);
 				// stage.scale(1 / cns_scale,1 / cns_scale);
 
-				rescaleStage(this.scale);
+				layer1.xrescaleStage(this.scale);
 				//！！background しか拡大、縮小しない。。。なぜ？？？
 			}
 		}
