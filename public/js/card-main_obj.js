@@ -282,7 +282,7 @@ class Card extends createjs.Container{
 		xgray.graphics.drawRoundRect(this.x, this.y, cns_cardWidth, cns_cardHeight, 0, 0);
 		xgray.alpha = 0.5;
 		xgray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
-		this.gray = new createjs.Bitmap(xgray.shape.cacheCanvas);
+		this.gray = new createjs.Bitmap(xgray.cacheCanvas);
         this.addChild(this.gray); // 表示リストに追加
 
         this.faceUp();
