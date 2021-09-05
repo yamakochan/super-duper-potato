@@ -26,8 +26,8 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 	cns_layer1Right = cns_layer1Width / 2;
 	cns_layer1Top = -1 * cns_layer1Height / 2;
 	cns_layer1Bottom = cns_layer1Height / 2;
-	cns_layer1SideMargin = 50;
-	cns_layer1VertMargin = 50;
+	cns_layer1SideMargin = 100;
+	cns_layer1VertMargin = 100;
 	cns_layer1InitX = cns_stageWidth / 2;
 	cns_layer1InitY = -1 * (cns_layer1Height / 2 - cns_stageHeight);
 
@@ -653,11 +653,11 @@ class Background extends createjs.Container{
 						// this.prex = layer1.x;
 		    //     	}
 	     //    	}
-	        	if(layer1.x > (cns_layer1Width * cns_scale - cns_layer1SideMargin)){
+	        	if(layer1.x > (cns_layer1Width * cns_scale - cns_layer1SideMargin * cns_scale)){
 	        		layer1.x = (cns_layer1Width * cns_scale - cns_layer1SideMargin);
 	        	}else{
-		        	if(layer1.x < (-1 * cns_stageWidth / 2 + cns_layer1SideMargin)){
-		        		layer1.x = (-1 * cns_stageWidth / 2 + cns_layer1SideMargin);
+		        	if(layer1.x < (-1 * cns_stageWidth + cns_layer1SideMargin * cns_scale)){
+		        		layer1.x = (-1 * cns_stageWidth + cns_layer1SideMargin * cns_scale);
 		        	}else{
 						this.prex2 = this.prex;
 						this.prex = layer1.x;
