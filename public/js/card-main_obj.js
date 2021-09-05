@@ -275,15 +275,14 @@ class Card extends createjs.Container{
 		this.tail.regY = cns_cardHeight / 2;
         this.addChild(this.tail); // 表示リストに追加
 
-        let headContainer = new createjs.Container();
+        this.head = new createjs.Container();
         let xheadBitmap = new createjs.Bitmap(arg_cardImage);
 		let xheadShadow = new createjs.Shape();
         xheadShadow.graphics.beginFill("black");
 		xheadShadow.graphics.drawRoundRect(this.x-1, this.y-1, cns_cardWidth+2, cns_cardHeight+2, 0, 0);
-		headContainer.addChild(xheadShadow);
-		headContainer.addChild(xheadBitmap);
-		headContainer.cache(-1,-1,cns_cardWidth+2,cns_cardHeight+2);
-		this.head = new createjs.Bitmap(headContainer.cacheCanvas);
+		xheadShadow.cache(-1,-1,cns_cardWidth+2,cns_cardHeight+2);
+		this.head.addChild(new createjs.Bitmap(xheadShadow.cacheCanvas));
+		this.head.addChild(xheadBitmap);
 		this.head.regX = cns_cardWidth / 2;
 		this.head.regY = cns_cardHeight / 2;
         this.addChild(this.head); // 表示リストに追加
