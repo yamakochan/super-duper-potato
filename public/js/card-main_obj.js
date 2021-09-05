@@ -324,8 +324,8 @@ class Card extends createjs.Container{
 		if(this.status == 1 || this.status == 2 || this.status == 9){
 	 		this.backupPointX = this.x;
 	 		this.backupPointY = this.y;
-	        this.dragPointX = stage.mouseX - this.x;
-	        this.dragPointY = stage.mouseY - this.y;
+	        this.dragPointX = stage.mouseX / cns_scale - this.x;
+	        this.dragPointY = stage.mouseY / cns_scale - this.y;
 	    // 半透明にする
 	        this.alpha = 0.5;
 	    // ドラッグ中ステータス　（透明化）
