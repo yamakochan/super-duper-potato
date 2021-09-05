@@ -270,18 +270,19 @@ class Card extends createjs.Container{
 		this.status = 0;  		// 0:deck、1:hand、2:place、9:cemetary
 
 		this.tail = new createjs.Bitmap(cns_tailImage);
-		this.tail.shadow = new createjs.Shadow("#000000", 1, 1, 1);
+		// this.tail.shadow = new createjs.Shadow("#000000", 1, 1, 1);
         this.addChild(this.tail); // 表示リストに追加
 
 		this.head = new createjs.Bitmap(arg_cardImage);
-		this.head.shadow = new createjs.Shadow("#000000", 1, 1, 1);
+		this.head.shadow = new createjs.Shadow("#000000", 5, 5, 5);
         this.addChild(this.head); // 表示リストに追加
 
-		this.gray = new createjs.Shape();
-        this.gray.graphics.beginFill("darkgray");
-		this.gray.graphics.drawRoundRect(this.x, this.y, cns_cardWidth, cns_cardHeight, 0, 0);
-		this.gray.alpha = 0.5;
-		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
+		let xgray = new createjs.Shape();
+        xgray.graphics.beginFill("darkgray");
+		xgray.graphics.drawRoundRect(this.x, this.y, cns_cardWidth, cns_cardHeight, 0, 0);
+		xgray.alpha = 0.5;
+		xgray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
+		this.gray = new createjs.Bitmap(xgray.shape.cacheCanvas);
         this.addChild(this.gray); // 表示リストに追加
 
         this.faceUp();
@@ -387,33 +388,27 @@ class Card extends createjs.Container{
  	faceUp(){
 		this.head.visible = true;
 		this.tail.visible = false;
-		this.gray.uncache();
 		this.gray.visible = false;
-		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
  	}
 
  	faceDown(){
 		this.head.visible = false;
 		this.tail.visible = true;
-		this.gray.uncache();
+		// this.gray.uncache();
 		this.gray.visible = false;
-		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
+		// this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
  	}
 
  	faceGray(){
 		this.head.visible = true;
 		this.tail.visible = false;
-		this.gray.uncache();
 		this.gray.visible = true;
-		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
  	}
 
  	hide(){
 		this.head.visible = false;
 		this.tail.visible = false;
-		this.gray.uncache();
 		this.gray.visible = false;
-		this.gray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
  	}
 
  	cloneCard(arg_card){
