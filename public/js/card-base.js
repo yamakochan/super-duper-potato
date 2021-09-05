@@ -137,7 +137,7 @@ class Judge{
 
 		// デッキ表示
 		this.deck = new Deck();
-		layer1.addChild(this.deck);
+		background.addChild(this.deck);
 	    // deckにカードを追加   
 		for (let i = 0; i < argDeckList.length; i++){
 			let xcard = new Card(cns_passPrefix + argDeckList[i],i);
@@ -149,7 +149,7 @@ class Judge{
 
 		// cemetary表示
 		this.cemetary = new Cemetary();
-		layer1.addChild(this.cemetary);
+		background.addChild(this.cemetary);
 	    // cemetaryにカードを追加    
 	    let j = argDeckList.length;
 		for (let i = 0; i < argCemetaryList.length; i++){
