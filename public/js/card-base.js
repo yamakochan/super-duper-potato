@@ -106,8 +106,6 @@ function rescaleStage(argScale){
 	canvasElement.setAttribute("width" ,cns_stageWidth);
 	canvasElement.setAttribute("height" ,cns_stageHeight);
 	stage.scale(1 / cns_scale,1 / cns_scale);
-
-	stage.draw();
 }
 
 class Judge{
@@ -129,6 +127,7 @@ class Judge{
 		// デッキ表示
 		this.deck = new Deck();
 		layer1.addChild(this.deck);
+		background.addChild(this.deck);
 	    // deckにカードを追加   
 		for (let i = 0; i < argDeckList.length; i++){
 			let xcard = new Card(cns_passPrefix + argDeckList[i],i);
