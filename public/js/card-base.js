@@ -445,8 +445,8 @@ class Judge{
 			let dice = new Dice(data.nX,data.nY);
 			this.dices.addChild(dice);
 
-			let newx = cns_stageWidth / 2 + (Math.floor(i/2) * 100 - 100) * (Math.random() + 0.5);
-			let newy = cns_stageHeight / 2 + (i - Math.floor(i/2)*2) * 100 - 50 * (Math.random() + 0.5);
+			let newx = cns_stageWidth / cns_scale / 2 + (Math.floor(i/2) * 100 - 100) * (Math.random() + 0.5);
+			let newy = cns_stageHeight / cns_scale / 2 + (i - Math.floor(i/2)*2) * 100 - 50 * (Math.random() + 0.5);
 			dice.rollDice(dice,newx,newy,data.faces[i]);
 		}
     	createjs.Sound.play("dice1");
