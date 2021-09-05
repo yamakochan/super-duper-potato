@@ -271,18 +271,31 @@ class Card extends createjs.Container{
 
 		this.tail = new createjs.Bitmap(cns_tailImage);
 		// this.tail.shadow = new createjs.Shadow("#000000", 1, 1, 1);
+		this.tail.regX = cns_cardWidth / 2;
+		this.tail.regY = cns_cardHeight / 2;
         this.addChild(this.tail); // 表示リストに追加
 
-		this.head = new createjs.Bitmap(arg_cardImage);
-		this.head.shadow = new createjs.Shadow("#000000", 5, 5, 5);
+        let headContainer = new createjs.Container();
+        let xheadBitmap = new createjs.Bitmap(arg_cardImage);
+		let xheadShadow = new createjs.Shape();
+        xheadShadow.graphics.beginFill("black");
+		xheadShadow.graphics.drawRoundRect(this.x-1, this.y-1, cns_cardWidth+2, cns_cardHeight+2, 0, 0);
+		headContainer.addChild(xheadShadow);
+		headContainer.addChild(xheadBitmap);
+		headContainer.cache(-1,-1,cns_cardWidth+2,cns_cardHeight+2);
+		this.head = new createjs.Bitmap(headContainer.cacheCanvas);
+		this.head.regX = cns_cardWidth / 2;
+		this.head.regY = cns_cardHeight / 2;
         this.addChild(this.head); // 表示リストに追加
 
 		let xgray = new createjs.Shape();
         xgray.graphics.beginFill("darkgray");
 		xgray.graphics.drawRoundRect(this.x, this.y, cns_cardWidth, cns_cardHeight, 0, 0);
-		xgray.alpha = 0.5;
 		xgray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
 		this.gray = new createjs.Bitmap(xgray.cacheCanvas);
+		this.gray.alpha = 0.5;
+		this.gray.regX = cns_cardWidth / 2;
+		this.gray.regY = cns_cardHeight / 2;
         this.addChild(this.gray); // 表示リストに追加
 
         this.faceUp();
