@@ -586,7 +586,7 @@ class Background extends createjs.Container{
 
         //マウスポインタの座標表示用
 		this.XYinfo =  new createjs.Text("", "14px sans-serif", "GhostWhite");
-		this.XYinfo.text = "X:" + (stage.mouseX * cns_scale - layer1.x) + "  Y:" + (stage.mouseY * cns_scale - layer1.y);
+		this.XYinfo.text = "X:" + (stage.mouseX - layer1.x) + "  Y:" + (stage.mouseY - layer1.y);
 		this.XYinfo.textAlign = "left";
 		this.XYinfo.textBaseline = "top";
 		this.XYinfo.x = cns_stageWidth - 200;
@@ -775,8 +775,8 @@ class Background extends createjs.Container{
 	pieceaction(){
 		this.XYinfo.uncache();
 		this.XYinfoShadow.uncache();
-		let mouse_x = Math.floor((stage.mouseX * cns_scale - layer1.x) * 100) / 100;
-		let mouse_y = Math.floor((stage.mouseY * cns_scale - layer1.y) * 100) / 100;
+		let mouse_x = Math.floor((stage.mouseX - layer1.x) * 100) / 100;
+		let mouse_y = Math.floor((stage.mouseY - layer1.y) * 100) / 100;
 		this.XYinfo.text = "X:" + mouse_x + "  Y:" + mouse_y;
 		this.XYinfoShadow.text = "X:" + mouse_x + "  Y:" + mouse_y;
 		this.XYinfo.cache(-2,-2,200,30);
