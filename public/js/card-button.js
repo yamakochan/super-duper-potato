@@ -189,20 +189,19 @@ class DelPieceButton extends createjs.Container{
 		this.x = arg_x - 10 ;
 		this.y = arg_y - 15;
 		this.piece = arg_piece;
-		this.layer = layer2;
 		
 		this.delPieceButton = new CncrDelPieceButton(0, 0, "delete", "darkgray", this.piece);
 		this.addChild(this.delPieceButton);
 		this.cancelButton = new CancelButton(0, cns_buttonHeight + 5);
 		this.addChild(this.cancelButton);
 
-		layer2.addChild(this);
+		layer1.addChild(this);
 	}
 
  	deleteButton(){
  		this.delPieceButton.off();
  		this.cancelButton.off();
-		layer2.removeChild(this);
+		layer1.removeChild(this);
 		this.currentButton = null;
  	}
 }

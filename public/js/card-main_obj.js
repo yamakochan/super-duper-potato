@@ -582,7 +582,7 @@ class Piece extends createjs.Container{
 		if(this.moving == 1){
 			if(this.backupPointX == this.x && this.backupPointY == this.y && this.status != 1){
 				judge.clearButton();
-				this.delPieceButton = new DelPieceButton(this, stage.mouseX - layer2.x, stage.mouseY - layer2.y);
+				this.delPieceButton = new DelPieceButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y);
 				judge.registerButton(this.delPieceButton);
 			}else{
 	 			socket.emit("serverPlayPiece", {

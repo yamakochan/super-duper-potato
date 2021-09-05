@@ -62,11 +62,6 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 	layer1.x = cns_layer1InitX;
 	layer1.y = cns_layer1InitY;
 
-	layer2 = new createjs.Container();
-	stage.addChild(layer2); 
-	layer2.x = cns_layer1InitX;
-	layer2.y = cns_layer1InitY;
-
 	info = new createjs.Container();
 	stage.addChild(info);
 
@@ -670,8 +665,6 @@ class Background extends createjs.Container{
 		        	}
 	        	}
 
-	        	layer2.x = layer1.x;
-	        	layer2.y = layer1.y;       	
 			}else{
 		        this.p1 = event.nativeEvent.targetTouches[0];
 		        this.p2 = event.nativeEvent.targetTouches[1];
@@ -767,9 +760,6 @@ class Background extends createjs.Container{
 			this.accy = 0;
 		}
 		this.pieceaction();
-
-       	layer2.x = layer1.x;
-       	layer2.y = layer1.y;       	
 	}
 
 	pieceaction(){
@@ -787,8 +777,8 @@ class Background extends createjs.Container{
 class Notice extends createjs.Container{
 	constructor(arg_x, arg_y, arg_text, arg_color, arg_size, arg_time){
 		super();
-		this.x = cns_stageWidth / 2 + arg_x;
-		this.y = cns_stageHeight / 2 + arg_y;
+		this.x = cns_stageWidth / cns_scale / 2 + arg_x;
+		this.y = cns_stageHeight / cns_scale / 2 + arg_y;
 		this.display = true;
 		this.displayCount = 0;
 		this.time = arg_time;
@@ -807,8 +797,8 @@ class Notice extends createjs.Container{
 		this.noticeTextShadow.x = 3;
 		this.noticeTextShadow.y = 3;
 
-		this.noticeText.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
-		this.noticeTextShadow.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
+		this.noticeText.cache(-1 * cns_stageWidth / cns_scale / 2,-1 * this.size / 2,cns_stageWidth / cns_scale,this.size)
+		this.noticeTextShadow.cache(-1 * cns_stageWidth / cns_scale / 2,-1 * this.size / 2,cns_stageWidth / cns_scale,this.size)
 
 		this.addChild(this.noticeTextShadow);
 		this.addChild(this.noticeText);
@@ -841,7 +831,7 @@ class Notice extends createjs.Container{
 				this.displayCount++;
 			}
 		}
-		this.noticeText.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
-		this.noticeTextShadow.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
+		this.noticeText.cache(-1 * cns_stageWidth / cns_scale / 2,-1 * this.size / 2,cns_stageWidth / cns_scale,this.size)
+		this.noticeTextShadow.cache(-1 * cns_stageWidth / cns_scale / 2,-1 * this.size / 2,cns_stageWidth / cns_scale,this.size)
 	}
 }
