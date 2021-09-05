@@ -343,8 +343,8 @@ class Card extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
 		if(this.status == 1 || this.status == 2 || this.status == 9){
 	    	if(this.moving == 1){
-	        	this.x = stage.mouseX - this.dragPointX;
-	        	this.y = stage.mouseY - this.dragPointY;
+	        	this.x = stage.mouseX / cns_scale - this.dragPointX;
+	        	this.y = stage.mouseY / cns_scale - this.dragPointY;
 	        }
 	        if(this.y < cns_layer1Height - cns_cardHeight * 2){
 	        	this.alpha = 1;
@@ -569,8 +569,8 @@ class Piece extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
 		event.stopPropagation();
     	if(this.moving == 1){
-        	this.x = stage.mouseX - this.dragPointX;
-        	this.y = stage.mouseY - this.dragPointY;
+        	this.x = stage.mouseX / cns_scale - this.dragPointX;
+        	this.y = stage.mouseY / cns_scale - this.dragPointY;
         }
        	this.alpha = 1;
     }
