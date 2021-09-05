@@ -454,6 +454,11 @@ class Card extends createjs.Container{
 	        this.pressupListener = this.on("pressup", this.handleUp,this);
 		}, 1000);
 	}
+
+	update(){
+		this.a = this.a +1;
+		this.a = this.a - 1;
+	}
 }
 
 class OtherPlace extends createjs.Container{
