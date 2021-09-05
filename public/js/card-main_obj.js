@@ -273,8 +273,7 @@ class Card extends createjs.Container{
 		// this.tail.shadow = new createjs.Shadow("#000000", 1, 1, 1);
 		this.tail.regX = cns_cardWidth / 2;
 		this.tail.regY = cns_cardHeight / 2;
-        // this.addChild(this.tail); // 表示リストに追加
-        background.addChild(this.tail); // 表示リストに追加
+        this.addChild(this.tail); // 表示リストに追加
 
         this.head = new createjs.Container();
         let xheadBitmap = new createjs.Bitmap(arg_cardImage);
@@ -286,8 +285,7 @@ class Card extends createjs.Container{
 		this.head.addChild(xheadBitmap);
 		this.head.regX = cns_cardWidth / 2;
 		this.head.regY = cns_cardHeight / 2;
-        // this.addChild(this.head); // 表示リストに追加
-        background.addChild(this.head); // 表示リストに追加
+        this.addChild(this.head); // 表示リストに追加
 
 		let xgray = new createjs.Shape();
         xgray.graphics.beginFill("darkgray");
@@ -304,8 +302,7 @@ class Card extends createjs.Container{
 		this.gray.alpha = 0.5;
 		this.gray.regX = cns_cardWidth / 2;
 		this.gray.regY = cns_cardHeight / 2;
-        // this.addChild(this.gray); // 表示リストに追加
-        background.addChild(this.gray); // 表示リストに追加
+        this.addChild(this.gray); // 表示リストに追加
 
         this.faceUp();
 

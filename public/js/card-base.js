@@ -106,6 +106,9 @@ function rescaleStage(argScale){
 	canvasElement.setAttribute("width" ,cns_stageWidth);
 	canvasElement.setAttribute("height" ,cns_stageHeight);
 	stage.scale(1 / cns_scale,1 / cns_scale);
+
+	stage.update();	
+
 }
 
 class Judge{
