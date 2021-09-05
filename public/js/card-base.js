@@ -579,6 +579,21 @@ class Background extends createjs.Container{
 		boad.rotation = cns_rotation;
         this.addChild(boad); // 表示リストに追加
 
+
+
+        this.head = new createjs.Container();
+		let xheadShadow = new createjs.Shape();
+        xheadShadow.graphics.beginFill("black");
+		xheadShadow.graphics.drawRoundRect(this.x-1, this.y-1, cns_cardWidth+2, cns_cardHeight+2, 0, 0);
+		xheadShadow.cache(0,0,cns_cardWidth+2,cns_cardHeight+2);
+		this.head.addChild(new createjs.Bitmap(xheadShadow.cacheCanvas));
+		this.head.regX = cns_cardWidth / 2;
+		this.head.regY = cns_cardHeight / 2;
+        this.addChild(this.head); // 表示リストに追加
+
+
+
+
         //マウスポインタの座標表示用
 		this.XYinfo =  new createjs.Text("", "14px sans-serif", "GhostWhite");
 		this.XYinfo.text = "X:" + (stage.mouseX * cns_scale - layer1.x) + "  Y:" + (stage.mouseY * cns_scale - layer1.y);
