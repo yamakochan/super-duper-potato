@@ -15,17 +15,17 @@ class Player extends createjs.Container{
 		// place表示
 		this.place = new Place(this);
 		this.addChild(this.place);
-		layer1.addChild(this.place);
+		background.addChild(this.place);
 
 		// hand表示
 		this.hand = new Hand(this);
 		this.addChild(this.hand);
-		layer1.addChild(this.hand);
+		background.addChild(this.hand);
 
 		//piece用のコンテナ
 		this.otherPlace = new OtherPlace(this);
 		this.addChild(this.otherPlace);
-		layer2.addChild(this.otherPlace);
+		background.addChild(this.otherPlace);
 		
 
 		//player毎の表示位置計算用角度
@@ -313,6 +313,7 @@ class Card extends createjs.Container{
 	}
 
 	handleDown(event){
+		event.stopPropagation();
 		judge.clearButton();
     // 背景選択の非活性化
 		background.notActivate();
@@ -335,6 +336,7 @@ class Card extends createjs.Container{
  	}
 
     handleMove(event){
+		event.stopPropagation();
     // マウス追従　ドラッグ開始地点との補正あり
 		if(this.status == 1 || this.status == 2 || this.status == 9){
 	    	if(this.moving == 1){
@@ -350,6 +352,7 @@ class Card extends createjs.Container{
     }
 
  	handleUp(event){
+		event.stopPropagation();
  		this.alpha = 1;
 
 		if((this.status == 1 || this.status == 2 || this.status == 9) && this.moving == 1){
