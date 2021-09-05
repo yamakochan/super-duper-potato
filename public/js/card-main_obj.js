@@ -280,8 +280,8 @@ class Card extends createjs.Container{
 		let xheadShadow = new createjs.Shape();
         xheadShadow.graphics.beginFill("black");
 		xheadShadow.graphics.drawRoundRect(this.x-1, this.y-1, cns_cardWidth+2, cns_cardHeight+2, 0, 0);
-		headContainer.addChild(xheadBitmap);
 		headContainer.addChild(xheadShadow);
+		headContainer.addChild(xheadBitmap);
 		headContainer.cache(-1,-1,cns_cardWidth+2,cns_cardHeight+2);
 		this.head = new createjs.Bitmap(headContainer.cacheCanvas);
 		this.head.regX = cns_cardWidth / 2;
@@ -293,6 +293,13 @@ class Card extends createjs.Container{
 		xgray.graphics.drawRoundRect(this.x, this.y, cns_cardWidth, cns_cardHeight, 0, 0);
 		xgray.cache(0,0,cns_cardWidth+1,cns_cardHeight+1);
 		this.gray = new createjs.Bitmap(xgray.cacheCanvas);
+// キャッシュした画像は、別CANVASに書かれて固定される。オブジェクトのプロパティを変更しても別CANVASの画像は変わらない。
+// 変更するには該当オブジェクトのupdateCacheメソッドを呼ぶ必要がある。
+
+// キャッシュで済まさず、パーティクルをビットマップでつくらないと、WebGLの速さが活かせない。
+// DisplayObject.cacheCanvasプロパティで、キャッシュしたイメージをもったHTMLCanvasElementが得られるので、
+// Bitmap()コンストラクタに渡せばビットマップのオブジェクトがつくれる。
+
 		this.gray.alpha = 0.5;
 		this.gray.regX = cns_cardWidth / 2;
 		this.gray.regY = cns_cardHeight / 2;
