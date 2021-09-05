@@ -361,8 +361,8 @@ class Judge{
 		this.currentscore.cache(-2,-2,150,30);
 		info.addChild(this.currentscore);
 
-		let notice1 = new Notice(0,-150,this.playerList[this.currentPlayer].playerName,"hsl(" + judge.currentPlayer*99 + ", 90%, 50%)",50,120);
-		let notice2 = new Notice(0,-100,"のターン","hsl(" + judge.currentPlayer*99 + ", 90%, 50%)",50,120);
+		let notice1 = new Notice(0,0,this.playerList[this.currentPlayer].playerName,"hsl(" + judge.currentPlayer*99 + ", 90%, 50%)",50,120);
+		let notice2 = new Notice(0,50,"のターン","hsl(" + judge.currentPlayer*99 + ", 90%, 50%)",50,120);
 	
     	createjs.Sound.play("turn");
 	}
@@ -398,8 +398,8 @@ class Judge{
 		this.playerList[data.player].place.mouseChildren = false;
 		this.playerList[data.player].otherPlace.mouseChildren = false;
 
-		let notice1 = new Notice(0,0,this.playerList[data.player].playerName,"GhostWhite",50,120);
-		let notice2 = new Notice(0,50,"は、負け！","GhostWhite",50,120);
+		let notice1 = new Notice(0,150,this.playerList[data.player].playerName,"GhostWhite",50,120);
+		let notice2 = new Notice(0,200,"は、負け！","GhostWhite",50,120);
 
 		if(data.player == cns_myPlayerIndex){
 			this.deck.mouseChildren = false;
@@ -422,7 +422,7 @@ class Judge{
 		}
 		if(liveCount == 1){
 			if(cns_myPlayerIndex == winner){
-				let notice1 = new Notice(0,-250,"CHANPION!!","GhostWhite",100,2000);
+				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",60,2000);
 				createjs.Sound.play("champion");
 			}else{
 			}
@@ -642,11 +642,17 @@ class Background extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
     		if(!this.pinch){
 	        	layer1.x = (stage.mouseX - this.dragPointX);
-	        	if(layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin){
-	        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) * -1;
+	        	if(layer1.x > cns_stageWidth / cns_scale - cns_layer1SideMargin)
+	        		layer1.x = cns_stageWidth / cns_scale - cns_layer1SideMargin;
 	        	}else{
-		        	if(layer1.x  * -1 > cns_layer1Right - cns_stageWidth + cns_layer1SideMargin){
-		        		layer1.x = (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) * -1;
+		        	if(layer1.x < cns_stageWidth / cns_scale - cns_layer1SideMargin)
+
+
+	        	if(layer1.x * -1 < (cns_layer1Left - cns_layer1SideMargin) / cns_scale){
+	        		layer1.x = (cns_layer1Left - cns_layer1SideMargin) / cns_scale * -1;
+	        	}else{
+		        	if(layer1.x  * -1 > (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) / cns_scale){
+		        		layer1.x = (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) / cns_scale * -1;
 		        	}else{
 						this.prex2 = this.prex;
 						this.prex = layer1.x;
