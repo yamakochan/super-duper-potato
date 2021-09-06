@@ -656,8 +656,8 @@ class Background extends createjs.Container{
 
 	     // !!!!　変更要!!
 	     // layer1の左端が、ステージ（画面）の右端ーマージンを超えたら止める。
-	        	if(layer1.x > (cns_layer1Width / 2 + window.innerWidth - cns_layer1SideMargin)){
-	        		layer1.x = (cns_layer1Width / 2 + window.innerWidth - cns_layer1SideMargin);
+	        	if(layer1.x > (cns_layer1Width / 2 + window.innerWidth * cns_scale - cns_layer1SideMargin)){
+	        		layer1.x = (cns_layer1Width / 2 + window.innerWidth * cns_scale - cns_layer1SideMargin);
 	        	}else{
 	     // layer1の右端が、ステージ（画面）の左端＋マージンを超えたら止める。
 		        	if(layer1.x < (-1 * cns_stageWidth * cns_scale + cns_layer1SideMargin)){
