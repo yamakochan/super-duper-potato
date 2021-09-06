@@ -700,8 +700,8 @@ class Background extends createjs.Container{
 					if(judge.end == 0){
 						//   自陣への移動ー＞すまほ用
 						if(cns_sp){
-							let nX = cns_layer1InitX;
-							let nY = cns_layer1InitY; 
+							let nX = cns_layer1InitX * cns_scale;
+							let nY = cns_layer1InitY * cns_scale; 
 							let duration = 1000;
 							createjs.Tween.get(layer1, {override:true})
 							.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
@@ -741,10 +741,6 @@ class Background extends createjs.Container{
 		layer1.y += this.dy;
 		this.dx -= this.accx;
 		this.dy -= this.accy;
-		// if((layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin || 
-		// 	layer1.x * -1 > cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) && 
-		// 	( !this.hitwall || this.hitwallNo != 1) ){
-
 		if((layer1.x > cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin ||
 			layer1.x < -1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin) && 
 			( !this.hitwall || this.hitwallNo != 1) ){
@@ -755,9 +751,6 @@ class Background extends createjs.Container{
 			this.hitwallNo = 1;
 			this.hitwall = true;
 		}
-		// if((layer1.y * -1 < cns_layer1Top - cns_layer1VertMargin  || 
-		// 	layer1.y * -1 > cns_layer1Bottom - cns_stageHeight + cns_layer1VertMargin) && 
-		// 	(!this.hitwall || this.hitwallNo != 2) ){
 		if((layer1.y > cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin  || 
 			layer1.y < -1 * cns_layer1Height / 2 * cns_scale + cns_layer1VertMargin) && 
 			(!this.hitwall || this.hitwallNo != 2) ){
