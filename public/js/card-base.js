@@ -642,26 +642,13 @@ class Background extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
     		if(!this.pinch){
 	        	layer1.x = (stage.mouseX - this.dragPointX);
-
-	        	// if(layer1.x * -1 < (cns_layer1Left - cns_layer1SideMargin) * cns_scale){
-	        	// 	layer1.x = (cns_layer1Left - cns_layer1SideMargin) * cns_scale * -1;
-	     //    	}else{
-		    //     	if(layer1.x  * -1 > (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) * cns_scale){
-		    //     		layer1.x = (cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) * cns_scale * -1;
-		    //     	}else{
-						// this.prex2 = this.prex;
-						// this.prex = layer1.x;
-		    //     	}
-	     //    	}
-
-	     // !!!!　変更要!!
 	     // layer1の左端が、ステージ（画面）の右端ーマージンを超えたら止める。
-	        	if(layer1.x > (cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin)){
-	        		layer1.x = (cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin);
+	        	if(layer1.x > cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin){
+	        		layer1.x = cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin;
 	        	}else{
 	     // layer1の右端が、ステージ（画面）の左端＋マージンを超えたら止める。
-		        	if(layer1.x < (-1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin)){
-		        		layer1.x = (-1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin);
+		        	if(layer1.x < -1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin){
+		        		layer1.x = -1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin;
 		        	}else{
 						this.prex2 = this.prex;
 						this.prex = layer1.x;
@@ -669,9 +656,11 @@ class Background extends createjs.Container{
 	        	}
 
 	        	layer1.y = (stage.mouseY - this.dragPointY);
+	     // layer1の上端が、ステージ（画面）の下端ーマージンを超えたら止める。
 	        	if(layer1.y > cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin){
 	        		layer1.y = cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin;
 	        	}else{
+	     // layer1の下端が、ステージ（画面）の上端＋マージンを超えたら止める。
 		        	if(layer1.y < -1 * cns_layer1Height / 2 * cns_scale + cns_layer1VertMargin){
 		        		layer1.y = -1 * cns_layer1Height / 2 * cns_scale + cns_layer1VertMargin;
 		        	}else{
@@ -752,7 +741,13 @@ class Background extends createjs.Container{
 		layer1.y += this.dy;
 		this.dx -= this.accx;
 		this.dy -= this.accy;
-		if((layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin || layer1.x * -1 > cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) && ( !this.hitwall || this.hitwallNo != 1) ){
+		// if((layer1.x * -1 < cns_layer1Left - cns_layer1SideMargin || 
+		// 	layer1.x * -1 > cns_layer1Right - cns_stageWidth + cns_layer1SideMargin) && 
+		// 	( !this.hitwall || this.hitwallNo != 1) ){
+
+		if((layer1.x > cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin ||
+			layer1.x < -1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin) && 
+			( !this.hitwall || this.hitwallNo != 1) ){
 			this.dx = this.dx * -1 / 2;
 			this.dy = this.dy / 2;
 			this.accx = this.accx * -1 * 5;
@@ -760,7 +755,12 @@ class Background extends createjs.Container{
 			this.hitwallNo = 1;
 			this.hitwall = true;
 		}
-		if((layer1.y * -1 < cns_layer1Top - cns_layer1VertMargin  || layer1.y * -1 > cns_layer1Bottom - cns_stageHeight + cns_layer1VertMargin) && (!this.hitwall || this.hitwallNo != 2) ){
+		// if((layer1.y * -1 < cns_layer1Top - cns_layer1VertMargin  || 
+		// 	layer1.y * -1 > cns_layer1Bottom - cns_stageHeight + cns_layer1VertMargin) && 
+		// 	(!this.hitwall || this.hitwallNo != 2) ){
+		if((layer1.y > cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin  || 
+			layer1.y < -1 * cns_layer1Height / 2 * cns_scale + cns_layer1VertMargin) && 
+			(!this.hitwall || this.hitwallNo != 2) ){
 			this.dy = this.dy * -1 / 2;
 			this.dx = this.dx / 2;
 			this.accy = this.accy * -1 * 5;
