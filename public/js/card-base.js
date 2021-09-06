@@ -700,8 +700,8 @@ class Background extends createjs.Container{
 					if(judge.end == 0){
 						//   自陣への移動ー＞すまほ用
 						if(cns_sp){
-							let nX = cns_layer1InitX * cns_scale;
-							let nY = cns_layer1InitY * cns_scale; 
+							let nX = window.innerWidth / 2;
+							let nY = -1 * cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin; 
 							let duration = 1000;
 							createjs.Tween.get(layer1, {override:true})
 							.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
