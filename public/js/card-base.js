@@ -660,8 +660,8 @@ class Background extends createjs.Container{
 	        		layer1.x = (cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin);
 	        	}else{
 	     // layer1の右端が、ステージ（画面）の左端＋マージンを超えたら止める。
-		        	if(layer1.x < (-1 * cns_layer1Width * cns_scale + cns_layer1SideMargin)){
-		        		layer1.x = (-1 * cns_layer1Width * cns_scale + cns_layer1SideMargin);
+		        	if(layer1.x < (-1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin)){
+		        		layer1.x = (-1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin);
 		        	}else{
 						this.prex2 = this.prex;
 						this.prex = layer1.x;
@@ -672,8 +672,8 @@ class Background extends createjs.Container{
 	        	if(layer1.y > cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin){
 	        		layer1.y = cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin;
 	        	}else{
-		        	if(layer1.y < -1 * cns_layer1Height * cns_scale + cns_layer1VertMargin){
-		        		layer1.y = -1 * cns_layer1Height * cns_scale + cns_layer1VertMargin;
+		        	if(layer1.y < -1 * cns_layer1Height / 2 * cns_scale + cns_layer1VertMargin){
+		        		layer1.y = -1 * cns_layer1Height / 2 * cns_scale + cns_layer1VertMargin;
 		        	}else{
 						this.prey2 = this.prey;
 						this.prey = layer1.y;
