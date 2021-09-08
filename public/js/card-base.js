@@ -631,8 +631,8 @@ class Background extends createjs.Container{
 	        this.p2 = event.nativeEvent.targetTouches[1];
 	        this.pinchDist = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 	        this.pinchDist = this.pinchDist / this.scale;
-	        this.qx = (this.p1.pageX + this.p2.pageX) / 2;
-	        this.qy = (this.p1.pageY + this.p2.pageY) / 2;
+	        this.pinchCenterx = (this.p1.pageX + this.p2.pageX) / 2;
+	        this.pinchCentery = (this.p1.pageY + this.p2.pageY) / 2;
 	    }else{
 			this.pinch = false;
 	    }
@@ -672,18 +672,20 @@ class Background extends createjs.Container{
 	        	}
 
 			}else{
+		        this.preScale = this.scale;
+
 		        this.p1 = event.nativeEvent.targetTouches[0];
 		        this.p2 = event.nativeEvent.targetTouches[1];
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist2 / this.pinchDist;
 
-		        let scaleAjustx = (this.qx - layer1.x) * this.scale;
-		        let scaleAjusty = (this.qy - layer1.y) * this.scale;
+		        this.adjustx = (this.pinchCenterx - layer1.x) * this.scale / this.preScale * (this.scale - this.preScale) / Math.abs(this.scale - this.preScale);
+		        this.adjusty = (this.pinchCentery - layer1.y) * this.scale / this.preScale * (this.scale - this.preScale) / Math.abs(this.scale - this.preScale);
 
 				rescaleStage(this.scale);
 
-				layer.x = layer.x + scaleAjustx;
-				layer.y = layer.y + scaleAjusty;
+				layer.x = layer.x + this.adjustx;
+				layer.y = layer.y + this.adjusty;
 
 // ここで直接処理してもいいが、stageの属性変更であるため、一応global functionにする。
 			}
