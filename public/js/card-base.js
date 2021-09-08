@@ -625,7 +625,8 @@ class Background extends createjs.Container{
 		if(background.activate){
     // マウス追従　ドラッグ開始地点との補正あり
     		if(!this.pinch){
-	        	layer1.x = (stage.mouseX - this.dragPointX);
+				this.rescaleStage(this.scale);
+				layer1.x = (stage.mouseX - this.dragPointX);
 	     // layer1の左端が、ステージ（画面）の右端ーマージンを超えたら止める。
 	        	if(layer1.x > cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin){
 	        		layer1.x = cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin;
@@ -667,16 +668,16 @@ class Background extends createjs.Container{
 		let notice11 = new Notice(-50,0,this.pinchCenterx,"GhostWhite",20,1);
 		let notice12 = new Notice(-50,50,this.pinchCentery,"GhostWhite",20,1);
 
-				this.rescaleStage(this.scale);
-
-		let notice13 = new Notice(-50,200,layer.x,"GhostWhite",20,1);
 		let notice15 = new Notice(-50,100,this.adjustx,"GhostWhite",20,1);
 		let notice14 = new Notice(-50,150,this.adjusty,"GhostWhite",20,1);
 
+		let notice13 = new Notice(-50,200,layer.x,"GhostWhite",20,1);
+		let notice16 = new Notice(-50,250,layer.x,"GhostWhite",20,1);
+
 				layer.x = layer.x + this.adjustx;
 				layer.y = layer.y + this.adjusty;
+				this.rescaleStage(this.scale);
 
-		let notice16 = new Notice(-50,250,layer.x,"GhostWhite",20,1);
 
 // ここで直接処理してもいいが、stageの属性変更であるため、一応global functionにする。
 			}
