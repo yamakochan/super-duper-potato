@@ -684,8 +684,8 @@ class Background extends createjs.Container{
 
 				rescaleStage(this.scale);
 
-				layer.x = layer.x + this.adjustx;
-				layer.y = layer.y + this.adjusty;
+				layer.x = layer.x + this.adjustx + 100;
+				layer.y = layer.y + this.adjusty + 100;
 
 // ここで直接処理してもいいが、stageの属性変更であるため、一応global functionにする。
 			}
