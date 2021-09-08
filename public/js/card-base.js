@@ -670,13 +670,13 @@ class Background extends createjs.Container{
 		let notice15 = new Notice(-50,100,this.adjustx,"GhostWhite",20,1);
 		let notice14 = new Notice(-50,150,this.adjusty,"GhostWhite",20,1);
 
-		let notice13 = new Notice(-50,200,layer.x,"GhostWhite",20,1);
-		let notice16 = new Notice(-50,250,layer.x,"GhostWhite",20,1);
+		let notice13 = new Notice(-50,200,layer1.x,"GhostWhite",20,1);
+		let notice16 = new Notice(-50,250,layer1.y,"GhostWhite",20,1);
 
-				layer.x = layer.x + this.adjustx;
-				layer.y = layer.y + this.adjusty;
-				this.rescaleStage(this.scale);
+				layer1.x = layer1.x + this.adjustx;
+				layer1.y = layer1.y + this.adjusty;
 
+				stage.scaleX = stage.scaleY = 1 / cns_scale;
 
 // ここで直接処理してもいいが、stageの属性変更であるため、一応global functionにする。
 			}
@@ -729,24 +729,6 @@ class Background extends createjs.Container{
 		createjs.Tween.get(layer1, {override:true})
 		.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
     }
-
-	rescaleStage(arg_scale){
-	    cns_scale = arg_scale;
-		// if(window.innerWidth * cns_scale < cns_boadWidth){
-		// 	cns_stageWidth = window.innerWidth * cns_scale;
-		// }else{
-		// 	cns_stageWidth = cns_boadWidth;
-		// }
-		// if(window.innerHeight * cns_scale < cns_boadHeight){
-		// 	cns_stageHeight = window.innerHeight * cns_scale;
-		// }else{
-		// 	cns_stageHeight = cns_boadHeight;
-		// }
-
-		// canvasElement.setAttribute("width" ,cns_stageWidth);
-		// canvasElement.setAttribute("height" ,cns_stageHeight);
-		stage.scale(1 / cns_scale,1 / cns_scale);
-	}
 
 	notActivate(){
 		this.activate = false;
