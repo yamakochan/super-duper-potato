@@ -677,8 +677,8 @@ class Background extends createjs.Container{
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist2 / this.pinchDist;
 
-		        let scaleAjustx = (qx - layer1.x) * this.scale;
-		        let scaleAjusty = (qy - layer1.y) * this.scale;
+		        let scaleAjustx = (this.qx - layer1.x) * this.scale;
+		        let scaleAjusty = (this.qy - layer1.y) * this.scale;
 
 				rescaleStage(this.scale);
 
