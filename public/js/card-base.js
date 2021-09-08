@@ -654,27 +654,27 @@ class Background extends createjs.Container{
 	        	}
 
 			}else{
-		        this.preScale = this.scale;
+		        // this.preScale = this.scale;
 
 		        this.p1 = event.nativeEvent.targetTouches[0];
 		        this.p2 = event.nativeEvent.targetTouches[1];
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist2 / this.pinchDist;
 
-		        this.adjustx = (this.pinchCenterx - layer1.x) * this.preScale - (this.pinchCenterx - layer1.x) * this.scale / this.preScale;
-		        this.adjusty = (this.pinchCentery - layer1.y) * this.preScale - (this.pinchCentery - layer1.y) * this.scale / this.preScale;
+		//         this.adjustx = (this.pinchCenterx - layer1.x) * this.preScale - (this.pinchCenterx - layer1.x) * this.scale / this.preScale;
+		//         this.adjusty = (this.pinchCentery - layer1.y) * this.preScale - (this.pinchCentery - layer1.y) * this.scale / this.preScale;
 
-		let notice11 = new Notice(-50,0,this.pinchCenterx,"GhostWhite",20,1);
-		let notice12 = new Notice(-50,50,this.pinchCentery,"GhostWhite",20,1);
+		// let notice11 = new Notice(-50,0,this.pinchCenterx,"GhostWhite",20,1);
+		// let notice12 = new Notice(-50,50,this.pinchCentery,"GhostWhite",20,1);
 
-		let notice15 = new Notice(-50,100,this.adjustx,"GhostWhite",20,1);
-		let notice14 = new Notice(-50,150,this.adjusty,"GhostWhite",20,1);
+		// let notice15 = new Notice(-50,100,this.adjustx,"GhostWhite",20,1);
+		// let notice14 = new Notice(-50,150,this.adjusty,"GhostWhite",20,1);
 
-		let notice13 = new Notice(-50,200,layer1.x,"GhostWhite",20,1);
-		let notice16 = new Notice(-50,250,layer1.y,"GhostWhite",20,1);
+		// let notice13 = new Notice(-50,200,layer1.x,"GhostWhite",20,1);
+		// let notice16 = new Notice(-50,250,layer1.y,"GhostWhite",20,1);
 
-				layer1.x = layer1.x - this.adjustx;
-				layer1.y = layer1.y - this.adjusty;
+		// 		layer1.x = layer1.x - this.adjustx;
+		// 		layer1.y = layer1.y - this.adjusty;
 
 				stage.scaleX = stage.scaleY = 1 / cns_scale;
 
