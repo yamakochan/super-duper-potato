@@ -673,8 +673,8 @@ class Background extends createjs.Container{
 		let notice13 = new Notice(-50,200,layer1.x,"GhostWhite",20,1);
 		let notice16 = new Notice(-50,250,layer1.y,"GhostWhite",20,1);
 
-				layer1.x = layer1.x + this.adjustx;
-				layer1.y = layer1.y + this.adjusty;
+				layer1.x = layer1.x - this.adjustx;
+				layer1.y = layer1.y - this.adjusty;
 
 				stage.scaleX = stage.scaleY = 1 / cns_scale;
 
