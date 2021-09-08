@@ -86,24 +86,6 @@ function clearStage() {
 	endGame();
 }
 
-function rescaleStage(argScale){
-    cns_scale = argScale;
-	if(window.innerWidth * cns_scale < cns_boadWidth){
-		cns_stageWidth = window.innerWidth * cns_scale;
-	}else{
-		cns_stageWidth = cns_boadWidth;
-	}
-	if(window.innerHeight * cns_scale < cns_boadHeight){
-		cns_stageHeight = window.innerHeight * cns_scale;
-	}else{
-		cns_stageHeight = cns_boadHeight;
-	}
-
-	canvasElement.setAttribute("width" ,cns_stageWidth);
-	canvasElement.setAttribute("height" ,cns_stageHeight);
-	stage.scale(1 / cns_scale,1 / cns_scale);
-}
-
 class Judge{
 	constructor(argUserList, argDeckList,argCemetaryList){
 		this.playerList = [];		
@@ -679,13 +661,13 @@ class Background extends createjs.Container{
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist2 / this.pinchDist;
 
-		        this.adjustx = (this.pinchCenterx - layer1.x) * this.scale / this.preScale * (this.scale - this.preScale) / Math.abs(this.scale - this.preScale);
-		        this.adjusty = (this.pinchCentery - layer1.y) * this.scale / this.preScale * (this.scale - this.preScale) / Math.abs(this.scale - this.preScale);
+		        this.adjustx = (this.pinchCenterx - layer1.x) * this.preScale - (this.pinchCenterx - layer1.x) * this.scale / this.preScale;
+		        this.adjusty = (this.pinchCentery - layer1.y) * this.preScale - (this.pinchCentery - layer1.y) * this.scale / this.preScale;
 
 		let notice11 = new Notice(-50,0,this.pinchCenterx,"GhostWhite",20,1);
 		let notice12 = new Notice(-50,50,this.pinchCentery,"GhostWhite",20,1);
 
-				rescaleStage(this.scale);
+				this.rescaleStage(this.scale);
 
 		let notice13 = new Notice(-50,200,layer.x,"GhostWhite",20,1);
 		let notice15 = new Notice(-50,100,this.adjustx,"GhostWhite",20,1);
@@ -747,6 +729,24 @@ class Background extends createjs.Container{
 		createjs.Tween.get(layer1, {override:true})
 		.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
     }
+
+	rescaleStage(arg_scale){
+	    cns_scale = arg_scale;
+		if(window.innerWidth * cns_scale < cns_boadWidth){
+			cns_stageWidth = window.innerWidth * cns_scale;
+		}else{
+			cns_stageWidth = cns_boadWidth;
+		}
+		if(window.innerHeight * cns_scale < cns_boadHeight){
+			cns_stageHeight = window.innerHeight * cns_scale;
+		}else{
+			cns_stageHeight = cns_boadHeight;
+		}
+
+		canvasElement.setAttribute("width" ,cns_stageWidth);
+		canvasElement.setAttribute("height" ,cns_stageHeight);
+		stage.scale(1 / cns_scale,1 / cns_scale);
+	}
 
 	notActivate(){
 		this.activate = false;
