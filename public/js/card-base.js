@@ -733,19 +733,19 @@ class Background extends createjs.Container{
 
 	rescaleStage(arg_scale){
 	    cns_scale = arg_scale;
-		if(window.innerWidth * cns_scale < cns_boadWidth){
-			cns_stageWidth = window.innerWidth * cns_scale;
-		}else{
-			cns_stageWidth = cns_boadWidth;
-		}
-		if(window.innerHeight * cns_scale < cns_boadHeight){
-			cns_stageHeight = window.innerHeight * cns_scale;
-		}else{
-			cns_stageHeight = cns_boadHeight;
-		}
+		// if(window.innerWidth * cns_scale < cns_boadWidth){
+		// 	cns_stageWidth = window.innerWidth * cns_scale;
+		// }else{
+		// 	cns_stageWidth = cns_boadWidth;
+		// }
+		// if(window.innerHeight * cns_scale < cns_boadHeight){
+		// 	cns_stageHeight = window.innerHeight * cns_scale;
+		// }else{
+		// 	cns_stageHeight = cns_boadHeight;
+		// }
 
-		canvasElement.setAttribute("width" ,cns_stageWidth);
-		canvasElement.setAttribute("height" ,cns_stageHeight);
+		// canvasElement.setAttribute("width" ,cns_stageWidth);
+		// canvasElement.setAttribute("height" ,cns_stageHeight);
 		stage.scale(1 / cns_scale,1 / cns_scale);
 	}
 
