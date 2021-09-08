@@ -625,7 +625,6 @@ class Background extends createjs.Container{
 		if(background.activate){
     // マウス追従　ドラッグ開始地点との補正あり
     		if(!this.pinch){
-				this.rescaleStage(this.scale);
 				layer1.x = (stage.mouseX - this.dragPointX);
 	     // layer1の左端が、ステージ（画面）の右端ーマージンを超えたら止める。
 	        	if(layer1.x > cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin){
