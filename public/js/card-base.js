@@ -684,13 +684,17 @@ class Background extends createjs.Container{
 
 		let notice11 = new Notice(-50,0,this.pinchCenterx,"GhostWhite",20,1);
 		let notice12 = new Notice(-50,50,this.pinchCentery,"GhostWhite",20,1);
-		let notice13 = new Notice(-50,100,this.adjustx,"GhostWhite",20,1);
-		let notice14 = new Notice(-50,150,this.adjusty,"GhostWhite",20,1);
 
 				rescaleStage(this.scale);
 
-				layer.x = layer.x + this.adjustx + 100;
-				layer.y = layer.y + this.adjusty + 100;
+		let notice13 = new Notice(-50,200,layer.x,"GhostWhite",20,1);
+		let notice13 = new Notice(-50,100,this.adjustx,"GhostWhite",20,1);
+		let notice14 = new Notice(-50,150,this.adjusty,"GhostWhite",20,1);
+
+				layer.x = layer.x + this.adjustx;
+				layer.y = layer.y + this.adjusty;
+
+		let notice13 = new Notice(-50,250,layer.x,"GhostWhite",20,1);
 
 // ここで直接処理してもいいが、stageの属性変更であるため、一応global functionにする。
 			}
