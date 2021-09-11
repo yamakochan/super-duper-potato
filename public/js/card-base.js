@@ -679,7 +679,8 @@ class Background extends createjs.Container{
 				layer1.x = layer1.x - this.adjustx;
 				layer1.y = layer1.y - this.adjusty;
 
-				stage.scaleX = stage.scaleY = 1 / cns_scale;
+				// stage.scaleX = stage.scaleY = 1 / cns_scale;
+				stage.scaleX = stage.scaleY = 1 / this.scale;
 
 // ここで直接処理してもいいが、stageの属性変更であるため、一応global functionにする。
 			}
