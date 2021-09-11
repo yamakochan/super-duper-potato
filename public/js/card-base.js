@@ -767,7 +767,8 @@ class Background extends createjs.Container{
 		this.XYinfoShadow.uncache();
 		let mouse_x = Math.floor((stage.mouseX - layer1.x) * 100) / 100;
 		let mouse_y = Math.floor((stage.mouseY - layer1.y) * 100) / 100;
-		this.XYinfo.text = "X:" + mouse_x + "  Y:" + mouse_y + "  s:" + this.scale;
+		// this.XYinfo.text = "X:" + mouse_x + "  Y:" + mouse_y;
+		this.XYinfo.text = "X:" + this.pinchCenterx + "  Y:" + layer1.x + "  s:" + this.adjustx;
 		this.XYinfoShadow.text = "X:" + mouse_x + "  Y:" + mouse_y;
 		this.XYinfo.cache(-2,-2,200,30);
 		this.XYinfoShadow.cache(-2,-2,200,30);
