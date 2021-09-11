@@ -661,11 +661,11 @@ class Background extends createjs.Container{
 		        this.p1 = event.nativeEvent.targetTouches[0];
 		        this.p2 = event.nativeEvent.targetTouches[1];
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
-		        this.scale = this.pinchDist / this.pinchDist2 * this.backupScale;
+		        this.scale = this.pinchDist2 / this.pinchDist * this.backupScale;
 
 		        // 拡大縮小の中心を調整
-		        this.adjustx = (this.pinchCenterx - layer1.x) / this.scale - (this.pinchCenterx - layer1.x) / this.preScale;
-		        this.adjusty = (this.pinchCentery - layer1.y) / this.scale - (this.pinchCentery - layer1.y) / this.preScale;
+		        this.adjustx = (this.pinchCenterx - layer1.x) * this.scale - (this.pinchCenterx - layer1.x) * this.preScale;
+		        this.adjusty = (this.pinchCentery - layer1.y) * this.scale - (this.pinchCentery - layer1.y) * this.preScale;
 
 				layer1.x = layer1.x + this.adjustx;
 				layer1.y = layer1.y + this.adjusty;
@@ -767,7 +767,7 @@ class Background extends createjs.Container{
 		this.XYinfoShadow.uncache();
 		let mouse_x = Math.floor((stage.mouseX - layer1.x) * 100) / 100;
 		let mouse_y = Math.floor((stage.mouseY - layer1.y) * 100) / 100;
-		this.XYinfo.text = "X:" + mouse_x + "  Y:" + mouse_y;
+		this.XYinfo.text = "X:" + mouse_x + "  Y:" + mouse_y + "  s:" + this.scale;
 		this.XYinfoShadow.text = "X:" + mouse_x + "  Y:" + mouse_y;
 		this.XYinfo.cache(-2,-2,200,30);
 		this.XYinfoShadow.cache(-2,-2,200,30);
