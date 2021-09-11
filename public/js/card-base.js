@@ -661,9 +661,6 @@ class Background extends createjs.Container{
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist2 / this.pinchDist;
 
-		        // this.adjustx = (this.pinchCenterx - layer1.x) * this.preScale - (this.pinchCenterx - layer1.x) * this.scale / this.preScale;
-		        // this.adjusty = (this.pinchCentery - layer1.y) * this.preScale - (this.pinchCentery - layer1.y) * this.scale / this.preScale;
-
 		        this.adjustx = (this.pinchCenterx - layer1.x) * this.scale - (this.pinchCenterx - layer1.x) * this.preScale;
 		        this.adjusty = (this.pinchCentery - layer1.y) * this.scale - (this.pinchCentery - layer1.y) * this.preScale;
 
@@ -679,8 +676,8 @@ class Background extends createjs.Container{
 				layer1.x = layer1.x - this.adjustx;
 				layer1.y = layer1.y - this.adjusty;
 
-				cns_scale = this.scale;
-				stage.scaleX = stage.scaleY = 1 / cns_scale;
+				// cns_scale = this.scale;
+				// stage.scaleX = stage.scaleY = 1 / cns_scale;
 
 // ここで直接処理してもいいが、stageの属性変更であるため、一応global functionにする。
 			}
