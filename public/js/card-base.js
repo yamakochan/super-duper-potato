@@ -667,11 +667,11 @@ class Background extends createjs.Container{
 		        this.adjustx = (this.pinchCenterx - layer1.x) * this.scale / this.preScale - (this.pinchCenterx - layer1.x) * this.preScale;
 		        this.adjusty = (this.pinchCentery - layer1.y) * this.scale / this.preScale - (this.pinchCentery - layer1.y) * this.preScale;
 
-		// let notice11 = new Notice(-50,0,this.pinchCenterx,"GhostWhite",20,1);
-		// let notice12 = new Notice(-50,50,this.pinchCentery,"GhostWhite",20,1);
+		let notice11 = new Notice(-50,0,this.pinchCenterx,"GhostWhite",20,1);
+		let notice12 = new Notice(-50,50,layer1.x,"GhostWhite",20,1);
 
-		// let notice15 = new Notice(-50,100,this.adjustx,"GhostWhite",20,1);
-		// let notice14 = new Notice(-50,150,this.adjusty,"GhostWhite",20,1);
+		let notice15 = new Notice(-50,100,this.adjustx,"GhostWhite",20,1);
+		let notice14 = new Notice(-50,150,this.adjusty,"GhostWhite",20,1);
 
 		let notice13 = new Notice(-50,200,layer1.x,"GhostWhite",20,1);
 		let notice16 = new Notice(-50,250,layer1.y,"GhostWhite",20,1);
