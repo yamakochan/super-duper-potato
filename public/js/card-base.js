@@ -667,8 +667,8 @@ class Background extends createjs.Container{
 		        this.adjustx = (this.pinchCenterx - layer1.x) - (this.pinchCenterx - layer1.x) * this.preScale / this.scale;
 		        this.adjusty = (this.pinchCentery - layer1.y) - (this.pinchCentery - layer1.y) * this.preScale / this.scale;
 
-				layer1.x = layer1.x + this.adjustx;
-				layer1.y = layer1.y + this.adjusty;
+				layer1.x = layer1.x - this.adjustx;
+				layer1.y = layer1.y - this.adjusty;
 			}
 		}
     }
