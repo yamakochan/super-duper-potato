@@ -654,7 +654,7 @@ class Background extends createjs.Container{
 	        	}
 
 			}else{
-		        // this.preScale = this.scale;
+		        this.preScale = this.scale;
 
 		        this.p1 = event.nativeEvent.targetTouches[0];
 		        this.p2 = event.nativeEvent.targetTouches[1];
