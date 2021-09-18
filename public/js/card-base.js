@@ -663,6 +663,7 @@ class Background extends createjs.Container{
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist2 / this.pinchDist * this.backupScale;
 
+		        cns_scale = this.scale;
 		        // 拡大縮小の中心を調整 （scaleを大きくしたらadjustはプラス　ー＞　pinchCenterとlayer1の中心の距離を離す。）
 		        this.adjustx = (this.pinchCenterx - layer1.x) - (this.pinchCenterx - layer1.x) * this.preScale / this.scale;
 		        this.adjusty = (this.pinchCentery - layer1.y) - (this.pinchCentery - layer1.y) * this.preScale / this.scale;
