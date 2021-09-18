@@ -422,8 +422,8 @@ class Judge{
 			let dice = new Dice(data.nX,data.nY);
 			this.dices.addChild(dice);
 
-			let newx = cns_stageWidth / cns_scale / 2 + (Math.floor(i/2) * 100 - 100) * (Math.random() + 0.5);
-			let newy = cns_stageHeight / cns_scale / 2 + (i - Math.floor(i/2)*2) * 100 - 50 * (Math.random() + 0.5);
+			let newx = cns_stageWidth / 2 + (Math.floor(i/2) * 100 - 100) * (Math.random() + 0.5);
+			let newy = cns_stageHeight / 2 + (i - Math.floor(i/2)*2) * 100 - 50 * (Math.random() + 0.5);
 			dice.rollDice(dice,newx,newy,data.faces[i]);
 		}
     	createjs.Sound.play("dice1");
@@ -627,12 +627,12 @@ class Background extends createjs.Container{
     		if(!this.pinch){
 				layer1.x = (stage.mouseX - this.dragPointX);
 	     // layer1の左端が、ステージ（画面）の右端ーマージンを超えたら止める。
-	        	if(layer1.x > cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin){
-	        		layer1.x = cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin;
+	        	if(layer1.x > cns_layer1Width * this.scale / 2 + window.innerWidth  - cns_layer1SideMargin){
+	        		layer1.x = cns_layer1Width * this.scale / 2 + window.innerWidth  - cns_layer1SideMargin;
 	        	}else{
 	     // layer1の右端が、ステージ（画面）の左端＋マージンを超えたら止める。
-		        	if(layer1.x < -1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin){
-		        		layer1.x = -1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin;
+		        	if(layer1.x < -1 * cns_layer1Width / 2 * this.scale + cns_layer1SideMargin){
+		        		layer1.x = -1 * cns_layer1Width / 2 * this.scale + cns_layer1SideMargin;
 		        	}else{
 						this.prex2 = this.prex;
 						this.prex = layer1.x;
@@ -641,12 +641,12 @@ class Background extends createjs.Container{
 
 	        	layer1.y = (stage.mouseY - this.dragPointY);
 	     // layer1の上端が、ステージ（画面）の下端ーマージンを超えたら止める。
-	        	if(layer1.y > cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin){
-	        		layer1.y = cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin;
+	        	if(layer1.y > cns_layer1Height * this.scale / 2 + window.innerHeight - cns_layer1VertMargin){
+	        		layer1.y = cns_layer1Height * this.scale / 2 + window.innerHeight - cns_layer1VertMargin;
 	        	}else{
 	     // layer1の下端が、ステージ（画面）の上端＋マージンを超えたら止める。
-		        	if(layer1.y < -1 * cns_layer1Height / 2 * cns_scale + cns_layer1VertMargin){
-		        		layer1.y = -1 * cns_layer1Height / 2 * cns_scale + cns_layer1VertMargin;
+		        	if(layer1.y < -1 * cns_layer1Height / 2 * this.scale + cns_layer1VertMargin){
+		        		layer1.y = -1 * cns_layer1Height / 2 * this.scale + cns_layer1VertMargin;
 		        	}else{
 						this.prey2 = this.prey;
 						this.prey = layer1.y;
@@ -663,7 +663,6 @@ class Background extends createjs.Container{
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
 		        this.scale = this.pinchDist2 / this.pinchDist * this.backupScale;
 
-		        cns_scale = this.scale;
 		        // 拡大縮小の中心を調整 （scaleを大きくしたらadjustはプラス　ー＞　pinchCenterとlayer1の中心の距離を離す。）
 		        this.adjustx = (this.pinchCenterx - layer1.x) - (this.pinchCenterx - layer1.x) * this.preScale / this.scale;
 		        this.adjusty = (this.pinchCentery - layer1.y) - (this.pinchCentery - layer1.y) * this.preScale / this.scale;
@@ -694,7 +693,7 @@ class Background extends createjs.Container{
 						//   自陣への移動ー＞すまほ用
 						if(cns_sp){
 							let nX = window.innerWidth / 2;
-							let nY = -1 * cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin; 
+							let nY = -1 * cns_layer1Height * this.scale / 2 + window.innerHeight - cns_layer1VertMargin; 
 							let duration = 1000;
 							createjs.Tween.get(layer1, {override:true})
 							.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
@@ -734,8 +733,8 @@ class Background extends createjs.Container{
 		layer1.y += this.dy;
 		this.dx -= this.accx;
 		this.dy -= this.accy;
-		if((layer1.x > cns_layer1Width * cns_scale / 2 + window.innerWidth  - cns_layer1SideMargin ||
-			layer1.x < -1 * cns_layer1Width / 2 * cns_scale + cns_layer1SideMargin) && 
+		if((layer1.x > cns_layer1Width * this.scale / 2 + window.innerWidth  - cns_layer1SideMargin ||
+			layer1.x < -1 * cns_layer1Width / 2 * this.scale + cns_layer1SideMargin) && 
 			( !this.hitwall || this.hitwallNo != 1) ){
 			this.dx = this.dx * -1 / 2;
 			this.dy = this.dy / 2;
@@ -744,8 +743,8 @@ class Background extends createjs.Container{
 			this.hitwallNo = 1;
 			this.hitwall = true;
 		}
-		if((layer1.y > cns_layer1Height * cns_scale / 2 + window.innerHeight - cns_layer1VertMargin  || 
-			layer1.y < -1 * cns_layer1Height / 2 * cns_scale + cns_layer1VertMargin) && 
+		if((layer1.y > cns_layer1Height * this.scale / 2 + window.innerHeight - cns_layer1VertMargin  || 
+			layer1.y < -1 * cns_layer1Height / 2 * this.scale + cns_layer1VertMargin) && 
 			(!this.hitwall || this.hitwallNo != 2) ){
 			this.dy = this.dy * -1 / 2;
 			this.dx = this.dx / 2;
@@ -778,8 +777,8 @@ class Background extends createjs.Container{
 class Notice extends createjs.Container{
 	constructor(arg_x, arg_y, arg_text, arg_color, arg_size, arg_time){
 		super();
-		this.x = cns_stageWidth / cns_scale / 2 + arg_x;
-		this.y = cns_stageHeight / cns_scale / 2 + arg_y;
+		this.x = cns_stageWidth / 2 + arg_x;
+		this.y = cns_stageHeight / 2 + arg_y;
 		this.display = true;
 		this.displayCount = 0;
 		this.time = arg_time;
@@ -798,8 +797,8 @@ class Notice extends createjs.Container{
 		this.noticeTextShadow.x = 3;
 		this.noticeTextShadow.y = 3;
 
-		this.noticeText.cache(-1 * cns_stageWidth / cns_scale / 2,-1 * this.size / 2,cns_stageWidth / cns_scale,this.size)
-		this.noticeTextShadow.cache(-1 * cns_stageWidth / cns_scale / 2,-1 * this.size / 2,cns_stageWidth / cns_scale,this.size)
+		this.noticeText.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
+		this.noticeTextShadow.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
 
 		this.addChild(this.noticeTextShadow);
 		this.addChild(this.noticeText);
@@ -832,7 +831,7 @@ class Notice extends createjs.Container{
 				this.displayCount++;
 			}
 		}
-		this.noticeText.cache(-1 * cns_stageWidth / cns_scale / 2,-1 * this.size / 2,cns_stageWidth / cns_scale,this.size)
-		this.noticeTextShadow.cache(-1 * cns_stageWidth / cns_scale / 2,-1 * this.size / 2,cns_stageWidth / cns_scale,this.size)
+		this.noticeText.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
+		this.noticeTextShadow.cache(-1 * cns_stageWidth / 2,-1 * this.size / 2,cns_stageWidth,this.size)
 	}
 }
