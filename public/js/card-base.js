@@ -612,7 +612,7 @@ class Background extends createjs.Container{
 	        this.p1 = event.nativeEvent.targetTouches[0];
 	        this.p2 = event.nativeEvent.targetTouches[1];
 	        this.pinchDist = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
-	        this.backupScale = this.scale;
+	        this.backupScale = layer1.scale;
 	        this.pinchCenterx = (this.p1.pageX + this.p2.pageX) / 2;
 	        this.pinchCentery = (this.p1.pageY + this.p2.pageY) / 2;
 	    }else{
