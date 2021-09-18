@@ -15,17 +15,17 @@ class Player extends createjs.Container{
 		// place表示
 		this.place = new Place(this);
 		this.addChild(this.place);
-		layer1.addChild(this.place);
+		background.addChild(this.place);
 
 		// hand表示
 		this.hand = new Hand(this);
 		this.addChild(this.hand);
-		layer1.addChild(this.hand);
+		background.addChild(this.hand);
 
 		//piece用のコンテナ
 		this.otherPlace = new OtherPlace(this);
 		this.addChild(this.otherPlace);
-		layer1.addChild(this.otherPlace);
+		background.addChild(this.otherPlace);
 		
 // 拡大縮小のため、cardとpieceのコンテナはbackgroundのchildにする。
 // card,pieceのイベント処理では、backgraundへのイベント波及を止めるため、stopPropagation()をコール。

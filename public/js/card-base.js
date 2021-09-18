@@ -104,7 +104,7 @@ class Judge{
 
 		// デッキ表示
 		this.deck = new Deck();
-		layer1.addChild(this.deck);
+		background.addChild(this.deck);
 	    // deckにカードを追加   
 		for (let i = 0; i < argDeckList.length; i++){
 			let xcard = new Card(cns_passPrefix + argDeckList[i],i);
@@ -116,7 +116,7 @@ class Judge{
 
 		// cemetary表示
 		this.cemetary = new Cemetary();
-		layer1.addChild(this.cemetary);
+		background.addChild(this.cemetary);
 	    // cemetaryにカードを追加    
 	    let j = argDeckList.length;
 		for (let i = 0; i < argCemetaryList.length; i++){
@@ -612,7 +612,7 @@ class Background extends createjs.Container{
 	        this.p1 = event.nativeEvent.targetTouches[0];
 	        this.p2 = event.nativeEvent.targetTouches[1];
 	        this.pinchDist = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
-	        this.backupScale = layer1.scale;
+	        this.backupScale = this.scale;
 	        this.pinchCenterx = (this.p1.pageX + this.p2.pageX) / 2;
 	        this.pinchCentery = (this.p1.pageY + this.p2.pageY) / 2;
 	    }else{
@@ -655,18 +655,17 @@ class Background extends createjs.Container{
 
 			}else{
 				// 前回スケールを保管
-		        this.preScale = this.layerScale;
+		        this.preScale = this.scale;
 
 				// backgroundのスケールを変更
 		        this.p1 = event.nativeEvent.targetTouches[0];
 		        this.p2 = event.nativeEvent.targetTouches[1];
 		        this.pinchDist2 = Math.abs(this.p1.pageX - this.p2.pageX) + Math.abs(this.p1.pageY - this.p2.pageY);
-		        this.layerScale = this.pinchDist2 / this.pinchDist * this.backupScale;
-		        layer1.scale = this.layerScale;
+		        this.scale = this.pinchDist2 / this.pinchDist * this.backupScale;
 
 		        // 拡大縮小の中心を調整 （scaleを大きくしたらadjustはプラス　ー＞　pinchCenterとlayer1の中心の距離を離す。）
-		        this.adjustx = (this.pinchCenterx - layer1.x) - (this.pinchCenterx - layer1.x) * this.preScale / this.layerScale;
-		        this.adjusty = (this.pinchCentery - layer1.y) - (this.pinchCentery - layer1.y) * this.preScale / this.layerScale;
+		        this.adjustx = (this.pinchCenterx - layer1.x) - (this.pinchCenterx - layer1.x) * this.preScale / this.scale;
+		        this.adjusty = (this.pinchCentery - layer1.y) - (this.pinchCentery - layer1.y) * this.preScale / this.scale;
 
 				layer1.x = layer1.x - this.adjustx;
 				layer1.y = layer1.y - this.adjusty;
