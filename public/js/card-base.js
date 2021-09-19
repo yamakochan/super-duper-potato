@@ -552,6 +552,8 @@ class Background extends createjs.Container{
         this.accy = 0;
         this.hitwall = false;
 		this.hitwallNo = 0; // 1:left/right,2:top/bottom
+		this.xxdblTap = false;
+
 
 		// ボード表示
 		let boad = new createjs.Bitmap(cns_boadImage);
@@ -606,7 +608,8 @@ class Background extends createjs.Container{
 		this.prex2 = layer1.x;
 		this.prey2 = layer1.y;
 		this.hitwall = false;
-    // マルチタッチ判定
+    // マルチタッチ判定、ダブルタップ判定
+		this.dblTap = false;
 		if (cns_sp && event.nativeEvent.targetTouches.length >= 2) {
 			this.pinch = true;
 	        this.p1 = event.nativeEvent.targetTouches[0];
@@ -617,6 +620,13 @@ class Background extends createjs.Container{
 	        this.pinchCentery = (this.p1.pageY + this.p2.pageY) / 2;
 	    }else{
 			this.pinch = false;
+			if(this.xxdblTap){
+				this.dblTap = true;
+				this.xxdblTap = false;
+			}else{
+				this.xxdblTap = true;
+			};
+			setTimeout(function(){background.xxdblTap = false;},500);
 	    }
  	}
 
@@ -691,7 +701,7 @@ class Background extends createjs.Container{
 				if(this.dx == 0 && this.dy == 0 && this.prey2 == layer1.y && this.prex2 == layer1.x){
 					if(judge.end == 0){
 						//   自陣への移動ー＞すまほ用
-						if(cns_sp){
+						if(cns_sp && this.dblTap){
 							let nX = window.innerWidth / 2;
 							let nY = -1 * cns_layer1Height * this.scale / 2 + window.innerHeight - cns_layer1VertMargin; 
 							let duration = 1000;
