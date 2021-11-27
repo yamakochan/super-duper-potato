@@ -1,7 +1,7 @@
 
 //自分の部屋のユーザリストを受け取る。自分のplayerNoはグローバルのuserNoをつかう。
 //deckリスト（画像png）cemetaryリスト（画像png）を受け取る。手札数制限を受け取る
-function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
+function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCards) {
 	// verとか書かないとglobal変数
 	for(let i = 0; i < argUserList.length; i++){
 		if(argUserList[i][1] == userNo){
@@ -71,7 +71,7 @@ function initStage(argUserList,argDeckList,argCemetaryList,argHandCards) {
 	layer1.addChild(background); //背景
 
     // 審判を作成
-    judge = new Judge(argUserList,argDeckList,argCemetaryList);
+    judge = new Judge(argUserList,argDeckList,argCemetaryList,argDescList);
 
 	//stage の描画を更新
 	stage.update();	
@@ -87,7 +87,7 @@ function clearStage() {
 }
 
 class Judge{
-	constructor(argUserList, argDeckList,argCemetaryList){
+	constructor(argUserList, argDeckList, argCemetaryList, argDescList){
 		this.playerList = [];		
 		this.currentPlayer = -1;	//userNo と対応
 		this.score = [];
@@ -107,11 +107,12 @@ class Judge{
 		background.addChild(this.deck);
 	    // deckにカードを追加   
 		for (let i = 0; i < argDeckList.length; i++){
-			let xcard = new Card(cns_passPrefix + argDeckList[i],i);
+			let xno = argDeckList[i][1];
+			let xcard = new Card(cns_passPrefix + argDeckList[i][0],xno,argDescList[xno]);
 			xcard.x = cns_layer1Left;
 			xcard.y = cns_layer1Top;
 			xcard.rotation = cns_rotation;
-			this.deck.addDeckCard(xcard, cns_deckLeft + 0.1 * i, cns_deckTop + 0.1 * i);
+			this.deck.addDeckCard(xcard);
 		}
 
 		// cemetary表示
@@ -120,7 +121,8 @@ class Judge{
 	    // cemetaryにカードを追加    
 	    let j = argDeckList.length;
 		for (let i = 0; i < argCemetaryList.length; i++){
-			let xcard = new Card(cns_passPrefix + argCemetaryList[i],j);
+			let xno = argCemetaryList[i][1];
+			let xcard = new Card(cns_passPrefix + argCemetaryList[i][0],xno,argDescList[xno]);
 			xcard.x = cns_layer1Left;
 			xcard.y = cns_layer1Top;
 			xcard.rotation = cns_rotation;
@@ -267,6 +269,22 @@ class Judge{
 			tempCard.rotation = cns_rotation;
 			this.playerList[data.player].place.delPlaceCard(tempCard);
 			this.cemetary.addCemetaryCard(tempCard);
+		}
+		if(data.text == "trash2"){
+		    tempArray = this.playerList[data.player].hand.handCard;
+			let tempCard = tempArray.find(elm => {return elm.no == data.no;});
+	
+			tempCard.rotation = cns_rotation;
+			this.playerList[data.player].hand.delHandCard(tempCard);
+			this.cemetary.addCemetaryCard(tempCard);
+		}
+		if(data.text == "reverse"){
+		    tempArray = this.playerList[data.player].hand.handCard;
+			let tempCard = tempArray.find(elm => {return elm.no == data.no;});
+	
+			tempCard.rotation = cns_rotation;
+			this.playerList[data.player].hand.delHandCard(tempCard);
+			this.deck.addDeckCard(tempCard);
 		}
 		if(data.text == "spread"){
 			this.cemetary.spreadCemetaryCard(this.playerList[data.player].playerRotation);
@@ -459,10 +477,15 @@ class Judge{
 		this.currentButton = arg_button;
 	}
 
+	forgetButton(){
+		this.currentButton = null;
+	}
+
 	clearButton(){
 		if(this.currentButton != null){
 			this.currentButton.deleteButton();
 		}
+		this.forgetButton();
 	}
 }
 
@@ -723,11 +746,16 @@ class Background extends createjs.Container{
 
   //   自陣への移動ー＞すまほでは使わない
     handledblclick(event){
-		let nX = cns_layer1InitX;
-		let nY = cns_layer1InitY; 
-		let duration = 500;
-		createjs.Tween.get(layer1, {override:true})
-		.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
+		if(background.activate){
+			let nX = cns_layer1InitX;
+			let nY = cns_layer1InitY; 
+			let duration = 500;
+			createjs.Tween.get(layer1, {override:true})
+			.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
+		}else{
+			// 背景選択の活性化
+			background.Activate();
+		}
     }
 
 	notActivate(){

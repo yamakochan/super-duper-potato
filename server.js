@@ -1,6 +1,19 @@
 'use strict';
 
+//◆Node.js におけるグローバル空間
+// ブラウザだと、ファイルの一番大きな部分に変数を宣言したり、そもそも宣言せずに変数を使った場合、その変数は window オブジェクトの
+// プロパティとして定義されます。
+// そして、 Node.js で同じことを行うと、 global オブジェクトのプロパティになります。
+// 要するに、 window の代わりとなるのが global オブジェクトです。
+// この global オブジェクトは、1ファイルごとにそれぞれ生成されます。つまり、ブラウザにおける window オブジェクトと違い、ファイルをまたい
+// で変数が共有されることはありません。
+// 例えば a.js で global.test = 1 を定義したとしても、 b.js では global.test は undefined を返します。
+// というかそもそもプロパティ自体がありません。これによって、不用意なグローバル汚染をなくすことができます。
 // モジュール
+
+//◆タイムアウト回避
+//HerokuのWebSocketには30秒でのタイムアウトがあるので、それを回避するために定期的に通信を行わなければならない
+
 const os	   = require('os');
 const crypto 　= require("crypto");
 const http     = require('http');
@@ -13,33 +26,41 @@ const app    = express();
 const server = http.Server(app);
 const io     = socketIO(server);
 
-// オブジェクト deck
+// name リスト
+const nameList = require('./name_list.js');
+
+// desc リスト
+const descList = require('./desc_list.js');
+let descArray = descList.descArray;
+
+// オブジェクト deck　リスト
 let deckArray = [];
 let xxArray = new Array(93);
 for(let i = 0; i < 93; i++){
   let xtext = "./image/card01/mm" + ('000' + (i+1)).slice(-2) + ".png";
-  xxArray[i] = new Array(xtext,Math.random());
+  xxArray[i] = new Array(xtext,i,Math.random());
 }
 xxArray.sort((a,b)=>{
-        if( a[1] < b[1] ) return -1;
-        if( a[1] > b[1] ) return 1;
+        if( a[2] < b[2] ) return -1;
+        if( a[2] > b[2] ) return 1;
         return 0;
 });
-deckArray = xxArray.map(item => item[0]);
+deckArray = xxArray.map(item => {return new Array(item[0],item[1]);});
 
-// オブジェクト cemetary
+// オブジェクト cemetary　リスト
 let cemetaryArray = [];
 let yyArray = new Array(5);
 for(let i = 0; i < 5; i++){
   let xtext = "./image/card01/ima" + ('000' + (i+1)).slice(-2) + ".png";
-  yyArray[i] = new Array(xtext,Math.random());
+  yyArray[i] = new Array(xtext,i+93,Math.random());
 }
 yyArray.sort((a,b)=>{
-        if( a[1] < b[1] ) return -1;
-        if( a[1] > b[1] ) return 1;
+        if( a[2] < b[2] ) return -1;
+        if( a[2] > b[2] ) return 1;
         return 0;
 });
-cemetaryArray = yyArray.map(item => item[0]);
+// cemetaryArray = yyArray.map(item => item[0]);
+cemetaryArray = yyArray.map(item => {return new Array(item[0],item[1]);});
 
 // ユーザーリスト
 const userList = new Array(3);  //room
@@ -52,6 +73,7 @@ for (let i=0; i<userList.length; i++){
 	    }
     }
 }
+
 // ルームステータス　0:受付中　1:ゲーム中
 const roomStatus = [0,0,0];
 
@@ -126,7 +148,7 @@ io.on('connection', (socket) => {
 	            roomNo = data.room;                 //部屋番号を退避
 	            socket.join(roomNo);                //★部屋分け
 	            userNo   = i;                       //クライアントのuserList[roomNo]内indexを退避
-	            userName = data.name || token;      //ユーザ名を退避（ユーザ名が空の場合、tokenをユーザ名にする）
+	            userName = data.name || nameList.getNiceName();      //ユーザ名を退避（ユーザ名が空の場合、tokenをユーザ名にする）
 	            userList[roomNo][i][0] = userName;     //userListにユーザ名を記録
 	            userList[roomNo][i][1] = userNo;     //userListにユーザ名を記録
 
@@ -146,7 +168,7 @@ io.on('connection', (socket) => {
 
 	//部屋を出る
 	socket.on("outRoom", () => {
-        if(userList[roomNo][userNo][0] != null){
+        if(roomNo != null && userNo != null && userList[roomNo][userNo][0] != null){
     	    io.to(roomNo).emit("message", `${userName}が退室`);
             userList[roomNo][userNo][0] = null;
             userList[roomNo][userNo][1] = null;
@@ -173,18 +195,16 @@ io.on('connection', (socket) => {
         io.to(roomNo).emit("message", strMessage);
 	});
 
+    // ダミーコネクト
+    socket.on("dummyConnect", () => {
+        console.log("dummyconnect",userName);
+    });
+
     // 切断時の処理
     socket.on('disconnect', () => {
         console.log('disconnect');
         if(userName != null){
             io.to(roomNo).emit("message", `${userName}が切断`);
-            // //ユーザリストからクライアントのユーザ名を除外（そして後ろを詰める）
-            // for(let i=0; i<userList[roomNo].length - 1; i++){
-            //     if(i >= userNo){
-            //         userList[roomNo][i] = userList[roomNo][i+1];
-            //     }
-            // }
-            // userList[roomNo][userList[roomNo].length - 1] = null;
             userList[roomNo][userNo][0] = null;
             userList[roomNo][userNo][1] = null;
 	    	let xuserList = userList[roomNo].filter(elm =>{return elm[0] != null});
@@ -192,7 +212,7 @@ io.on('connection', (socket) => {
             if(xuserList.length == 0){
             	roomStatus[roomNo] = 0;
             }
-        }
+         }
     });
 
     // ゲーム終了時の部屋解散
@@ -210,7 +230,8 @@ io.on('connection', (socket) => {
 	    		roomStatus[roomNo] = 1;
 	        	io.to(roomNo).emit("gameStart",{
 	        		deck: JSON.stringify(deckArray),
-	        		cemetary: JSON.stringify(cemetaryArray)
+	        		cemetary: JSON.stringify(cemetaryArray),
+                    desc: JSON.stringify(descArray)
 	        	});
         	}else{
 				io.to(socket.id).emit("message", 'メンバー不足 ゲーム開始不可'); //入室ng時の該当クライアント処理

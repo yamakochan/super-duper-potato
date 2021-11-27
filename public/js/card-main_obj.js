@@ -165,7 +165,7 @@ class Deck extends createjs.Container{
 		this.deckCard = [];
 	}
 
-    addDeckCard(arg_card, arg_nX, arg_nY){
+    addDeckCard(arg_card){
 		let xcard = arg_card;
 		xcard.status = 0;
 		xcard.faceDown();
@@ -174,7 +174,8 @@ class Deck extends createjs.Container{
 	 	this.addChild(xcard);
 
     	createjs.Sound.play("place");
-	 	xcard.moveCard(arg_nX, arg_nY);
+	 	// xcard.moveCard(arg_nX, arg_nY);
+	 	xcard.moveCard(cns_deckLeft + 0.1 * this.deckCard.length, cns_deckTop + 0.1 * this.deckCard.length);
 	}
 
 	delDeckCard(arg_card){	
@@ -263,7 +264,7 @@ class Cemetary extends createjs.Container{
 }
 
 class Card extends createjs.Container{
-	constructor(arg_cardImage,arg_no){
+	constructor(arg_cardImage,arg_no,arg_desc){
 		super();
 		this.no = arg_no;
 		this.x = 0;
@@ -271,6 +272,7 @@ class Card extends createjs.Container{
 		this.headortail = 0;    // 0:表、1:裏
 		this.moving = 0;  		// 0:静止中、1:操作中
 		this.status = 0;  		// 0:deck、1:hand、2:place、9:cemetary
+		this.desc = arg_desc;	// 説明書き
 
 		this.tail = new createjs.Bitmap(cns_tailImage);
 		// this.tail.shadow = new createjs.Shadow("#000000", 1, 1, 1);
@@ -359,18 +361,21 @@ class Card extends createjs.Container{
  		this.alpha = 1;
 
 		if((this.status == 1 || this.status == 2 || this.status == 9) && this.moving == 1){
-			if(this.backupPointX == this.x && this.backupPointY == this.y && this.status != 1){
-				if(this.status == 2){
-					this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"trash","hsl(250, 40%, 50%)");
-					judge.registerButton(this.cemetaryButton);
+			// if(this.backupPointX == this.x && this.backupPointY == this.y && this.status != 1){
+			if(this.backupPointX == this.x && this.backupPointY == this.y){
+				if(this.status == 1){
+					judge.registerButton(new HandCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"desc","hsl(90, 40%, 50%)","trash2","hsl(250, 40%, 50%)","reverse","hsl(280, 40%, 50%)"));
 				}else{
-					if(this.status == 9){
-						if(judge.cemetary.spread){
-							this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"close","hsl(150, 40%, 50%)");
-						}else{
-							this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"spread","hsl(30, 40%, 50%)");
+					if(this.status == 2){
+						judge.registerButton(new PlaceCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"trash","hsl(250, 40%, 50%)","desc","hsl(90, 40%, 50%)"));
+					}else{
+						if(this.status == 9){
+							if(judge.cemetary.spread){
+								judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"close","hsl(150, 40%, 50%)") );
+							}else{
+								judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"spread","hsl(30, 40%, 50%)") );
+							}
 						}
-						judge.registerButton(this.cemetaryButton);
 					}
 				}
 			}else{
@@ -445,6 +450,10 @@ class Card extends createjs.Container{
 		xcard.status = arg_card.status;  		// 0:deck、1:hand、2:place、9:cemetary
 
 		return xcard;
+ 	}
+
+ 	showDescription(){
+ 		judge.registerButton(new CardDescription(this));
  	}
 
  	nonreactiveCard(){
