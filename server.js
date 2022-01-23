@@ -67,7 +67,7 @@ const userList = new Array(3);  //room
 for (let i=0; i<userList.length; i++){
     userList[i] = new Array(4);  //user
     for(let j=0; j<userList[i].length; j++){
-        userList[i][j] = new Array(2); //username , userno
+        userList[i][j] = new Array(3); //username , userno , token
 	    for(let k=0; k<userList[i][j].length; k++){
 	        userList[i][j][k] = null;
 	    }
@@ -114,13 +114,9 @@ function getLocalAddress() {
 };
 
 // 接続単位の処理（クライアント単位にインスタンスが作成されるイメージ。。socketも、callback関数内のローカル変数もクライアント単位）
+// サーバーとクライアントの接続が確立すると、サーバー側で'connection'イベント、クライアント側で'connect'イベントが発生する
 io.on('connection', (socket) => {
     console.log('connection');
-　　//トークン生成　→　クライアントの仮ユーザー名
-    const time = new Date();
-    const md5 = crypto.createHash("MD5");
-    md5.update(time.toString());
-    let token = md5.digest("hex");
     //クライアント毎情報の退避領域
     let roomNo = null;        　　　　//クライアントのルームNo
     let userName = null;            //クライアントのユーザー名
@@ -156,7 +152,15 @@ io.on('connection', (socket) => {
 	            io.to(roomNo).emit("renewUserList", JSON.stringify(xuserList));   //同室メンバーにユーザ名リストを配布
 
 	            io.to(roomNo).emit("message", `${userName}が入室`);                        //同室メンバーに新規メンバー入室のメッセージ送信
-	            io.to(socket.id).emit("inRoomOk", {name: userName, no: i }); //入室ok時の該当クライアント処理
+
+            　　//トークン生成　→　クライアントの識別情報
+                const time = new Date();
+                const md5 = crypto.createHash("MD5");
+                md5.update(time.toString());
+                let token = md5.digest("hex");
+                userList[roomNo][i][2] = token;     //userListにトークンを記録
+
+	            io.to(socket.id).emit("inRoomOk", {name: userName, no: i ,token: token}); //入室ok時の該当クライアント処理
 	        }else{
 	            //入室ng時の該当クライアント処理
 	            io.to(socket.id).emit("inRoomNg", '定員オーバー入室不可'); //入室ng時の該当クライアント処理
@@ -172,6 +176,7 @@ io.on('connection', (socket) => {
     	    io.to(roomNo).emit("message", `${userName}が退室`);
             userList[roomNo][userNo][0] = null;
             userList[roomNo][userNo][1] = null;
+            userList[roomNo][userNo][2] = null;
 
 	    	let xuserList = userList[roomNo].filter(elm =>{return elm[0] != null});
             io.to(roomNo).emit("renewUserList", JSON.stringify(xuserList));   //同室メンバーにユーザ名リストを配布
@@ -201,18 +206,29 @@ io.on('connection', (socket) => {
     });
 
     // 切断時の処理
+    // クライアントが切断したら、サーバー側では'disconnect'イベントが発生する
     socket.on('disconnect', () => {
         console.log('disconnect');
-        if(userName != null){
-            io.to(roomNo).emit("message", `${userName}が切断`);
-            userList[roomNo][userNo][0] = null;
-            userList[roomNo][userNo][1] = null;
-	    	let xuserList = userList[roomNo].filter(elm =>{return elm[0] != null});
-            io.to(roomNo).emit("renewUserList", JSON.stringify(xuserList));
-            if(xuserList.length == 0){
-            	roomStatus[roomNo] = 0;
+        if(roomStatus[roomNo] == 0){
+            if(userName != null){
+                io.to(roomNo).emit("message", `${userName}が切断`);
+                userList[roomNo][userNo][0] = null;
+                userList[roomNo][userNo][1] = null;
+                userList[roomNo][userNo][2] = null;
+                let xuserList = userList[roomNo].filter(elm =>{return elm[0] != null});
+                io.to(roomNo).emit("renewUserList", JSON.stringify(xuserList));
+                // if(xuserList.length == 0){
+                //     roomStatus[roomNo] = 0;
+                // }
             }
-         }
+        }else{
+            //※＊＊＊中断＊＊＊＊
+            //切断されたメンバーをloseにするか、
+            //復活させる仕組みをつくるなら、disconnectメンバありフラグをたてて、その間の
+            //サーバー操作を記録、再コネクト時にそれまでの操作を反映させる。※
+            //※特定クライアントに貯めたｍｓgを送信　io.to('socetID').emit('event', param);
+            //→取り合えずloseにするなら.. io.to(roomNo).emit("resign", data);
+        }
     });
 
     // ゲーム終了時の部屋解散

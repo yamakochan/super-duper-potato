@@ -334,25 +334,21 @@ class Card extends createjs.Container{
 			this.moving  =  1;
 		}
 		if(this.status == 0){
-			//draw button　表示。。　
-			this.drawButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"draw","hsl(200, 70%, 50%)");
-			judge.registerButton(this.drawButton);
 		}
  	}
 
     handleMove(event){
+    // 親オブジェクトへのイベントの伝播を止める。
 		event.stopPropagation();
     // マウス追従　ドラッグ開始地点との補正あり
-		if(this.status == 1 || this.status == 2 || this.status == 9){
-	    	if(this.moving == 1){
-	        	this.x = stage.mouseX / cns_scale - this.dragPointX;
-	        	this.y = stage.mouseY / cns_scale - this.dragPointY;
-	        }
-	        if(this.y < cns_layer1Height - cns_cardHeight * 2){
-	        	this.alpha = 1;
-	        }else{
-	        	this.alpha = 0.5;
-	        }
+    	if(this.moving == 1){
+        	this.x = stage.mouseX / cns_scale - this.dragPointX;
+        	this.y = stage.mouseY / cns_scale - this.dragPointY;
+        }
+        if(this.y < cns_layer1Height - cns_cardHeight * 2){
+        	this.alpha = 1;
+        }else{
+        	this.alpha = 0.5;
         }
     }
 
@@ -360,26 +356,29 @@ class Card extends createjs.Container{
 		event.stopPropagation();
  		this.alpha = 1;
 
-		if((this.status == 1 || this.status == 2 || this.status == 9) && this.moving == 1){
-			// if(this.backupPointX == this.x && this.backupPointY == this.y && this.status != 1){
+		if(this.moving == 1){
 			if(this.backupPointX == this.x && this.backupPointY == this.y){
-				if(this.status == 1){
-					judge.registerButton(new HandCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"desc","hsl(90, 40%, 50%)","trash2","hsl(250, 40%, 50%)","reverse","hsl(280, 40%, 50%)"));
-				}else{
-					if(this.status == 2){
+				switch(this.status){
+					case 0:
+						judge.registerButton( this.drawButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"draw","hsl(200, 70%, 50%)") );
+					case 1:
+						judge.registerButton(new HandCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"desc","hsl(90, 40%, 50%)","trash2","hsl(250, 40%, 50%)","reverse","hsl(280, 40%, 50%)"));
+						break;
+					case 2:
 						judge.registerButton(new PlaceCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"trash","hsl(250, 40%, 50%)","desc","hsl(90, 40%, 50%)"));
-					}else{
-						if(this.status == 9){
-							if(judge.cemetary.spread){
-								judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"close","hsl(150, 40%, 50%)") );
-							}else{
-								judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"spread","hsl(30, 40%, 50%)") );
-							}
+						break;
+					case 9:
+						if(judge.cemetary.spread){
+							judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"close","hsl(150, 40%, 50%)") );
+						}else{
+							judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"spread","hsl(30, 40%, 50%)") );
 						}
-					}
+						break;
+					default:
+						console.log('error');					
 				}
 			}else{
-				let locationNo = 0;  //カード配置　0:hand , 1:place , 2:cemetary
+				let locationNo = 0;  //カード配置　0:hand , 1:place , xxx2:cemetary
 		        if(this.y < cns_handTop - cns_cardHeight / 4){	//place側に配置
 		        	locationNo = 1;
 		        }else{

@@ -179,6 +179,9 @@ class Judge{
 		// if(data.status == 0){
 		//     tempArray = judge.deck.deckCard;
 		// }
+		if(data.status == 0){
+		    tempArray = this.deck.deckCard;
+		}
 		if(data.status == 1){
 		    tempArray = this.playerList[data.player].hand.handCard;
 		}
@@ -195,6 +198,11 @@ class Judge{
   
 		let xplayer = this.playerList[data.player]
 
+		if(tempCard.status == 0){	//deckカード
+			tempX = cns_layer1Left;
+			this.deck.delDeckCard(tempCard);
+			this.playerList[data.player].hand.addHandCard(tempCard, tempX, this.playerList[data.player].playerNo == cns_myPlayerIndex);
+		}
 		if(tempCard.status == 2){	//placeカード
 	        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
 	        	// カード場所移動だけ。
