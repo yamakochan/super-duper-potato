@@ -198,61 +198,65 @@ class Judge{
   
 		let xplayer = this.playerList[data.player]
 
-		if(tempCard.status == 0){	//deckカード
-			this.deck.delDeckCard(tempCard);
-			this.playerList[data.player].hand.addHandCard(tempCard, cns_layer1Left, this.playerList[data.player].playerNo == cns_myPlayerIndex);
-		}
-		if(tempCard.status == 2){	//placeカード
-	        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
-	        	// カード場所移動だけ。
-	    		xplayer.place.srtPlaceCard(tempCard,data.nX,data.nY); 
-		    }
-	        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
-		    	if(xplayer.hand.handCard.length < cns_handCards){	//手札がlimit数を超えてたら移動キャンセル
-		    // 場札から手札に変更
-		    // 手札の順番入れ替え　＆　表示位置変更
-		    		xplayer.place.delPlaceCard(tempCard);
-		    		xplayer.hand.addHandCard(tempCard, data.nX, xplayer.playerNo == cns_myPlayerIndex);　　
-		    	}else{
-		    		if(xplayer.playerNo == cns_myPlayerIndex){
-			    		tempCard.x = tempCard.backupPointX;
-			    		tempCard.y = tempCard.backupPointY;
-		    		}
-		    	}
-		    }
-        }
-		if(tempCard.status == 1){	//Handカード
-	        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
-		    // 手札から場札に変更
-//		    	let cloneCard = tempCard.cloneCard(tempCard);
-//		    	xplayer.place.addPlaceCard(cloneCard,newX,newY);
-	    		xplayer.hand.delHandCard(tempCard); 　
-		    	xplayer.place.addPlaceCard(tempCard,data.nX,data.nY);
-		    }
-	        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
-		    // 手札の順番入れ替え　＆　表示位置変更
-	    		xplayer.hand.srtHandCard(tempCard,data.nX); 
-		    }
-        }
-		if(tempCard.status == 9){	//cemetaryカード
-	        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
-	    		judge.cemetary.delCemetaryCard(tempCard); 　
-		    	xplayer.place.addPlaceCard(tempCard,data.nX,data.nY);
-		    }
-	        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
-		    	if(xplayer.hand.handCard.length < cns_handCards){	//手札がlimit数を超えてたら移動キャンセル
-		    // 場札から手札に変更
-		    // 手札の順番入れ替え　＆　表示位置変更
+		switch(tempCard.status){
+			case 0:		//deckカード
+				this.deck.delDeckCard(tempCard);
+				this.playerList[data.player].hand.addHandCard(tempCard, cns_layer1Left, this.playerList[data.player].playerNo == cns_myPlayerIndex);
+				break;
+			case 2:		//placeカード
+		        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
+		        	// カード場所移動だけ。
+		    		xplayer.place.srtPlaceCard(tempCard,data.nX,data.nY); 
+			    }
+		        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
+			    	if(xplayer.hand.handCard.length < cns_handCards){	//手札がlimit数を超えてたら移動キャンセル
+			    // 場札から手札に変更
+			    // 手札の順番入れ替え　＆　表示位置変更
+			    		xplayer.place.delPlaceCard(tempCard);
+			    		xplayer.hand.addHandCard(tempCard, data.nX, xplayer.playerNo == cns_myPlayerIndex);　　
+			    	}else{
+			    		if(xplayer.playerNo == cns_myPlayerIndex){
+				    		tempCard.x = tempCard.backupPointX;
+				    		tempCard.y = tempCard.backupPointY;
+			    		}
+			    	}
+			    }
+				break;
+			case 1:		//handカード
+		        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
+			    // 手札から場札に変更
+	//		    	let cloneCard = tempCard.cloneCard(tempCard);
+	//		    	xplayer.place.addPlaceCard(cloneCard,newX,newY);
+		    		xplayer.hand.delHandCard(tempCard); 　
+			    	xplayer.place.addPlaceCard(tempCard,data.nX,data.nY);
+			    }
+		        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
+			    // 手札の順番入れ替え　＆　表示位置変更
+		    		xplayer.hand.srtHandCard(tempCard,data.nX); 
+			    }
+				break;
+			case 9:		//cemetaryカード
+		        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
 		    		judge.cemetary.delCemetaryCard(tempCard); 　
-		    		xplayer.hand.addHandCard(tempCard, data.nX, xplayer.playerNo == cns_myPlayerIndex);　　
-		    	}else{
-		    		if(xplayer.playerNo == cns_myPlayerIndex){
-			    		tempCard.x = tempCard.backupPointX;
-			    		tempCard.y = tempCard.backupPointY;
-		    		}
-		    	}
-		    }
-        }
+			    	xplayer.place.addPlaceCard(tempCard,data.nX,data.nY);
+			    }
+		        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
+			    	if(xplayer.hand.handCard.length < cns_handCards){	//手札がlimit数を超えてたら移動キャンセル
+			    // 場札から手札に変更
+			    // 手札の順番入れ替え　＆　表示位置変更
+			    		judge.cemetary.delCemetaryCard(tempCard); 　
+			    		xplayer.hand.addHandCard(tempCard, data.nX, xplayer.playerNo == cns_myPlayerIndex);　　
+			    	}else{
+			    		if(xplayer.playerNo == cns_myPlayerIndex){
+				    		tempCard.x = tempCard.backupPointX;
+				    		tempCard.y = tempCard.backupPointY;
+			    		}
+			    	}
+			    }
+				break;
+			default:
+				console.log('error');					
+		}
 	}
 
 	buttonAction(data){
