@@ -178,7 +178,7 @@ class Deck extends createjs.Container{
 	 	xcard.moveCard(cns_deckLeft + 0.1 * this.deckCard.length, cns_deckTop + 0.1 * this.deckCard.length);
 	}
 
-	delDeckCard(arg_card){	
+	delDeckCard(arg_card){
     	this.deckCard = this.deckCard.filter(elm => {
     		return elm.no != arg_card.no;
     	});
