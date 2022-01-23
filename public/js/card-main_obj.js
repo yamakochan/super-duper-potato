@@ -357,6 +357,7 @@ class Card extends createjs.Container{
 				switch(this.status){
 					case 0:
 						judge.registerButton( this.drawButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"draw","hsl(200, 70%, 50%)") );
+						break;
 					case 1:
 						judge.registerButton(new HandCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"desc","hsl(90, 40%, 50%)","trash2","hsl(250, 40%, 50%)","reverse","hsl(280, 40%, 50%)"));
 						break;
