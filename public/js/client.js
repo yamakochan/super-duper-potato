@@ -5,6 +5,7 @@ const socket = io.connect();
 
 let userName = null;
 let userNo = 0;             //userlistの添え字に対応
+let userToken = null;       //入室時にサーバから受領して保管。（reconnect検証用）
 let selectRoom = null;
 let memArray = new Array(2);
 let descArray = [];
@@ -23,6 +24,7 @@ const dummyConnect = () => {
 }
 
 // 接続時の処理
+// サーバーとクライアントの接続が確立すると、サーバー側で'connection'イベント、クライアント側で'connect'イベントが発生する
 socket.on('connect', () => {
     console.log('connect');
     
@@ -94,6 +96,8 @@ $("#message_send").click(function () {
 
 //入退室
 $("#room_in_out").click(function () {
+    createjs.Sound.play("inout");
+
     selectRoom = $("#room_list").val();
     roomState = !roomState;
 
@@ -112,6 +116,7 @@ socket.on("inRoomOk", function (data) {
     document.getElementById("username_text").value = data.name;
     userName = data.name;
     userNo = data.no;
+    userToken = data.token;
 });
 
 socket.on("inRoomNg", function (strMessage) {
@@ -173,6 +178,10 @@ socket.on("resign", function (data) {
     judge.resign(data);
 });
 
+socket.on("playerDisconnect", function (data) {
+    judge.playerDisconnect(data);
+});
+
 socket.on("permitRevoke", function (data) {
     judge.permitRevoke(data);
 });
@@ -217,6 +226,9 @@ const lobbyWaitForEntry = function () {
 
     //メッセージリストを削除
     $("#message_list").empty();
+
+    //トークンを初期化
+    userToken = null;
 }
 
 

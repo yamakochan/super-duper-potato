@@ -442,6 +442,47 @@ class Judge{
 		}
 	}
 
+	playerDisconnect(data){
+		let xplayerNo = 0;
+		for(let i = 0; i < memArray.length; i++){
+			if(memArray[i][1] == data.userNo){
+				xplayerNo = i;
+			}
+		}
+		this.playerList[xplayerNo].live = false;
+
+		let xscore = this.score[xplayerNo].clone();
+		xscore.color = "dimgray";
+		xscore.outline = 1;
+		xscore.cache(-2,-2,150,30);
+		info.addChild(xscore);
+
+		this.playerList[xplayerNo].hand.mouseChildren = false;
+		this.playerList[xplayerNo].place.mouseChildren = false;
+		this.playerList[xplayerNo].otherPlace.mouseChildren = false;
+
+		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",50,120);
+		let notice2 = new Notice(0,200,"が切断","GhostWhite",50,120);
+
+		let liveCount = 0;
+		let winner = 0;
+		for(let i = 0; i < this.playerList.length; i++){
+			if(this.playerList[i].live){
+				winner = i;
+				liveCount++;
+			}
+		}
+		if(liveCount == 1){
+			if(cns_myPlayerIndex == winner){
+				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",60,2000);
+				createjs.Sound.play("champion");
+			}else{
+			}
+			this.end = 2;
+			background.Activate();
+		}
+	}
+
 	rollDice(data){
  		info.removeChild(judge.dices);
 

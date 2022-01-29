@@ -113,7 +113,7 @@ function getLocalAddress() {
     return ifacesObj;
 };
 
-// 接続単位の処理（クライアント単位にインスタンスが作成されるイメージ。。socketも、callback関数内のローカル変数もクライアント単位）
+// 接続単位の処理（クライアント単位にio.onのインスタンスが作成されるイメージ。。socketも、callback関数内のローカル変数もクライアント単位）
 // サーバーとクライアントの接続が確立すると、サーバー側で'connection'イベント、クライアント側で'connect'イベントが発生する
 io.on('connection', (socket) => {
     console.log('connection');
@@ -227,7 +227,8 @@ io.on('connection', (socket) => {
             //復活させる仕組みをつくるなら、disconnectメンバありフラグをたてて、その間の
             //サーバー操作を記録、再コネクト時にそれまでの操作を反映させる。※
             //※特定クライアントに貯めたｍｓgを送信　io.to('socetID').emit('event', param);
-            //→取り合えずloseにするなら.. io.to(roomNo).emit("resign", data);
+            //→取り合えずloseにする。
+            io.to(roomNo).emit("playerDisconnect", {userNo: userNo});
         }
     });
 
