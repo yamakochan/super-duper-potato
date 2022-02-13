@@ -96,7 +96,7 @@ $("#message_send").click(function () {
 
 //入退室
 $("#room_in_out").click(function () {
-    createjs.Sound.play("inout");
+    createjs.Sound.play("turn");
 
     selectRoom = $("#room_list").val();
     roomState = !roomState;
@@ -140,6 +140,8 @@ $("#game_start").click(function () {
 });
 
 socket.on("gameStart", function(data){
+    createjs.Sound.play("inoutroom");
+
     deckArray = JSON.parse(data.deck);
     cemetaryArray = JSON.parse(data.cemetary);
     descArray = JSON.parse(data.desc);
