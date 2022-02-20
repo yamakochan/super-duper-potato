@@ -315,15 +315,14 @@ class Judge{
 			this.playerList[i].mouseChildren = false;
 			this.playerList[i].hand.mouseChildren = false;
 			this.playerList[i].place.mouseChildren = false;
-			this.playerList[i].otherPlace.mouseChildren = false;
 		}
 		this.deck.mouseChildren = false;
 		this.cemetary.mouseChildren = false;
 
-		//place と otherplaceはターンに関係なく　自分のだけ操作可能
+		//place,hand はターンに関係なく　自分のだけ操作可能
 		if(this.playerList[cns_myPlayerIndex].live){
 			this.playerList[cns_myPlayerIndex].place.mouseChildren = true;
-			this.playerList[cns_myPlayerIndex].otherPlace.mouseChildren = true;
+			this.playerList[cns_myPlayerIndex].hand.mouseChildren = true;
 		}
 
 		//カレントプレイヤー変更
@@ -338,10 +337,9 @@ class Judge{
 			}
 		}
 
-		//自分のはターンだけ、hand,deck,cemetaryの操作可
+		//自分のはターンだけ、deck,cemetaryの操作可
 		if(this.currentPlayer == cns_myPlayerIndex){
 			this.playerList[this.currentPlayer].mouseChildren = true;
-			this.playerList[this.currentPlayer].hand.mouseChildren = true;
 			this.deck.mouseChildren = true;
 			this.cemetary.mouseChildren = true;
 		//turnendボタン作成
