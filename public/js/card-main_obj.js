@@ -494,9 +494,10 @@ class OtherPlace extends createjs.Container{
     	this.removeChild(arg_piece);
 	}
 
-    srtPlaceCard(arg_piece,arg_nX,arg_nY){
+    srtPlaceCard(arg_piece,arg_nX,arg_nY,arg_rotation){
     	createjs.Sound.play("srthand");
 
+    	arg_piece.rotation = arg_rotation;
 	 	arg_piece.movePiece(arg_nX, arg_nY);
 
 		let xpiece = arg_piece;
