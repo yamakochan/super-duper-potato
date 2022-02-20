@@ -461,7 +461,6 @@ class Judge{
 
 		this.playerList[xplayerNo].hand.mouseChildren = false;
 		this.playerList[xplayerNo].place.mouseChildren = false;
-		this.playerList[xplayerNo].otherPlace.mouseChildren = false;
 
 		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",50,120);
 		let notice2 = new Notice(0,200,"が切断","GhostWhite",50,120);
