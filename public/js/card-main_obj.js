@@ -546,17 +546,17 @@ class Piece extends createjs.Container{
 	    this.text =  new createjs.Text(arg_no, "14px sans-serif", "GhostWhite");
 		this.text.textAlign = "center";
 		this.text.textBaseline = "middle";
-		this.text.x = 0;
-		this.text.y = 0;
-		this.text.regX = 15;
-		this.text.regY = 15;
+		this.text.x = 15;
+		this.text.y = 15;
+		// this.text.regX = 15;
+		// this.text.regY = 15;
 
 		this.textShadow = this.text.clone();
 		this.textShadow.color = "dimgray";
 		this.textShadow.x = this.text.x - 1;
 		this.textShadow.y = this.text.y - 1;
-		this.text.regX = 15;
-		this.text.regY = 15;
+		// this.text.regX = 15;
+		// this.text.regY = 15;
 
 		this.text.cache(-15,-15,30,30);
 		this.textShadow.cache(-15,-15,30,30);
