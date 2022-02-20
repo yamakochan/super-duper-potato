@@ -473,6 +473,9 @@ class OtherPlace extends createjs.Container{
 		this.idCounter++;
 		this.addChild(xpiece);
 
+    	createjs.Sound.play("piece");
+	 	xpiece.movePiece(arg_nX, arg_nY);
+
 		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - elm.centerX)**2 + (xpiece.centerX - elm.centerY)**2) < 15;});
 		if(ypiece != null){
 			xpiece.addNo(ypiece.no);
@@ -480,9 +483,6 @@ class OtherPlace extends createjs.Container{
 		}
 
 		this.pieceList[this.pieceList.length] = xpiece;
-
-    	createjs.Sound.play("piece");
-	 	xpiece.movePiece(arg_nX, arg_nY);
 	}
 
     delPiece(arg_piece){	
@@ -497,6 +497,8 @@ class OtherPlace extends createjs.Container{
     srtPlaceCard(arg_piece,arg_nX,arg_nY){
     	createjs.Sound.play("srthand");
 
+	 	arg_piece.movePiece(arg_nX, arg_nY);
+
 		let xpiece = arg_piece;
 		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - elm.centerX)**2 + (xpiece.centerX - elm.centerY)**2) < 15 && elm.id != xpiece.id;});
 		if(ypiece != null){
@@ -504,9 +506,6 @@ class OtherPlace extends createjs.Container{
 			this.delPiece(ypiece);
 		}
 
-	 	arg_piece.movePiece(arg_nX, arg_nY);
-
-		this.pieceList[this.pieceList.length] = xpiece;
     	this.removeChild(arg_piece);
     	this.addChild(arg_piece);
 	}
