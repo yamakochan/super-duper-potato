@@ -478,7 +478,7 @@ class OtherPlace extends createjs.Container{
 	 	//movepieceをpromiseにすれば、下記の計算は不要となり、ypieceの検索はxpiece.x、xpiece.yでよくなるはず。
 	 	//あとは、pieceのマージ処理も、（player毎に差異があり得るため）別のcurrent player からの　socket.emitにする？
 
-		let xrad = this.rotation * Math.PI / 180;
+		let xrad = arg_rotation * Math.PI / 180;
 		let newX = arg_nX * Math.cos(xrad) - arg_nY * Math.sin(xrad);
 		let newY = arg_nX * Math.sin(xrad) + arg_nY * Math.cos(xrad);
 
