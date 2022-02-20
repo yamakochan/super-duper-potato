@@ -512,7 +512,7 @@ class Judge{
 		}else{
 			if(data.cmd == "move"){
 				let xpiece = this.otherPlace.pieceList.find(elm => {return elm.id == data.id;});
-				this.otherPlace.srtPlaceCard(xpiece, data.nX, data.nY);
+				this.otherPlace.srtPlaceCard(xpiece, data.nX, data.nY, xrotation);
 			}
 		}
 	}
