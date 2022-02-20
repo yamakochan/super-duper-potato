@@ -465,12 +465,10 @@ class OtherPlace extends createjs.Container{
 	constructor(){
 		super();
 		this.pieceList = [];
-		this.idCounter = 0;
 	}
 
-    addPiece(arg_nX, arg_nY, arg_no, arg_rotation, arg_color){
-		let xpiece = new Piece(cns_layer1Left, cns_layer1Top, arg_no, this.idCounter, arg_rotation, arg_color);
-		this.idCounter++;
+    addPiece(arg_nX, arg_nY, arg_id, arg_no, arg_rotation, arg_color){
+		let xpiece = new Piece(cns_layer1Left, cns_layer1Top, arg_id, arg_no, arg_rotation, arg_color);
 		this.addChild(xpiece);
 
     	createjs.Sound.play("piece");
@@ -513,7 +511,7 @@ class OtherPlace extends createjs.Container{
 }
 
 class Piece extends createjs.Container{
-	constructor(arg_x, arg_y, arg_no, arg_id, arg_rotation, arg_color){
+	constructor(arg_x, arg_y, arg_id, arg_no, arg_rotation, arg_color){
 		super();
 		this.id = arg_id;
 		this.rotation = arg_rotation;
@@ -548,15 +546,15 @@ class Piece extends createjs.Container{
 		this.text.textBaseline = "middle";
 		this.text.x = 15;
 		this.text.y = 15;
-		// this.text.regX = 15;
-		// this.text.regY = 15;
+		this.text.regX = 15;
+		this.text.regY = 15;
 
 		this.textShadow = this.text.clone();
 		this.textShadow.color = "dimgray";
 		this.textShadow.x = this.text.x - 1;
 		this.textShadow.y = this.text.y - 1;
-		// this.text.regX = 15;
-		// this.text.regY = 15;
+		this.text.regX = 15;
+		this.text.regY = 15;
 
 		this.text.cache(-15,-15,30,30);
 		this.textShadow.cache(-15,-15,30,30);
