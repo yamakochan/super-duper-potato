@@ -315,7 +315,7 @@ class CncrDelPieceButton extends AbstButton{
  	buttonCommand(){
 		socket.emit("serverDeletePiece", {
 			// player: this.piece.parent.player.playerNo,
-			player: cns_myPlayerIndex,
+			// player: cns_myPlayerIndex,
 	 		id: this.piece.id
 		});	
  	}

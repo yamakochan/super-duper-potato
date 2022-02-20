@@ -22,14 +22,8 @@ class Player extends createjs.Container{
 		this.addChild(this.hand);
 		background.addChild(this.hand);
 
-		//piece用のコンテナ
-		this.otherPlace = new OtherPlace(this);
-		this.addChild(this.otherPlace);
-		background.addChild(this.otherPlace);
-		
-// 拡大縮小のため、cardとpieceのコンテナはbackgroundのchildにする。
+// 拡大縮小のため、cardのコンテナはbackgroundのchildにする。
 // card,pieceのイベント処理では、backgraundへのイベント波及を止めるため、stopPropagation()をコール。
-
 
 		//player毎の表示位置計算用角度
 		this.playerRotation = 0;
@@ -468,9 +462,8 @@ class Card extends createjs.Container{
 }
 
 class OtherPlace extends createjs.Container{
-	constructor(arg_player){
+	constructor(){
 		super();
-		this.player = arg_player;
 		this.pieceList = [];
 		this.idCounter = 0;
 	}
@@ -480,6 +473,12 @@ class OtherPlace extends createjs.Container{
 		this.idCounter++;
 		this.addChild(xpiece);
 		this.pieceList[this.pieceList.length] = xpiece;
+
+		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - elm.centerX)**2 + (xpiece.centerX - elm.centerY)**2) < 15;});
+		if(ypiece != null){
+			xpiece.no = xpiece.no + ypiece.no;
+			delPiece(ypiece);
+		}
 
     	createjs.Sound.play("piece");
 	 	xpiece.movePiece(arg_nX, arg_nY);
@@ -512,7 +511,9 @@ class Piece extends createjs.Container{
 		this.x = arg_x;
 		this.y = arg_y;
 		this.moving = 0;  		// 0:静止中、1:操作中
-		this.showPieceButton = false;
+
+		this.centerX = (this.x + 15) * Math.cos(this.rotation) - (this.y + 15) * Math.sin(this.rotation);
+		this.centerY = (this.y + 15) * Math.cos(this.rotation) + (this.x + 15) * Math.sin(this.rotation);
 
 		this.shape = new createjs.Shape();
         this.shape.graphics.beginFill("#00cccc");

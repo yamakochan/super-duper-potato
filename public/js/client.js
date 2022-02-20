@@ -148,7 +148,7 @@ socket.on("gameStart", function(data){
 
     document.getElementById("view_login").style.display ="none";
     document.getElementById("view_canvas").style.display ="block";
-    initStage(memArray,deckArray,cemetaryArray,descArray,50);
+    initStage(memArray,deckArray,cemetaryArray,descArray,data.handCardNumber);
 });
 
 

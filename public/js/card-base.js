@@ -130,6 +130,10 @@ class Judge{
 			j++;
 		}
 
+		//piece用のコンテナ
+		this.otherPlace = new OtherPlace();
+		background.addChild(this.otherPlace);
+		
 // 拡大縮小のため、cardとpieceのコンテナはbackgroundのchildにする。
 // card,pieceのイベント処理では、backgraundへのイベント波及を止めるため、stopPropagation()をコール。
 
@@ -503,26 +507,23 @@ class Judge{
 	//data - cmd: player: id: no: nX: nY:
 	playPiece(data){
 		let xplayer = judge.playerList[data.playerno];
-		let xotherPlace = xplayer.otherPlace;
 		let xrotation = cns_rotation - xplayer.playerRotation;
 		let xcolor = "hsl(" + data.playerno*99 + ", 90%, 50%)";
 
 		if(data.cmd == "add"){
-			xotherPlace.addPiece(data.nX, data.nY, data.no, xrotation, xcolor);
+			this.otherPlace.addPiece(data.nX, data.nY, data.no, xrotation, xcolor);
 		}else{
 			if(data.cmd == "move"){
-				let xpiece = xotherPlace.pieceList.find(elm => {return elm.id == data.id;});
-				xotherPlace.srtPlaceCard(xpiece, data.nX, data.nY);
+				let xpiece = this.otherPlace.pieceList.find(elm => {return elm.id == data.id;});
+				this.otherPlace.srtPlaceCard(xpiece, data.nX, data.nY);
 			}
 		}
 	}
 
 	deletePiece(data){
-		let xplayer = this.playerList[data.player];
-		let xotherPlace = xplayer.otherPlace;
-		let xpiece = xotherPlace.pieceList.find(elm => {return elm.id == data.id;});
+		let xpiece = this.otherPlace.pieceList.find(elm => {return elm.id == data.id;});
 
-		xplayer.otherPlace.delPiece(xpiece);
+		this.otherPlace.delPiece(xpiece);
 	}
 
 	registerButton(arg_button){
