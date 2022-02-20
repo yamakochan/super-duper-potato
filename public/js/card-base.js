@@ -508,7 +508,7 @@ class Judge{
 		let xcolor = "hsl(" + 99 + ", 90%, 50%)"; //色も固定
 
 		if(data.cmd == "add"){
-			this.otherPlace.addPiece(data.nX, data.nY, data.no, xrotation, xcolor);
+			this.otherPlace.addPiece(data.nX, data.nY, data.id, data.no, xrotation, xcolor);
 		}else{
 			if(data.cmd == "move"){
 				let xpiece = this.otherPlace.pieceList.find(elm => {return elm.id == data.id;});

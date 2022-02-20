@@ -573,6 +573,7 @@ class PieceButton extends createjs.Container{
 		super();
 		this.x = arg_x;
 		this.y = arg_y;
+		this.idNo = 0;
 		
 		this.pieceButton = [];
 
@@ -725,13 +726,14 @@ class PieceButton extends createjs.Container{
 
  	pieceHandleUp(event){
  		if(this.piecePush){
+ 			this.idNo = this.idNo + 1;
  			let xno = this.no;
  			if(xno == 6){xno = 10};
  			let xplayer = judge.playerList[cns_myPlayerIndex];
  			socket.emit("serverPlayPiece", {
 		 		cmd: "add",
 		 		playerno: xplayer.playerNo,
-		 		id: 0,
+		 		id: cns_myPlayerIndex + "/" + this.idNo,
 		 		no: xno,
 		 		nX: 0,
 		 		nY: 100
