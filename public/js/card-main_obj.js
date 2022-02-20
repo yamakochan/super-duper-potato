@@ -476,7 +476,7 @@ class OtherPlace extends createjs.Container{
     	createjs.Sound.play("piece");
 	 	xpiece.movePiece(arg_nX, arg_nY);
 
-		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - (elm.centerX * Math.cos(elm.rotation * Math.PI / 180) - elm.centerY * Math.sin(elm.rotation * Math.PI / 180)))**2 + (xpiece.centerY - (elm.centerX * Math.sin(elm.rotation * Math.PI / 180) + elm.centerY * Math.cos(elm.rotation * Math.PI / 180)))**2) < 15;});
+		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.x - (elm.x * Math.cos(elm.rotation * Math.PI / 180) - elm.y * Math.sin(elm.rotation * Math.PI / 180)))**2 + (xpiece.y - (elm.x * Math.sin(elm.rotation * Math.PI / 180) + elm.y * Math.cos(elm.rotation * Math.PI / 180)))**2) < 15;});
 		if(ypiece != null){
 			xpiece.addNo(ypiece.no);
 			this.delPiece(ypiece);
@@ -501,7 +501,7 @@ class OtherPlace extends createjs.Container{
 	 	arg_piece.movePiece(arg_nX, arg_nY);
 
 		let xpiece = arg_piece;
-		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - (elm.centerX * Math.cos(elm.rotation * Math.PI / 180) - elm.centerY * Math.sin(elm.rotation * Math.PI / 180)))**2 + (xpiece.centerY - (elm.centerX * Math.sin(elm.rotation * Math.PI / 180) + elm.centerY * Math.cos(elm.rotation * Math.PI / 180)))**2) < 15 && elm.id != xpiece.id;});
+		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.x - (elm.x * Math.cos(elm.rotation * Math.PI / 180) - elm.y * Math.sin(elm.rotation * Math.PI / 180)))**2 + (xpiece.y - (elm.x * Math.sin(elm.rotation * Math.PI / 180) + elm.y * Math.cos(elm.rotation * Math.PI / 180)))**2) < 15 && elm.id != xpiece.id;});
 		if(ypiece != null){
 			xpiece.addNo(ypiece.no);
 			this.delPiece(ypiece);
@@ -527,12 +527,16 @@ class Piece extends createjs.Container{
 		this.shape.graphics.drawRoundRect(0, 0, 30, 30, 0, 0);
 		// this.shape.shadow = new createjs.Shadow(arg_color, 1, 1, 3);
 		this.shape.alpha = 1;
+		this.shape.regX = 15;
+		this.shape.regY = 15;
 
 		this.shapeShadow = new createjs.Shape();
 		this.shapeShadow.graphics.beginFill(arg_color);
 		this.shapeShadow.graphics.drawRoundRect(0, 0, 30, 30, 0, 0);
 		this.shapeShadow.x = this.shapeShadow.x + 1;
 		this.shapeShadow.y = this.shapeShadow.y + 2;
+		this.shapeShadow.regX = 15;
+		this.shapeShadow.regY = 15;
 
 		this.shape.cache(0,0,30,30);
 		this.shapeShadow.cache(0,0,32,32);
@@ -542,13 +546,17 @@ class Piece extends createjs.Container{
 	    this.text =  new createjs.Text(arg_no, "14px sans-serif", "GhostWhite");
 		this.text.textAlign = "center";
 		this.text.textBaseline = "middle";
-		this.text.x = 15;
-		this.text.y = 15;
+		this.text.x = 0;
+		this.text.y = 0;
+		this.text.regX = 15;
+		this.text.regY = 15;
 
 		this.textShadow = this.text.clone();
 		this.textShadow.color = "dimgray";
 		this.textShadow.x = this.text.x - 1;
 		this.textShadow.y = this.text.y - 1;
+		this.text.regX = 15;
+		this.text.regY = 15;
 
 		this.text.cache(-15,-15,30,30);
 		this.textShadow.cache(-15,-15,30,30);
@@ -617,9 +625,6 @@ class Piece extends createjs.Container{
 		let xrad = this.rotation * Math.PI / 180;
 		let newX = arg_nX * Math.cos(xrad) - arg_nY * Math.sin(xrad);
 		let newY = arg_nX * Math.sin(xrad) + arg_nY * Math.cos(xrad);
-
-		this.centerX = (newX + 15) * Math.cos(xrad) - (newY + 15) * Math.sin(xrad);
-		this.centerY = (newX + 15) * Math.sin(xrad) + (newY + 15) * Math.cos(xrad);
 
 		createjs.Tween.get(this, {override:true})
 		.to({x:newX, y:newY}, cns_duration, createjs.Ease.cubicOut);
