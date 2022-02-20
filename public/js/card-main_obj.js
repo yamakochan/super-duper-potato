@@ -472,13 +472,14 @@ class OtherPlace extends createjs.Container{
 		let xpiece = new Piece(cns_layer1Left, cns_layer1Top, arg_no, this.idCounter, arg_rotation, arg_color);
 		this.idCounter++;
 		this.addChild(xpiece);
-		this.pieceList[this.pieceList.length] = xpiece;
 
 		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - elm.centerX)**2 + (xpiece.centerX - elm.centerY)**2) < 15;});
 		if(ypiece != null){
-			xpiece.no = xpiece.no + ypiece.no;
+			xpiece.addNo(ypiece.no);
 			this.delPiece(ypiece);
 		}
+
+		this.pieceList[this.pieceList.length] = xpiece;
 
     	createjs.Sound.play("piece");
 	 	xpiece.movePiece(arg_nX, arg_nY);
@@ -495,8 +496,17 @@ class OtherPlace extends createjs.Container{
 
     srtPlaceCard(arg_piece,arg_nX,arg_nY){
     	createjs.Sound.play("srthand");
+
+		let xpiece = arg_piece;
+		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - elm.centerX)**2 + (xpiece.centerX - elm.centerY)**2) < 15 && elm.id != xpiece.id;});
+		if(ypiece != null){
+			xpiece.addNo(ypiece.no);
+			this.delPiece(ypiece);
+		}
+
 	 	arg_piece.movePiece(arg_nX, arg_nY);
 
+		this.pieceList[this.pieceList.length] = xpiece;
     	this.removeChild(arg_piece);
     	this.addChild(arg_piece);
 	}
@@ -593,7 +603,7 @@ class Piece extends createjs.Container{
 			}else{
 	 			socket.emit("serverPlayPiece", {
 	 				cmd: "move",
-			 		playerno: this.parent.player.playerNo,
+			 		// playerno: this.parent.player.playerNo,
 			 		id: this.id,
 			 		no: this.no,
 			 		nX: this.x,
@@ -614,4 +624,15 @@ class Piece extends createjs.Container{
 		createjs.Tween.get(this, {override:true})
 		.to({x:newX, y:newY}, cns_duration, createjs.Ease.cubicOut);
  	}
+
+ 	addNo(arg_no){
+		this.no = this.no + arg_no;
+
+		this.text.uncache();
+		this.text.text = this.no;
+		this.textShadow.text = this.no;
+		this.text.cache(-15,-15,30,30);
+		this.textShadow.cache(-15,-15,30,30);
+ 	}
+
 }
