@@ -522,9 +522,6 @@ class Piece extends createjs.Container{
 		this.y = arg_y;
 		this.moving = 0;  		// 0:静止中、1:操作中
 
-		this.centerX = (this.x + 15) * Math.cos(this.rotation) - (this.y + 15) * Math.sin(this.rotation);
-		this.centerY = (this.y + 15) * Math.cos(this.rotation) + (this.x + 15) * Math.sin(this.rotation);
-
 		this.shape = new createjs.Shape();
         this.shape.graphics.beginFill("#00cccc");
 		this.shape.graphics.drawRoundRect(0, 0, 30, 30, 0, 0);
@@ -603,7 +600,7 @@ class Piece extends createjs.Container{
 			}else{
 	 			socket.emit("serverPlayPiece", {
 	 				cmd: "move",
-			 		// playerno: this.parent.player.playerNo,
+			 		playerno: cns_myPlayerIndex,
 			 		id: this.id,
 			 		no: this.no,
 			 		nX: this.x,
@@ -620,6 +617,9 @@ class Piece extends createjs.Container{
 		let xrad = this.rotation * Math.PI / 180;
 		let newX = arg_nX * Math.cos(xrad) - arg_nY * Math.sin(xrad);
 		let newY = arg_nX * Math.sin(xrad) + arg_nY * Math.cos(xrad);
+
+		this.centerX = (newX + 15) * Math.cos(xrad) - (newY + 15) * Math.sin(xrad);
+		this.centerY = (newX + 15) * Math.sin(xrad) + (newY + 15) * Math.cos(xrad);
 
 		createjs.Tween.get(this, {override:true})
 		.to({x:newX, y:newY}, cns_duration, createjs.Ease.cubicOut);
