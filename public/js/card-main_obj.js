@@ -471,10 +471,18 @@ class OtherPlace extends createjs.Container{
 		let xpiece = new Piece(cns_layer1Left, cns_layer1Top, arg_id, arg_no, arg_rotation, arg_color);
 		this.addChild(xpiece);
 
-    	createjs.Sound.play("piece");
+
+	   	createjs.Sound.play("piece");
 	 	xpiece.movePiece(arg_nX, arg_nY);
 
-		let ypiece = this.pieceList.find(elm => {return Math.sqrt((arg_nX - elm.x)**2 + (arg_nY - elm.y)**2) < 15;});
+	 	//movepieceをpromiseにすれば、下記の計算は不要となり、ypieceの検索はxpiece.x、xpiece.yでよくなるはず。
+	 	//あとは、pieceのマージ処理も、（player毎に差異があり得るため）別のcurrent player からの　socket.emitにする？
+
+		let xrad = this.rotation * Math.PI / 180;
+		let newX = arg_nX * Math.cos(xrad) - arg_nY * Math.sin(xrad);
+		let newY = arg_nX * Math.sin(xrad) + arg_nY * Math.cos(xrad);
+
+		let ypiece = this.pieceList.find(elm => {return Math.sqrt((newX - elm.x)**2 + (newY - elm.y)**2) < 15;});
 		if(ypiece != null){
 			xpiece.addNo(ypiece.no);
 			this.delPiece(ypiece);
