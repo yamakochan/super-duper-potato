@@ -476,7 +476,7 @@ class OtherPlace extends createjs.Container{
     	createjs.Sound.play("piece");
 	 	xpiece.movePiece(arg_nX, arg_nY);
 
-		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - elm.centerX)**2 + (xpiece.centerY - elm.centerY)**2) < 15;});
+		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - (elm.centerX * Math.cos(elm.rotation * Math.PI / 180) - elm.centerY * Math.sin(elm.rotation * Math.PI / 180)))**2 + (xpiece.centerY - (elm.centerX * Math.sin(elm.rotation * Math.PI / 180) + elm.centerY * Math.cos(elm.rotation * Math.PI / 180)))**2) < 15;});
 		if(ypiece != null){
 			xpiece.addNo(ypiece.no);
 			this.delPiece(ypiece);
@@ -501,7 +501,7 @@ class OtherPlace extends createjs.Container{
 	 	arg_piece.movePiece(arg_nX, arg_nY);
 
 		let xpiece = arg_piece;
-		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - elm.centerX)**2 + (xpiece.centerY - elm.centerY)**2) < 15 && elm.id != xpiece.id;});
+		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.centerX - (elm.centerX * Math.cos(elm.rotation * Math.PI / 180) - elm.centerY * Math.sin(elm.rotation * Math.PI / 180)))**2 + (xpiece.centerY - (elm.centerX * Math.sin(elm.rotation * Math.PI / 180) + elm.centerY * Math.cos(elm.rotation * Math.PI / 180)))**2) < 15 && elm.id != xpiece.id;});
 		if(ypiece != null){
 			xpiece.addNo(ypiece.no);
 			this.delPiece(ypiece);
