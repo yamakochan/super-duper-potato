@@ -29,6 +29,9 @@ const io     = socketIO(server);
 // name リスト
 const nameList = require('./name_list.js');
 
+// handCardNumber
+const handCardNumber = 5;
+
 // desc リスト
 const descList = require('./desc_list.js');
 let descArray = descList.descArray;
@@ -248,7 +251,8 @@ io.on('connection', (socket) => {
 	        	io.to(roomNo).emit("gameStart",{
 	        		deck: JSON.stringify(deckArray),
 	        		cemetary: JSON.stringify(cemetaryArray),
-                    desc: JSON.stringify(descArray)
+                    desc: JSON.stringify(descArray),
+                    handCardNumber: handCardNumber
 	        	});
         	}else{
 				io.to(socket.id).emit("message", 'メンバー不足 ゲーム開始不可'); //入室ng時の該当クライアント処理
