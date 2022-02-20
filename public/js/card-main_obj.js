@@ -474,7 +474,7 @@ class OtherPlace extends createjs.Container{
     	createjs.Sound.play("piece");
 	 	xpiece.movePiece(arg_nX, arg_nY);
 
-		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.x - elm.x)**2 + (xpiece.y - elm.y)**2) < 15;});
+		let ypiece = this.pieceList.find(elm => {return Math.sqrt((arg_nX - elm.x)**2 + (arg_nY - elm.y)**2) < 15;});
 		if(ypiece != null){
 			xpiece.addNo(ypiece.no);
 			this.delPiece(ypiece);
