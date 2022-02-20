@@ -504,12 +504,12 @@ class Judge{
 
 	//data - cmd: player: id: no: nX: nY:
 	playPiece(data){
-		let xplayer = judge.playerList[data.playerno];
-		let xrotation = cns_rotation - xplayer.playerRotation;
-		let xcolor = "hsl(" + data.playerno*99 + ", 90%, 50%)";
+		// let xplayer = judge.playerList[data.playerno];
+		// let xrotation = cns_rotation - xplayer.playerRotation;
+		let xcolor = "hsl(" + 99 + ", 90%, 50%)"; //色も固定
 
 		if(data.cmd == "add"){
-			this.otherPlace.addPiece(data.nX, data.nY, data.no, xrotation, xcolor);
+			this.otherPlace.addPiece(data.nX, data.nY, data.no, 0, xcolor);  //rotation は常に０にする
 		}else{
 			if(data.cmd == "move"){
 				let xpiece = this.otherPlace.pieceList.find(elm => {return elm.id == data.id;});
