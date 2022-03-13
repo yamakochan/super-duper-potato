@@ -501,18 +501,18 @@ class Judge{
     	createjs.Sound.play("dice2");
 	}
 
-	//data - cmd: player: id: no: nX: nY:
+	//data - cmd: playerno: id: no: mrg: mrgId: nX: nY:
 	playPiece(data){
 		let xplayer = judge.playerList[data.playerno];
 		let xrotation = cns_rotation - xplayer.playerRotation;
 		let xcolor = "hsl(" + 99 + ", 90%, 50%)"; //色も固定
 
 		if(data.cmd == "add"){
-			this.otherPlace.addPiece(data.nX, data.nY, data.id, data.no, xrotation, xcolor);
+			this.otherPlace.addPiece(data.nX, data.nY, data.id, data.no, data.mrg, data.mrgId ,xrotation, xcolor);
 		}else{
 			if(data.cmd == "move"){
 				let xpiece = this.otherPlace.pieceList.find(elm => {return elm.id == data.id;});
-				this.otherPlace.srtPlaceCard(xpiece, data.nX, data.nY, xrotation);
+				this.otherPlace.srtPlaceCard(xpiece, data.nX, data.nY, data.mrg, data.mrgId, xrotation);
 			}
 		}
 	}

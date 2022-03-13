@@ -730,11 +730,23 @@ class PieceButton extends createjs.Container{
  			let xno = this.no;
  			if(xno == 6){xno = 10};
  			let xplayer = judge.playerList[cns_myPlayerIndex];
+ 			let newX = 0;
+ 			let newY = 100;
+			let ypiece = judge.otherPlace.pieceList.find(elm => {return Math.sqrt((newX - elm.x)**2 + (newY - elm.y)**2) < 15;});
+			let mrg = false;
+			let mrgId = 0;
+			if(ypiece != null){
+				mrg = true;
+				mrgId = ypiece.id;
+			}
+
  			socket.emit("serverPlayPiece", {
 		 		cmd: "add",
 		 		playerno: xplayer.playerNo,
 		 		id: cns_myPlayerIndex + "/" + this.idNo,
 		 		no: xno,
+		 		mrg: mrg,
+		 		mrgId : mrgId,
 		 		nX: 0,
 		 		nY: 100
 		 	});

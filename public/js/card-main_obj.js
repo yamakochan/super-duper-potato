@@ -467,26 +467,21 @@ class OtherPlace extends createjs.Container{
 		this.pieceList = [];
 	}
 
-    addPiece(arg_nX, arg_nY, arg_id, arg_no, arg_rotation, arg_color){
+    addPiece(arg_nX, arg_nY, arg_id, arg_no, arg_mrg, arg_mrgId ,arg_rotation, arg_color){
 		let xpiece = new Piece(cns_layer1Left, cns_layer1Top, arg_id, arg_no, arg_rotation, arg_color);
 		this.addChild(xpiece);
-
 
 	   	createjs.Sound.play("piece");
 	 	xpiece.movePiece(arg_nX, arg_nY);
 
-	 	//movepieceをpromiseにすれば、下記の計算は不要となり、ypieceの検索はxpiece.x、xpiece.yでよくなるはず。
-	 	//あとは、pieceのマージ処理も、（player毎に差異があり得るため）別のcurrent player からの　socket.emitにする？
-
-		let xrad = arg_rotation * Math.PI / 180;
-		let newX = arg_nX * Math.cos(xrad) - arg_nY * Math.sin(xrad);
-		let newY = arg_nX * Math.sin(xrad) + arg_nY * Math.cos(xrad);
-
-		let ypiece = this.pieceList.find(elm => {return Math.sqrt((newX - elm.x)**2 + (newY - elm.y)**2) < 15;});
-		if(ypiece != null){
-			xpiece.addNo(ypiece.no);
-			this.delPiece(ypiece);
-		}
+	 	//同じ位置にpieceがあったら統合
+	 	if(arg_mrg){
+			let ypiece = this.pieceList.find(elm => {return elm.id == arg_mrgId;});
+			if(ypiece != null){
+				xpiece.addNo(ypiece.no);
+				this.delPiece(ypiece);
+			}
+	 	}
 
 		this.pieceList[this.pieceList.length] = xpiece;
 	}
@@ -500,18 +495,19 @@ class OtherPlace extends createjs.Container{
     	this.removeChild(arg_piece);
 	}
 
-    srtPlaceCard(arg_piece,arg_nX,arg_nY,arg_rotation){
+    srtPlaceCard(arg_piece, arg_nX, arg_nY, arg_mrg, arg_mrgId ,arg_rotation){
     	createjs.Sound.play("srthand");
 
     	arg_piece.rotation = arg_rotation;
 	 	arg_piece.movePiece(arg_nX, arg_nY);
 
-		let xpiece = arg_piece;
-		let ypiece = this.pieceList.find(elm => {return Math.sqrt((xpiece.x - elm.x)**2 + (xpiece.y - elm.y)**2) < 15 && elm.id != xpiece.id;});
-		if(ypiece != null){
-			xpiece.addNo(ypiece.no);
-			this.delPiece(ypiece);
-		}
+	 	if(arg_mrg){
+			let ypiece = this.pieceList.find(elm => {return elm.id == arg_mrgId;});
+			if(ypiece != null){
+				arg_piece.addNo(ypiece.no);
+				this.delPiece(ypiece);
+			}
+	 	}
 
     	this.removeChild(arg_piece);
     	this.addChild(arg_piece);
@@ -607,16 +603,26 @@ class Piece extends createjs.Container{
  		this.alpha = 1;
 
 		if(this.moving == 1){
-			if(this.backupPointX == this.x && this.backupPointY == this.y && this.status != 1){
+			if(this.backupPointX == this.x && this.backupPointY == this.y){
 				judge.clearButton();
 				this.delPieceButton = new DelPieceButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y);
 				judge.registerButton(this.delPieceButton);
 			}else{
+				let ypiece = judge.otherPlace.pieceList.find(elm => {return Math.sqrt((this.x - elm.x)**2 + (this.y - elm.y)**2) < 15;});
+				let mrg = false;
+				let mrgId = 0;
+				if(ypiece != null){
+					mrg = true;
+					mrgId = ypiece.id;
+				}
+
 	 			socket.emit("serverPlayPiece", {
 	 				cmd: "move",
 			 		playerno: cns_myPlayerIndex,
 			 		id: this.id,
 			 		no: this.no,
+		 			mrg: mrg,
+		 			mrgId : mrgId,
 			 		nX: this.x,
 			 		nY: this.y
 			 	});
