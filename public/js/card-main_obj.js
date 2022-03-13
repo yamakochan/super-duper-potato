@@ -608,7 +608,7 @@ class Piece extends createjs.Container{
 				this.delPieceButton = new DelPieceButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y);
 				judge.registerButton(this.delPieceButton);
 			}else{
-				let xPieceList = this.pieceList.filter(elm => {return elm.id != this.id;});
+				let xPieceList = judge.otherPlace.pieceList.filter(elm => {return elm.id != this.id;});
 				let ypiece = xPieceList.find(elm => {return Math.sqrt((this.x - elm.x)**2 + (this.y - elm.y)**2) < 15;});
 				let mrg = false;
 				let mrgId = 0;
