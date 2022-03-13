@@ -486,7 +486,7 @@ class OtherPlace extends createjs.Container{
 		this.pieceList[this.pieceList.length] = xpiece;
 	}
 
-    delPiece(arg_piece){	
+    delPiece(arg_piece){
     	this.pieceList = this.pieceList.filter(elm => {
     		return elm.id != arg_piece.id;
     	});
@@ -608,7 +608,8 @@ class Piece extends createjs.Container{
 				this.delPieceButton = new DelPieceButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y);
 				judge.registerButton(this.delPieceButton);
 			}else{
-				let ypiece = judge.otherPlace.pieceList.find(elm => {return Math.sqrt((this.x - elm.x)**2 + (this.y - elm.y)**2) < 15;});
+				let xPieceList = this.pieceList.filter(elm => {return elm.id != this.id;});
+				let ypiece = xPieceList.find(elm => {return Math.sqrt((this.x - elm.x)**2 + (this.y - elm.y)**2) < 15;});
 				let mrg = false;
 				let mrgId = 0;
 				if(ypiece != null){
