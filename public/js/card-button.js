@@ -741,7 +741,7 @@ class PieceButton extends createjs.Container{
 				mrgId = ypiece.id;
 			}
 
-			this.notActive();
+			this.notActivate();
  			socket.emit("serverPlayPiece", {
 		 		cmd: "add",
 		 		playerno: xplayer.playerNo,

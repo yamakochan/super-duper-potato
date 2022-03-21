@@ -515,7 +515,7 @@ class Judge{
 				this.otherPlace.srtPlaceCard(xpiece, data.nX, data.nY, data.mrg, data.mrgId, xrotation);
 			}
 		}
-		judge.pieceButton.activate();
+		judge.pieceButton.Activate();
 	}
 
 	deletePiece(data){
