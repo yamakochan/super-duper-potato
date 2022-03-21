@@ -574,6 +574,7 @@ class PieceButton extends createjs.Container{
 		this.x = arg_x;
 		this.y = arg_y;
 		this.idNo = 0;
+		this.activate = true;
 		
 		this.pieceButton = [];
 
@@ -740,6 +741,7 @@ class PieceButton extends createjs.Container{
 				mrgId = ypiece.id;
 			}
 
+			this.notActive();
  			socket.emit("serverPlayPiece", {
 		 		cmd: "add",
 		 		playerno: xplayer.playerNo,
@@ -755,5 +757,14 @@ class PieceButton extends createjs.Container{
 		this.pieceButton[this.no - 1].children[0].alpha = 0.5;
 		this.pieceButton[this.no - 1].children[0].cache(0,0,19,30);
  	}
+
+	notActivate(){
+		this.activate = false;
+	}
+
+	Activate(){
+		this.activate = true;
+	}
+
 }
 
