@@ -130,14 +130,6 @@ class Judge{
 			j++;
 		}
 
-		//piece用のコンテナ
-		this.otherPlace = new OtherPlace();
-		background.addChild(this.otherPlace);
-		
-// 拡大縮小のため、cardとpieceのコンテナはbackgroundのchildにする。
-// card,pieceのイベント処理では、backgraundへのイベント波及を止めるため、stopPropagation()をコール。
-
-
 		// playerを作成　（hand , placeを含む）
     	for (let i = 0; i < cns_players; i++){
     		let xplayer = new Player(i,argUserList[i][0],90 * i)
@@ -167,6 +159,13 @@ class Judge{
 		    info.addChild(scoreShadow);
 		    info.addChild(this.score[i]);
 		}
+
+		//piece用のコンテナ
+		this.otherPlace = new OtherPlace();
+		background.addChild(this.otherPlace);
+		
+// 拡大縮小のため、cardとpieceのコンテナはbackgroundのchildにする。　（pieceが一番上のレイヤ）
+// card,pieceのイベント処理では、backgraundへのイベント波及を止めるため、stopPropagation()をコール。
 
 		//dice
 		this.diceButton = new DiceButton(10,100);
