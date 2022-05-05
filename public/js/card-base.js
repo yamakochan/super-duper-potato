@@ -30,6 +30,12 @@ function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCa
 	cns_layer1VertMargin = 100;
 	cns_layer1InitX = cns_stageWidth / 2;
 	cns_layer1InitY = -1 * (cns_layer1Height / 2 - cns_stageHeight);
+	cns_layer1TopViewX = cns_stageWidth / 2;
+	cns_layer1TopViewY = cns_layer1Height / 2;
+	cns_layer1LeftViewX = cns_layer1Width / 2;
+	cns_layer1LeftViewY = cns_stageHeight / 2;
+	cns_layer1RightViewX = -1 * cns_layer1Width / 2 + cns_stageWidth;
+	cns_layer1RightViewY = cns_stageHeight / 2;
 
 	cns_handMargin = 1; //カード間隔 1pt
 	cns_handWidth = (cns_cardWidth + cns_handMargin) * 5; //card５枚分＋間5pt
@@ -176,6 +182,9 @@ class Judge{
 
 		//resign
 		this.resignButton = new ResignButton(cns_stageWidth - cns_buttonWidth - 10,45);
+		
+		//view
+		this.viewButton = new ViewButton(cns_stageWidth - cns_buttonWidth + 20,85);
 	}
 
 	playCard(data){

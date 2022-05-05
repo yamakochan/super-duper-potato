@@ -580,7 +580,7 @@ class Card extends createjs.Container{
 		   	this.mousedownListener = this.on("mousedown", this.handleDown,this);
 	        this.pressmoveListener = this.on("pressmove", this.handleMove,this);
 	        this.pressupListener = this.on("pressup", this.handleUp,this);
-		}, 200);
+		}, 300);
 	}
 }
 

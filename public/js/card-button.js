@@ -413,6 +413,137 @@ class ResignButton extends AbstButton{
  	}
 }
 
+class ViewButton extends createjs.Container{
+	constructor(arg_x, arg_y){
+		super();
+		this.x = arg_x;
+		this.y = arg_y;
+		
+		this.viewButton = [];
+
+		for(let i = 0; i < 4; i++){this.viewButton[i] = new createjs.Container;}
+		this.drawViewButton(0,0,0,"T");
+		this.drawViewButton(1,-15,15,"L");
+		this.drawViewButton(2,15,15,"R");
+		this.drawViewButton(3,0,30,"B");
+		for(let i = 0; i < 4; i++){this.addChild(this.viewButton[i]);}
+
+	 //    let viewButtonText =  new createjs.Text("change view", "15px sans-serif", "GhostWhite");
+		// viewButtonText.textAlign = "left";
+		// viewButtonText.textBaseline = "top";
+		// viewButtonText.x = -30;
+		// viewButtonText.y = 70;
+		// // diceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		// viewButtonText.cache(0,0,40,15);
+
+	 //    let viewButtonTextShadow =  new createjs.Text("change view", "15px sans-serif", "dimgray");
+		// viewButtonTextShadow.textAlign = "left";
+		// viewButtonTextShadow.textBaseline = "top";
+		// viewButtonTextShadow.x = -30;
+		// viewButtonTextShadow.y = 70;
+		// viewButtonTextShadow.cache(0,0,40,15);
+		// this.addChild(viewButtonTextShadow);
+		// this.addChild(viewButtonText);
+
+		info.addChild(this);
+
+        // this.on('tick',this.update,this);
+    	this.viewButton[0].on("mousedown", this.viewHandleDown1,this);
+    	this.viewButton[1].on("mousedown", this.viewHandleDown2,this);
+    	this.viewButton[2].on("mousedown", this.viewHandleDown3,this);
+    	this.viewButton[3].on("mousedown", this.viewHandleDown4,this);
+		for(let i = 0; i < 4; i++){
+    	    this.viewButton[i].on("pressmove", this.viewHandleMove,this);
+        	this.viewButton[i].on("pressup", this.viewHandleUp,this);
+        }
+	}
+
+	drawViewButton(arg_i,arg_x,arg_y,arg_text){
+		let viewButtonShape = new createjs.Shape();
+		//グラデーション指定：[色1,色2,色3],[色2開始割合、色3開始割合、色3終了割合],開始位置x,y,終了位置x,y
+        viewButtonShape.graphics.beginLinearGradientFill(["violet","dimgray","violet"],[0.4,1.0,0.3],0,0,20,20);
+		viewButtonShape.graphics.drawRoundRect(0, 0, 20, 20, 5, 5);
+		viewButtonShape.x = arg_x;
+		viewButtonShape.y = arg_y;
+		viewButtonShape.alpha = 0.5;
+		viewButtonShape.cache(0,0,20,20);
+		viewButtonShape.rotation = 45;
+		this.viewButton[arg_i].addChild(viewButtonShape); 
+
+	    let viewButtonText =  new createjs.Text(arg_text, "14px sans-serif", "GhostWhite");
+		viewButtonText.textAlign = "center";
+		viewButtonText.textBaseline = "middle";
+		viewButtonText.x = arg_x;
+		viewButtonText.y = arg_y + 13;
+		// diceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+		viewButtonText.cache(-15,-15,20,20);
+
+	    let viewButtonTextShadow =  new createjs.Text(arg_text, "14px sans-serif", "dimgray");
+		viewButtonTextShadow.textAlign = "center";
+		viewButtonTextShadow.textBaseline = "middle";
+		viewButtonTextShadow.x = arg_x + 1;
+		viewButtonTextShadow.y = arg_y + 13;
+		viewButtonTextShadow.cache(-15,-15,21,21);
+		this.viewButton[arg_i].addChild(viewButtonTextShadow);
+		this.viewButton[arg_i].addChild(viewButtonText);
+	}
+
+	viewHandleDownAction(arg_i){
+		background.notActivate();
+		judge.clearButton();
+
+		this.viewButton[arg_i].children[0].uncache();
+		this.viewButton[arg_i].children[0].alpha = 1.0;
+		this.viewButton[arg_i].children[0].cache(0,0,20,20);
+	    this.dragPointX = stage.mouseX;
+	    this.dragPointY = stage.mouseY;
+	    this.no = arg_i;
+	    this.viewPush   = true;
+ 	}
+	viewHandleDown1(event){
+		this.viewHandleDownAction(0);
+		this.nX = cns_layer1TopViewX;
+		this.nY = cns_layer1TopViewY; 
+ 	}
+	viewHandleDown2(event){
+		this.viewHandleDownAction(1);
+		this.nX = cns_layer1LeftViewX;
+		this.nY = cns_layer1LeftViewY; 
+ 	}
+	viewHandleDown3(event){
+		this.viewHandleDownAction(2);
+		this.nX = cns_layer1RightViewX;
+		this.nY = cns_layer1RightViewY; 
+ 	}
+	viewHandleDown4(event){
+		this.viewHandleDownAction(3);
+		this.nX = cns_layer1InitX;
+		this.nY = cns_layer1InitY; 
+ 	}
+
+    viewHandleMove(event){
+		background.notActivate();
+		if(Math.abs(this.dragPointX - stage.mouseX) > 15 || Math.abs(this.dragPointY - stage.mouseY) > 15){
+	        this.viewPush = false;
+			this.viewButton[this.no].children[0].uncache();
+			this.viewButton[this.no].children[0].alpha = 0.5;
+			this.viewButton[this.no].children[0].cache(0,0,20,20);
+        }
+    }
+
+ 	viewHandleUp(event){
+		background.notActivate();
+ 		if(this.viewPush){
+			let duration = 500;
+			createjs.Tween.get(layer1, {override:true})
+			.to({x:this.nX, y:this.nY}, duration, createjs.Ease.cubicOut);
+ 		}
+		this.viewButton[this.no].children[0].uncache();
+		this.viewButton[this.no].children[0].alpha = 0.5;
+		this.viewButton[this.no].children[0].cache(0,0,20,20);
+ 	}
+}
+
 class DiceButton extends createjs.Container{
 	constructor(arg_x, arg_y){
 		super();
