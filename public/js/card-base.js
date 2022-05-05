@@ -92,6 +92,7 @@ class Judge{
 		this.currentPlayer = -1;	//userNo と対応
 		this.score = [];
 		this.perm = Array();
+		this.kenjyaYumeMode = false;
 
 		//current button
 		this.currentButton = null;
@@ -194,71 +195,125 @@ class Judge{
 		if(data.status == 9){
 		    tempArray = this.cemetary.cemetaryCard;
 		}
+		if(data.status == 5){
+		    tempArray = this.kenjyaYumePlace.kenjyaYumeCard;
+		}
 		let tempCard = tempArray.find(elm => {
 		    return elm.no == data.no;
 		});
-		tempCard.rotation = (cns_rotation - this.playerList[data.player].playerRotation)
+		// カード操作直前に変更
+		// tempCard.rotation = (cns_rotation - this.playerList[data.player].playerRotation)
   
 		let xplayer = this.playerList[data.player]
 
-		switch(tempCard.status){
-			case 0:		//deckカード
-				this.deck.delDeckCard(tempCard);
-				this.playerList[data.player].hand.addHandCard(tempCard, cns_layer1Left, this.playerList[data.player].playerNo == cns_myPlayerIndex);
-				break;
-			case 2:		//placeカード
-		        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
-		        	// カード場所移動だけ。
-		    		xplayer.place.srtPlaceCard(tempCard,data.nX,data.nY); 
-			    }
-		        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
+		if(this.kenjyaYumeMode == false){    //賢者の夢の呪文中以外
+			switch(tempCard.status){
+				case 0:		//deckカード
 			    	if(xplayer.hand.handCard.length < cns_handCards){	//手札がlimit数を超えてたら移動キャンセル
-			    // 場札から手札に変更
-			    // 手札の順番入れ替え　＆　表示位置変更
-			    		xplayer.place.delPlaceCard(tempCard);
-			    		xplayer.hand.addHandCard(tempCard, data.nX, xplayer.playerNo == cns_myPlayerIndex);　　
-			    	}else{
+						tempCard.rotation = (cns_rotation - xplayer.playerRotation)
+						this.deck.delDeckCard(tempCard);
+						this.playerList[data.player].hand.addHandCard(tempCard, cns_layer1Left, this.playerList[data.player].playerNo == cns_myPlayerIndex);
+					}else{
+						createjs.Sound.play("beep");
 			    		if(xplayer.playerNo == cns_myPlayerIndex){
 				    		tempCard.x = tempCard.backupPointX;
 				    		tempCard.y = tempCard.backupPointY;
 			    		}
-			    	}
-			    }
-				break;
-			case 1:		//handカード
-		        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
-			    // 手札から場札に変更
-	//		    	let cloneCard = tempCard.cloneCard(tempCard);
-	//		    	xplayer.place.addPlaceCard(cloneCard,newX,newY);
-		    		xplayer.hand.delHandCard(tempCard); 　
-			    	xplayer.place.addPlaceCard(tempCard,data.nX,data.nY);
-			    }
-		        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
-			    // 手札の順番入れ替え　＆　表示位置変更
-		    		xplayer.hand.srtHandCard(tempCard,data.nX); 
-			    }
-				break;
-			case 9:		//cemetaryカード
-		        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
-		    		judge.cemetary.delCemetaryCard(tempCard); 　
-			    	xplayer.place.addPlaceCard(tempCard,data.nX,data.nY);
-			    }
-		        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
-			    	if(xplayer.hand.handCard.length < cns_handCards){	//手札がlimit数を超えてたら移動キャンセル
-			    // 場札から手札に変更
-			    // 手札の順番入れ替え　＆　表示位置変更
+					}
+					break;
+				case 2:		//placeカード
+					tempCard.rotation = (cns_rotation - xplayer.playerRotation)
+			        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
+			        	// カード場所移動だけ。
+			    		xplayer.place.srtPlaceCard(tempCard,data.nX,data.nY); 
+				    }
+			        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
+				    	if(xplayer.hand.handCard.length < cns_handCards){	//手札がlimit数を超えてたら移動キャンセル
+				    // 場札から手札に変更
+				    // 手札の順番入れ替え　＆　表示位置変更
+				    		xplayer.place.delPlaceCard(tempCard);
+				    		xplayer.hand.addHandCard(tempCard, data.nX, xplayer.playerNo == cns_myPlayerIndex);　　
+				    	}else{
+							createjs.Sound.play("beep");
+				    		if(xplayer.playerNo == cns_myPlayerIndex){
+					    		tempCard.x = tempCard.backupPointX;
+					    		tempCard.y = tempCard.backupPointY;
+				    		}
+				    	}
+				    }
+					break;
+				case 1:		//handカード
+					tempCard.rotation = (cns_rotation - xplayer.playerRotation)
+			        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
+				    // 手札から場札に変更
+		//		    	let cloneCard = tempCard.cloneCard(tempCard);
+		//		    	xplayer.place.addPlaceCard(cloneCard,newX,newY);
+			    		xplayer.hand.delHandCard(tempCard); 　
+				    	xplayer.place.addPlaceCard(tempCard,data.nX,data.nY);
+				    }
+			        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
+				    // 手札の順番入れ替え　＆　表示位置変更
+			    		xplayer.hand.srtHandCard(tempCard,data.nX); 
+				    }
+					break;
+				case 9:		//cemetaryカード
+					tempCard.rotation = (cns_rotation - xplayer.playerRotation)
+			        if(data.location == 1){	//カード配置　0:hand , 1:place , 2:cemetary
 			    		judge.cemetary.delCemetaryCard(tempCard); 　
-			    		xplayer.hand.addHandCard(tempCard, data.nX, xplayer.playerNo == cns_myPlayerIndex);　　
-			    	}else{
-			    		if(xplayer.playerNo == cns_myPlayerIndex){
-				    		tempCard.x = tempCard.backupPointX;
-				    		tempCard.y = tempCard.backupPointY;
-			    		}
-			    	}
-			    }
-				break;
-			default:
-				console.log('error');					
+				    	xplayer.place.addPlaceCard(tempCard,data.nX,data.nY);
+				    }
+			        if(data.location == 0){	//カード配置　0:hand , 1:place , 2:cemetary
+				    	if(xplayer.hand.handCard.length < cns_handCards){	//手札がlimit数を超えてたら移動キャンセル
+				    // 場札から手札に変更
+				    // 手札の順番入れ替え　＆　表示位置変更
+				    		judge.cemetary.delCemetaryCard(tempCard); 　
+				    		xplayer.hand.addHandCard(tempCard, data.nX, xplayer.playerNo == cns_myPlayerIndex);　　
+				    	}else{
+							createjs.Sound.play("beep");
+				    		if(xplayer.playerNo == cns_myPlayerIndex){
+					    		tempCard.x = tempCard.backupPointX;
+					    		tempCard.y = tempCard.backupPointY;
+				    		}
+				    	}
+				    }
+					break;
+				default:
+					console.log('error');					
+			}
+		}else{
+			switch(tempCard.status){
+				case 0:		//deckカード
+		    		if(this.kenjyaYumePlace.kenjyaYumeCard.length < 10){
+						tempCard.rotation = (cns_rotation - xplayer.playerRotation)
+						this.deck.delDeckCard(tempCard);
+						this.kenjyaYumePlace.addCard(tempCard, data);
+					}else{
+						createjs.Sound.play("beep");
+					}
+					break;
+				case 1:		//handカード
+		    		if(this.kenjyaYumePlace.kenjyaYumeCard.length < 10){
+						tempCard.rotation = (cns_rotation - xplayer.playerRotation)
+			    		xplayer.hand.delHandCard(tempCard); 　
+						this.kenjyaYumePlace.addCard(tempCard, data);
+					}else{
+						createjs.Sound.play("beep");
+					}
+					break;
+				case 5:		//kenjyayumeカード
+		    		this.kenjyaYumePlace.delCard(tempCard);
+		    		xplayer.hand.addHandCard(tempCard, cns_layer1Left, xplayer.playerNo == cns_myPlayerIndex);　
+		    		if(this.kenjyaYumePlace.kenjyaYumeCard.length > 0){
+						this.kenjyaYumePlace.returnCard();
+		    		}
+					this.kenjyaYumeModeOff();
+					background.removeChild(this.kenjyaYumePlace);
+					this.kenjyaYumePlace = null;
+					createjs.Sound.play("glass");
+					break;
+				default:
+					console.log('error');					
+			}
 		}
 	}
 
@@ -268,13 +323,17 @@ class Judge{
 		let tempY = 0;
 		let tempRotation = 0;
 		if(data.text == "draw"){
-			tempArray = this.deck.deckCard;
-			let tempCard = tempArray.find(elm => {return elm.no == data.no;});
-			tempX = cns_layer1Left;
+	    	if(this.playerList[data.player].hand.handCard.length < cns_handCards){	//手札がlimit数を超えてたら移動キャンセル
+				tempArray = this.deck.deckCard;
+				let tempCard = tempArray.find(elm => {return elm.no == data.no;});
+				tempX = cns_layer1Left;
 
-			tempCard.rotation = (cns_rotation - this.playerList[data.player].playerRotation);
-			this.deck.delDeckCard(tempCard);
-			this.playerList[data.player].hand.addHandCard(tempCard, tempX, this.playerList[data.player].playerNo == cns_myPlayerIndex);
+				tempCard.rotation = (cns_rotation - this.playerList[data.player].playerRotation);
+				this.deck.delDeckCard(tempCard);
+				this.playerList[data.player].hand.addHandCard(tempCard, tempX, this.playerList[data.player].playerNo == cns_myPlayerIndex);
+			}else{
+				createjs.Sound.play("beep");
+			}
 		}
 		if(data.text == "trash"){
 		    tempArray = this.playerList[data.player].place.placeCard;
@@ -305,6 +364,12 @@ class Judge{
 		}
 		if(data.text == "close"){
 			this.cemetary.closeCemetaryCard();
+		}
+		if(data.text == "kenjya"){
+			this.kenjyaYumePlace = new KenjyaYumePlace();
+			background.addChild(this.kenjyaYumePlace);
+
+			this.kenjyaYumeModeOn();
 		}
 	}
 
@@ -535,6 +600,57 @@ class Judge{
 			this.currentButton.deleteButton();
 		}
 		this.forgetButton();
+	}
+
+	kenjyaYumeModeOn(){
+		this.kenjyaYumeMode = true;
+		//子要素にマウスイベントが伝搬されないようにする。
+		for (let i = 0; i < cns_players; i++){
+			this.playerList[i].mouseChildren = false;
+			this.playerList[i].hand.mouseChildren = false;
+			this.playerList[i].place.mouseChildren = false;
+		}
+		this.deck.mouseChildren = false;
+		this.cemetary.mouseChildren = false;
+		this.kenjyaYumePlace.mouseChildren = false;
+
+		//自分のはターンだけ、deck,cemetaryの操作可
+		if(this.currentPlayer == cns_myPlayerIndex){
+			for (let i = 0; i < cns_players; i++){
+				this.playerList[i].mouseChildren = true;
+				this.playerList[i].hand.mouseChildren = true;
+				this.playerList[i].place.mouseChildren = true;
+			}
+			this.deck.mouseChildren = true;
+			this.kenjyaYumePlace.mouseChildren = true;
+		}
+	}
+
+	kenjyaYumeModeOff(){
+		this.kenjyaYumeMode = false;
+		//子要素にマウスイベントが伝搬されないようにする。
+		for (let i = 0; i < cns_players; i++){
+			this.playerList[i].mouseChildren = false;
+			this.playerList[i].hand.mouseChildren = false;
+			this.playerList[i].place.mouseChildren = false;
+		}
+		this.deck.mouseChildren = false;
+		this.cemetary.mouseChildren = false;
+		this.kenjyaYumePlace.mouseChildren = false;
+
+		//place,hand はターンに関係なく　自分のだけ操作可能
+		if(this.playerList[cns_myPlayerIndex].live){
+			this.playerList[cns_myPlayerIndex].place.mouseChildren = true;
+			this.playerList[cns_myPlayerIndex].hand.mouseChildren = true;
+		}
+
+		//自分のはターンだけ、deck,cemetaryの操作可
+		if(this.currentPlayer == cns_myPlayerIndex){
+			this.playerList[this.currentPlayer].mouseChildren = true;
+			this.deck.mouseChildren = true;
+			this.cemetary.mouseChildren = true;
+			this.kenjyaYumePlace.mouseChildren = true;
+		}
 	}
 }
 

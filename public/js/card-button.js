@@ -197,8 +197,15 @@ class PlaceCardButton extends createjs.Container{
 		this.addChild(this.cardButton);
 		this.cancelButton = new CancelButton(0, cns_buttonHeight + 5);
 		this.addChild(this.cancelButton);
-		this.cardButton2 = new DescButton(cns_buttonWidth + 5, 0, this.text2, this.color2, this.card);
-		this.addChild(this.cardButton2);
+		if(this.card.no == 30){	   //賢者の夢の呪文
+			this.cardButton2 = new DescButton(cns_buttonWidth + 5, cns_buttonHeight + 5, this.text2, this.color2, this.card);
+			this.addChild(this.cardButton2);
+			this.cardButton3 = new CncrCardButton(cns_buttonWidth + 5, 0, "kenjya", "hsl(180, 40%, 50%)", this.card);
+			this.addChild(this.cardButton3);
+		}else{
+			this.cardButton2 = new DescButton(cns_buttonWidth + 5, 0, this.text2, this.color2, this.card);
+			this.addChild(this.cardButton2);
+		}
 
 		layer1.addChild(this);
 	}
@@ -351,7 +358,9 @@ class TurnButton extends AbstButton{
 	}
 
 	buttonCommand(){
-		socket.emit("serverChangeTurn");
+		if(judge.kenjyaYumeMode == false){
+			socket.emit("serverChangeTurn");
+		}
  	}
 
  	buttonDelete(){

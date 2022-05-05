@@ -43,12 +43,6 @@ for(let i = 0; i < 93; i++){
   let xtext = "./image/card01/mm" + ('000' + (i+1)).slice(-2) + ".png";
   xxArray[i] = new Array(xtext,i,Math.random());
 }
-xxArray.sort((a,b)=>{
-        if( a[2] < b[2] ) return -1;
-        if( a[2] > b[2] ) return 1;
-        return 0;
-});
-deckArray = xxArray.map(item => {return new Array(item[0],item[1]);});
 
 // オブジェクト cemetary　リスト
 let cemetaryArray = [];
@@ -244,6 +238,14 @@ io.on('connection', (socket) => {
     });
 
     socket.on("serverGameStart", () => {
+        //deckArrayのソート
+        xxArray.sort((a,b)=>{
+            if( a[2] < b[2] ) return -1;
+            if( a[2] > b[2] ) return 1;
+            return 0;
+        });
+        deckArray = xxArray.map(item => {return new Array(item[0],item[1]);});
+
         if(roomNo != null){
 	    	let xuserList = userList[roomNo].filter(elm =>{return elm[0] != null});
         	if(xuserList.length > 1){

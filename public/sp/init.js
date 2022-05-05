@@ -51,6 +51,8 @@ function init() {
 	createjs.Sound.registerSound("../sounds/champion.mp3", "champion");
 	createjs.Sound.registerSound("../sounds/lost.mp3", "lost");
 	createjs.Sound.registerSound("../sounds/in_out_room.mp3", "inoutroom");
+	createjs.Sound.registerSound("../sounds/glass.mp3", "glass");
+	createjs.Sound.registerSound("../sounds/beep.mp3", "beep");
 
 	// スピード
 	cns_speed = 3;          //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  

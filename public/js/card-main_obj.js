@@ -257,6 +257,122 @@ class Cemetary extends createjs.Container{
 	}
 }
 
+class KenjyaYumePlace extends createjs.Container{
+	constructor(){
+		super();
+		this.x = 0;
+		this.y = 0;
+		this.cardsTop = 280;
+		this.kenjyaYumeCard = [];
+		this.cardData = [];
+		if(judge.currentPlayer == cns_myPlayerIndex){
+			this.visibleCard = true;
+		}else{
+			this.visibleCard = false;
+		}
+
+		let initX = 0;
+		let initY = 280;
+		let xrotation = cns_rotation - judge.playerList[judge.currentPlayer].playerRotation;
+		let xrad = xrotation * Math.PI / 180;
+		let newX = initX * Math.cos(xrad) - initY * Math.sin(xrad);
+		let newY = initX * Math.sin(xrad) + initY * Math.cos(xrad);
+
+		this.boxShape = new createjs.Shape();
+        this.boxShape.graphics.beginFill("slategray");
+		this.boxShape.graphics.drawRoundRect(0, 0, 650, 200, 5, 5);
+		this.boxShape.alpha = 0.55;
+		this.boxShape.cache(-2,-2,654, 204);
+		this.boxShape.regX = 300;
+		this.boxShape.regY = 100;
+		this.boxShape.x = newX;
+		this.boxShape.y = newY;
+		this.addChild(this.boxShape); 
+
+		this.wakuShape = new createjs.Shape();
+        this.wakuShape.graphics.beginStroke("hsl(20, 30%, 30%)");
+        this.wakuShape.graphics.setStrokeStyle(1);
+		this.wakuShape.graphics.drawRoundRect(0, 0, 650, 200, 5, 5);
+		this.wakuShape.alpha = 1.0;
+		this.wakuShape.cache(-2,-2,654, 204);
+		this.wakuShape.regX = 300;
+		this.wakuShape.regY = 100;
+		this.wakuShape.x = newX;
+		this.wakuShape.y = newY;
+		this.addChild(this.wakuShape); 
+
+		this.wakuShape.rotation = (cns_rotation - judge.playerList[judge.currentPlayer].playerRotation);
+	}
+
+    addCard(arg_card, data){
+    	createjs.Sound.play("draw");
+    	arg_card.status = 5;
+    	this.addChild(arg_card);
+
+	 	this.kenjyaYumeCard[this.kenjyaYumeCard.length] = arg_card;
+	 	this.cardData[this.cardData.length] = data;
+
+		arg_card.rotation = (cns_rotation - judge.playerList[judge.currentPlayer].playerRotation);
+
+    	this.alignCard();
+
+    	if(this.visibleCard){
+    		arg_card.faceUp();
+    	}else{
+    		arg_card.faceDown();
+    	}
+	}
+
+    delCard(arg_card){
+    	this.removeChild(arg_card);
+
+    	this.kenjyaYumeCard = this.kenjyaYumeCard.filter(elm => {
+    		return elm.no != arg_card.no;
+    	});
+    	this.cardData = this.cardData.filter(elm => {
+    		return elm.no != arg_card.no;
+    	});
+
+    	this.alignCard();
+	}
+
+    returnCard(){
+	 	for(let i = this.kenjyaYumeCard.length - 1;i > 0; i--){
+	 		let tempCard = this.kenjyaYumeCard[i];
+			let xplayer = judge.playerList[this.cardData[i].player];
+	    	this.removeChild(tempCard);
+	    	switch(this.cardData[i].status){
+				case 0:		//deckカード
+					tempCard.rotation = cns_rotation;
+					judge.deck.addDeckCard(tempCard);
+					break;
+				case 1:		//handカード
+					tempCard.rotation = (cns_rotation - xplayer.playerRotation);
+				    xplayer.hand.addHandCard(tempCard, this.cardData[i].nX, xplayer.playerNo == cns_myPlayerIndex);　　
+					break;
+				default:
+					console.log('error');
+			}
+		}
+		this.kenjyaYumeCard = [];
+		this.cardData = [];	
+	}
+
+   	alignCard(){
+	 	let xhandLeft = cns_handLeft;
+	 	let xcardWidth = cns_cardWidth + cns_handMargin;
+		if(this.kenjyaYumeCard.length < Math.floor(cns_handWidth / cns_cardWidth)){
+		 	xhandLeft = -1 * (this.kenjyaYumeCard.length * cns_cardWidth + (this.kenjyaYumeCard.length - 1) * cns_handMargin) / 2 + cns_cardWidth / 2;
+		}else{
+		 	xcardWidth = cns_handWidth / this.kenjyaYumeCard.length;
+		}
+
+	 	for(let i = 0;i < this.kenjyaYumeCard.length;i++){
+	 		this.kenjyaYumeCard[i].moveCard(xhandLeft + xcardWidth * i, this.cardsTop);
+		}	
+	}
+}
+
 class Card extends createjs.Container{
 	constructor(arg_cardImage,arg_no,arg_desc){
 		super();
@@ -265,7 +381,7 @@ class Card extends createjs.Container{
 		this.y = 0;
 		this.headortail = 0;    // 0:表、1:裏
 		this.moving = 0;  		// 0:静止中、1:操作中
-		this.status = 0;  		// 0:deck、1:hand、2:place、9:cemetary
+		this.status = 0;  		// 0:deck、1:hand、2:place、9:cemetary、5:kenjyayume
 		this.desc = arg_desc;	// 説明書き
 
 		this.tail = new createjs.Bitmap(cns_tailImage);
@@ -323,8 +439,10 @@ class Card extends createjs.Container{
         this.dragPointY = stage.mouseY / cns_scale - this.y;
 	    // 半透明にする
         this.alpha = 0.5;
-	    // ドラッグ中ステータス　（透明化）
-		this.moving  =  1;
+	    // 賢者の夢の呪文中は、動かさない。
+	    if(judge.kenjyaYumeMode == false){
+			this.moving  =  1;			// ドラッグ中ステータス
+	    }
  	}
 
     handleMove(event){
@@ -346,50 +464,55 @@ class Card extends createjs.Container{
 		event.stopPropagation();
  		this.alpha = 1;
 
-		if(this.moving == 1){
-			if(this.backupPointX == this.x && this.backupPointY == this.y){
-				switch(this.status){
-					case 0:
-						judge.registerButton( this.drawButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"draw","hsl(200, 70%, 50%)") );
-						break;
-					case 1:
-						judge.registerButton(new HandCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"desc","hsl(90, 40%, 50%)","trash2","hsl(250, 40%, 50%)","reverse","hsl(280, 40%, 50%)"));
-						break;
-					case 2:
-						judge.registerButton(new PlaceCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"trash","hsl(250, 40%, 50%)","desc","hsl(90, 40%, 50%)"));
-						break;
-					case 9:
-						if(judge.cemetary.spread){
-							judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"close","hsl(150, 40%, 50%)") );
-						}else{
-							judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"spread","hsl(30, 40%, 50%)") );
-						}
-						break;
-					default:
-						console.log('error');					
-				}
-			}else{
-				let locationNo = 0;  //カード配置　0:hand , 1:place , xxx2:cemetary
-		        if(this.y < cns_handTop - cns_cardHeight / 4){	//place側に配置
-		        	locationNo = 1;
-		        }else{
-		        	locationNo = 0;
-		        }
-		        let xplayerNo = judge.currentPlayer;
-		        if(this.status == 1 || this.status == 2){
-		        	xplayerNo = this.parent.player.playerNo;
-		        }else{
-		        	xplayerNo = cns_myPlayerIndex;
-		        }
-	 			socket.emit("serverPlayCard", {
-	 				player: xplayerNo,
-			 		no: this.no,
-			 		status: this.status,
-			 		nX: this.x,
-			 		nY: this.y,
-			 		location: locationNo
-				});
+		if(this.moving == 1 &&	this.backupPointX == this.x && this.backupPointY == this.y){
+			switch(this.status){
+				case 0:
+					judge.registerButton( this.drawButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"draw","hsl(200, 70%, 50%)") );
+					break;
+				case 1:
+					judge.registerButton(new HandCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"desc","hsl(90, 40%, 50%)","trash2","hsl(250, 40%, 50%)","reverse","hsl(280, 40%, 50%)"));
+					break;
+				case 2:
+					judge.registerButton(new PlaceCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"trash","hsl(250, 40%, 50%)","desc","hsl(90, 40%, 50%)"));
+					break;
+				case 9:
+					if(judge.cemetary.spread){
+						judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"close","hsl(150, 40%, 50%)") );
+					}else{
+						judge.registerButton( this.cemetaryButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"spread","hsl(30, 40%, 50%)") );
+					}
+					break;
+				default:
+					console.log('error');					
 			}
+		}
+	    // カードを動かしたとき、または賢者の夢の呪文中のsocket.emit
+		if(judge.kenjyaYumeMode == true || this.moving == 1 && (this.backupPointX != this.x || this.backupPointY != this.y)){
+			let locationNo = 0;  //カード配置　0:hand , 1:place , xxx2:cemetary
+	        if(this.y < cns_handTop - cns_cardHeight / 4){	//place側に配置
+	        	locationNo = 1;
+	        }else{
+	        	locationNo = 0;
+	        }
+	        let xplayerNo = judge.currentPlayer;
+	        if(this.status == 1 || this.status == 2){
+	        	xplayerNo = this.parent.player.playerNo;
+	        }else{
+	        	xplayerNo = cns_myPlayerIndex;
+	        }
+
+	        //カード処理中のカード選択禁止。
+       		this.nonreactiveCard();
+			this.reactiveCard();
+
+ 			socket.emit("serverPlayCard", {
+ 				player: xplayerNo,
+		 		no: this.no,
+		 		status: this.status,
+		 		nX: this.x,
+		 		nY: this.y,
+		 		location: locationNo
+			});
  		}
 
  		this.moving = 0;
@@ -457,7 +580,7 @@ class Card extends createjs.Container{
 		   	this.mousedownListener = this.on("mousedown", this.handleDown,this);
 	        this.pressmoveListener = this.on("pressmove", this.handleMove,this);
 	        this.pressupListener = this.on("pressup", this.handleUp,this);
-		}, 1000);
+		}, 200);
 	}
 }
 
