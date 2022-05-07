@@ -35,6 +35,7 @@ function init() {
 	cns_diceImage = "./image/dice2.png";
 	cns_boadImage = "./image/boad1281.png";
 	cns_tailImage = "./image/card01/tails01.png";
+	cns_flagImage = "./image/flag.png";
 
 	//サウンド定義
 	createjs.Sound.registerSound("./sounds/piece.mp3", "piece");
@@ -50,6 +51,7 @@ function init() {
 	createjs.Sound.registerSound("./sounds/in_out_room.mp3", "inoutroom");
 	createjs.Sound.registerSound("./sounds/glass.mp3", "glass");
 	createjs.Sound.registerSound("./sounds/beep.mp3", "beep");
+	createjs.Sound.registerSound("./sounds/flag.mp3", "flag");
 
 	// スピード
 	cns_speed = 1;          //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  

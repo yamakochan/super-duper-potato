@@ -32,9 +32,9 @@ function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCa
 	cns_layer1InitY = -1 * (cns_layer1Height / 2 - cns_stageHeight);
 	cns_layer1TopViewX = cns_stageWidth / 2;
 	cns_layer1TopViewY = cns_layer1Height / 2;
-	cns_layer1LeftViewX = cns_layer1Width / 2;
+	cns_layer1LeftViewX = cns_layer1Width / 2 - (cns_cardHeight - 5)
 	cns_layer1LeftViewY = cns_stageHeight / 2;
-	cns_layer1RightViewX = -1 * cns_layer1Width / 2 + cns_stageWidth;
+	cns_layer1RightViewX = -1 * cns_layer1Width / 2 + cns_stageWidth + (cns_cardHeight - 5);
 	cns_layer1RightViewY = cns_stageHeight / 2;
 
 	cns_handMargin = 1; //カード間隔 1pt
@@ -44,6 +44,9 @@ function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCa
 
 	cns_buttonWidth = 100;
 	cns_buttonHeight = 30;
+
+	cns_flagWidth = 35;
+	cns_flagHeight = 35;
 
 
 	//自分用の表示位置計算用角度（backgroundの表示角度）
@@ -179,12 +182,13 @@ class Judge{
 
 		//piece
 		this.pieceButton = new PieceButton(10,150);
+		this.pieceButton2 = new MinusPieceButton(10,190);
 
 		//resign
-		this.resignButton = new ResignButton(cns_stageWidth - cns_buttonWidth - 10,45);
+		this.settingFlag = new SettingFlag(cns_stageWidth - 70,45 + cns_flagHeight / 2);
 		
 		//view
-		this.viewButton = new ViewButton(cns_stageWidth - cns_buttonWidth + 20,85);
+		this.viewButton = new ViewButton(cns_stageWidth - 100,95);
 	}
 
 	playCard(data){
@@ -419,7 +423,7 @@ class Judge{
 			this.turn = new TurnButton(10,45);
 
 		//permitrevokeボタン作成
-			let yy = 200;
+			let yy = 250;
 			for(let i = 0; i < cns_players; i++){
 				if(this.playerList[i].live && i != cns_myPlayerIndex){
 					this.perm[i] = new PermitRevokeButton(10,yy,i);
@@ -491,7 +495,7 @@ class Judge{
 			this.cemetary.mouseChildren = false;
 			this.diceButton.mouseChildren = false;
 			this.pieceButton.mouseChildren = false;
-			this.resignButton.mouseChildren = false;
+			this.settingFlag.mouseChildren = false;
 			// this.turn.buttonCommand();
 			// this.turn.buttonDelete();
 			createjs.Sound.play("lost");

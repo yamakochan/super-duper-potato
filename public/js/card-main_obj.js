@@ -51,7 +51,11 @@ class Hand extends createjs.Container{
 	}
 
     addHandCard(arg_card, arg_nX, arg_myself){
-    	createjs.Sound.play("draw");
+    	if(arg_card.status == 0){
+    		createjs.Sound.play("draw");
+    	}else{
+    		createjs.Sound.play("srthand");
+    	}
     	arg_card.status = 1;
     	this.addChild(arg_card);
 
@@ -605,6 +609,16 @@ class OtherPlace extends createjs.Container{
 				this.delPiece(ypiece);
 			}
 	 	}
+	 	if(xpiece.no == 0){
+	 		xpiece.off();
+			setTimeout(()=>{
+		 		createjs.Tween.get(xpiece, {override:true})
+				.to({alpha:0}, cns_duration + 300, createjs.Ease.cubicOut);
+				setTimeout(()=>{
+			   		this.delPiece(xpiece);
+				}, 200);
+			}, 500);
+	 	}
 
 		this.pieceList[this.pieceList.length] = xpiece;
 	}
@@ -648,7 +662,7 @@ class Piece extends createjs.Container{
 		this.moving = 0;  		// 0:静止中、1:操作中
 
 		this.shape = new createjs.Shape();
-        this.shape.graphics.beginFill("#00cccc");
+		this.shape.graphics.beginFill("mediumpurple");
 		this.shape.graphics.drawRoundRect(0, 0, 30, 30, 0, 0);
 		// this.shape.shadow = new createjs.Shadow(arg_color, 1, 1, 3);
 		this.shape.alpha = 1;
@@ -668,7 +682,11 @@ class Piece extends createjs.Container{
         this.addChild(this.shapeShadow); // 表示リストに追加
         this.addChild(this.shape); // 表示リストに追加
 
-	    this.text =  new createjs.Text(arg_no, "14px sans-serif", "GhostWhite");
+		if(this.no > 0){
+		    this.text =  new createjs.Text(arg_no, "14px sans-serif", "GhostWhite");
+		}else{
+		    this.text =  new createjs.Text(arg_no, "14px sans-serif", "red");
+		}
 		this.text.textAlign = "center";
 		this.text.textBaseline = "middle";
 		this.text.x = 15;
@@ -774,6 +792,14 @@ class Piece extends createjs.Container{
 		this.textShadow.text = this.no;
 		this.text.cache(-15,-15,30,30);
 		this.textShadow.cache(-15,-15,30,30);
+
+		this.text.uncache();
+		if(this.no > 0){
+		    this.text.color =  "GhostWhite";
+		}else{
+		    this.text.color =  "red";
+		}
+		this.text.cache(-15,-15,30,30);
  	}
 
 }

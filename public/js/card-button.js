@@ -33,6 +33,7 @@ class CancelButton extends createjs.Container{
 	}
 
  	handleDown(){
+		event.stopPropagation();
 		background.notActivate();
        	createjs.Sound.play("button");
 		this.parent.deleteButton();
@@ -78,8 +79,6 @@ class AbstButton extends createjs.Container{
     	this.on("mousedown", this.handleDown,this);
         this.on("pressmove", this.handleMove,this);
         this.on("pressup", this.handleUp,this);
-
-       	createjs.Sound.play("button");
 	}
 
 	handleDown(event){
@@ -104,8 +103,8 @@ class AbstButton extends createjs.Container{
  	handleUp(event){
  		if(this.buttonPush){
  			this.buttonCommand();
+			this.buttonDelete();
  		}
-		this.buttonDelete();
  	}
 
  	buttonCommand(){
@@ -121,6 +120,8 @@ class CncrCardButton extends AbstButton{
 		super(arg_x,arg_y,arg_text,arg_color);
 		this.card = arg_card;
 		this.text = arg_text;
+
+       	createjs.Sound.play("button");
 	}
 
  	buttonCommand(){
@@ -148,6 +149,8 @@ class DescButton extends AbstButton{
 		super(arg_x,arg_y,arg_text,arg_color);
 		this.card = arg_card;
 		this.text = arg_text;
+
+       	createjs.Sound.play("button");
 	}
 
  	buttonCommand(){
@@ -261,9 +264,9 @@ class CardDescription extends createjs.Container{
 		this.x = arg_card.x - 50 ;
 		this.y = arg_card.y - 80;
 		this.card = arg_card;
-		this.boxWidth = 375;
+		this.boxWidth = 345;
 		this.boxHeight = 100;
-		this.textHeight = 15;
+		this.textHeight = 13;
 		
 		this.boxShape = new createjs.Shape();
         this.boxShape.graphics.beginFill("hsl(40, 60%, 98%)");
@@ -283,7 +286,7 @@ class CardDescription extends createjs.Container{
 
 		let i = 0;
 		for (const elem of this.card.desc) {
-		    this.boxText =  new createjs.Text(elem, "11px sans-serif", "black");
+		    this.boxText =  new createjs.Text(elem, "10px Meiryo", "black");
 			this.boxText.textAlign = "left";
 			this.boxText.textBaseline = "top";
 			this.boxText.x = 5;
@@ -317,6 +320,8 @@ class CncrDelPieceButton extends AbstButton{
 	constructor(arg_x,arg_y,arg_text,arg_color,arg_piece){
 		super(arg_x,arg_y,arg_text,arg_color);
 		this.piece = arg_piece;
+
+       	createjs.Sound.play("button");
 	}
 
  	buttonCommand(){
@@ -394,6 +399,90 @@ class PermitRevokeButton extends AbstButton{
  	}
 }
 
+class SettingFlag extends createjs.Container{
+	constructor(arg_x, arg_y){
+		super();
+		this.x = arg_x;
+		this.y = arg_y;
+		this.onAlpha = 0.9;
+		this.offAlpha = 0.5;
+		this.onRotation = 20;
+		this.offRotation = 0;
+		this.perform = false;
+
+		// 旗表示
+		this.flag = new createjs.Bitmap(cns_flagImage);
+		this.flag.alpha = this.offAlpha;
+		this.flag.rotation = this.offRotation;
+		this.flag.regX = cns_flagWidth / 2;
+		this.flag.regY = cns_flagHeight / 2;
+		this.addChild(this.flag); // 表示リストに追加
+
+		info.addChild(this);
+
+    	this.flag.on("mousedown", this.flagHandleDown,this);
+        this.flag.on("pressmove", this.flagHandleMove,this);
+        this.flag.on("pressup", this.flagHandleUp,this);
+	} 	
+
+	flagHandleDown(event){
+		event.stopPropagation();
+		background.notActivate();
+		this.flag.uncache();
+		this.flag.alpha = this.onAlpha;
+		this.flag.cache(-2,-2,cns_flagWidth+4, cns_flagHeight+4);
+	    this.dragPointX = stage.mouseX;
+	    this.dragPointY = stage.mouseY;
+	    this.flagPush   = true;
+ 	}
+
+    flagHandleMove(event){
+		event.stopPropagation();
+		if(Math.abs(this.dragPointX - stage.mouseX) > 30 || Math.abs(this.dragPointY - stage.mouseY) > 30){
+	        this.flagPush = false;
+			this.flag.uncache();
+			this.flag.alpha = this.offAlpha;
+			this.flag.cache(-2,-2,cns_flagWidth+4, cns_flagHeight+4);
+        }
+    }
+
+ 	flagHandleUp(event){
+		event.stopPropagation();
+ 		if(this.flagPush){
+	 		if(this.perform){
+	 			this.deleteButton();
+ 		       	createjs.Sound.play("flag");
+		 	}else{
+			    this.perform = true;
+ 		       	createjs.Sound.play("flag");
+
+				this.resignButton = new ResignButton(cns_stageWidth / 2 - cns_buttonWidth / 2 - this.x,cns_stageHeight / 2 - cns_buttonHeight - this.y);
+				this.addChild(this.resignButton);
+				this.cancelButton = new CancelButton(cns_stageWidth / 2 - cns_buttonWidth / 2 - this.x,cns_stageHeight / 2 + 5 - this.y);
+				this.addChild(this.cancelButton);
+
+				this.flag.uncache();
+				this.flag.rotation = this.onRotation;
+				this.flag.cache(-2,-2,cns_flagWidth+4, cns_flagHeight+4);
+	 		}
+	 	}
+ 	}
+
+ 	deleteButton(){
+ 		this.resignButton.off();
+ 		this.cancelButton.off();
+		this.removeChild(this.resignButton);
+		this.removeChild(this.cancelButton);
+
+		this.perform = false;
+
+		this.flag.uncache();
+		this.flag.alpha = this.offAlpha;
+		this.flag.rotation = this.offRotation;
+		this.flag.cache(-2,-2,cns_flagWidth+4, cns_flagHeight+4);
+ 	}
+}
+
 class ResignButton extends AbstButton{
 	constructor(arg_x,arg_y){
 		super(arg_x, arg_y, " 降参 ", "dimgray");
@@ -404,12 +493,6 @@ class ResignButton extends AbstButton{
 		socket.emit("serverResign",{
 			player: cns_myPlayerIndex
 		});	
- 	}
-
- 	buttonDelete(){
-		judge.clearButton();
- 		this.off();
- 		info.removeChild(this);
  	}
 }
 
@@ -423,9 +506,9 @@ class ViewButton extends createjs.Container{
 
 		for(let i = 0; i < 4; i++){this.viewButton[i] = new createjs.Container;}
 		this.drawViewButton(0,0,0,"T");
-		this.drawViewButton(1,-15,15,"L");
-		this.drawViewButton(2,15,15,"R");
-		this.drawViewButton(3,0,30,"B");
+		this.drawViewButton(1,-22,22,"L");
+		this.drawViewButton(2,22,22,"R");
+		this.drawViewButton(3,0,44,"B");
 		for(let i = 0; i < 4; i++){this.addChild(this.viewButton[i]);}
 
 	 //    let viewButtonText =  new createjs.Text("change view", "15px sans-serif", "GhostWhite");
@@ -552,32 +635,32 @@ class DiceButton extends createjs.Container{
 		
 		this.diceButton = [];
 
-		for(let i = 0; i < 5; i++){
+		for(let i = 0; i < 3; i++){
 			this.diceButton[i] = new createjs.Container;
 			let diceButtonShape = new createjs.Shape();
 			//グラデーション指定：[色1,色2,色3],[色2開始割合、色3開始割合、色3終了割合],開始位置x,y,終了位置x,y
 	        diceButtonShape.graphics.beginLinearGradientFill(["dimgray","aliceblue","dimgray"],[0.4,0.6,1.0],50,0,50,30);
-			diceButtonShape.graphics.drawRoundRect(0, 0, 19, 30, 5, 5);
-			diceButtonShape.x = 20 * i;
+			diceButtonShape.graphics.drawRoundRect(0, 0, 39, 30, 5, 5);
+			diceButtonShape.x = 40 * i;
 			diceButtonShape.y = 0;
 			diceButtonShape.alpha = 0.5;
-			diceButtonShape.cache(0,0,19,30);
+			diceButtonShape.cache(0,0,39,30);
 			this.diceButton[i].addChild(diceButtonShape); 
 
 		    let diceButtonText =  new createjs.Text("x" + (i+1), "14px sans-serif", "GhostWhite");
 			diceButtonText.textAlign = "center";
 			diceButtonText.textBaseline = "middle";
-			diceButtonText.x = 20 * i + 9.5;
+			diceButtonText.x = 40 * i + 19.5;
 			diceButtonText.y = 15;
 			// diceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
-			diceButtonText.cache(-9.5,-15,19,30);
+			diceButtonText.cache(-9.5,-15,39,30);
 
 		    let diceButtonTextShadow =  new createjs.Text("x" + (i+1), "14px sans-serif", "dimgray");
 			diceButtonTextShadow.textAlign = "center";
 			diceButtonTextShadow.textBaseline = "middle";
-			diceButtonTextShadow.x = 20 * i + 10.5;
+			diceButtonTextShadow.x = 40 * i + 20.5;
 			diceButtonTextShadow.y = 16;
-			diceButtonTextShadow.cache(-8.5,-14,18,29);
+			diceButtonTextShadow.cache(-8.5,-14,38,29);
 			this.diceButton[i].addChild(diceButtonTextShadow);
 			this.diceButton[i].addChild(diceButtonText);
 
@@ -607,9 +690,10 @@ class DiceButton extends createjs.Container{
     	this.diceButton[0].on("mousedown", this.diceHandleDown1,this);
     	this.diceButton[1].on("mousedown", this.diceHandleDown2,this);
     	this.diceButton[2].on("mousedown", this.diceHandleDown3,this);
-    	this.diceButton[3].on("mousedown", this.diceHandleDown4,this);
-    	this.diceButton[4].on("mousedown", this.diceHandleDown5,this);
-		for(let i = 0; i < 5; i++){
+    	// this.diceButton[3].on("mousedown", this.diceHandleDown4,this);
+    	// this.diceButton[4].on("mousedown", this.diceHandleDown5,this);
+		// for(let i = 0; i < 5; i++){
+		for(let i = 0; i < 3; i++){
     	    this.diceButton[i].on("pressmove", this.diceHandleMove,this);
         	this.diceButton[i].on("pressup", this.diceHandleUp,this);
         }
@@ -621,7 +705,7 @@ class DiceButton extends createjs.Container{
 
 		this.diceButton[0].children[0].uncache();
 		this.diceButton[0].children[0].alpha = 1.0;
-		this.diceButton[0].children[0].cache(0,0,19,30);
+		this.diceButton[0].children[0].cache(0,0,39,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.dicePush   = true;
@@ -633,7 +717,7 @@ class DiceButton extends createjs.Container{
 
 		this.diceButton[1].children[0].uncache();
 		this.diceButton[1].children[0].alpha = 1.0;
-		this.diceButton[1].children[0].cache(0,0,19,30);
+		this.diceButton[1].children[0].cache(0,0,39,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.dicePush   = true;
@@ -645,7 +729,7 @@ class DiceButton extends createjs.Container{
 
 		this.diceButton[2].children[0].uncache();
 		this.diceButton[2].children[0].alpha = 1.0;
-		this.diceButton[2].children[0].cache(0,0,19,30);
+		this.diceButton[2].children[0].cache(0,0,39,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.dicePush   = true;
@@ -682,7 +766,7 @@ class DiceButton extends createjs.Container{
 	        this.dicePush = false;
 			this.diceButton[this.no - 1].children[0].uncache();
 			this.diceButton[this.no - 1].children[0].alpha = 0.5;
-			this.diceButton[this.no - 1].children[0].cache(0,0,19,30);
+			this.diceButton[this.no - 1].children[0].cache(0,0,39,30);
         }
     }
 
@@ -703,7 +787,7 @@ class DiceButton extends createjs.Container{
  		}
 		this.diceButton[this.no - 1].children[0].uncache();
 		this.diceButton[this.no - 1].children[0].alpha = 0.5;
-		this.diceButton[this.no - 1].children[0].cache(0,0,19,30);
+		this.diceButton[this.no - 1].children[0].cache(0,0,39,30);
  	}
 }
 
@@ -782,78 +866,35 @@ class PieceButton extends createjs.Container{
         	this.pieceButton[i].on("pressup", this.pieceHandleUp,this);
         }
 	}
-
-	pieceHandleDown1(event){
+	pieceHandleDownAction(arg_i){
 		background.notActivate();
 		judge.clearButton();
 
-		this.pieceButton[0].children[0].uncache();
-		this.pieceButton[0].children[0].alpha = 1.0;
-		this.pieceButton[0].children[0].cache(0,0,19,30);
+		this.pieceButton[arg_i].children[0].uncache();
+		this.pieceButton[arg_i].children[0].alpha = 1.0;
+		this.pieceButton[arg_i].children[0].cache(0,0,19,30);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.piecePush   = true;
-	    this.no = 1;
+	    this.no = arg_i + 1;
+ 	}
+	pieceHandleDown1(event){
+		this.pieceHandleDownAction(0);
  	}
 	pieceHandleDown2(event){
-		background.notActivate();
-		judge.clearButton();
-
-		this.pieceButton[1].children[0].uncache();
-		this.pieceButton[1].children[0].alpha = 1.0;
-		this.pieceButton[1].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
-	    this.piecePush   = true;
-	    this.no = 2;
+		this.pieceHandleDownAction(1);
  	}
 	pieceHandleDown3(event){
-		background.notActivate();
-		judge.clearButton();
-
-		this.pieceButton[2].children[0].uncache();
-		this.pieceButton[2].children[0].alpha = 1.0;
-		this.pieceButton[2].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
-	    this.piecePush   = true;
-	    this.no = 3;
+		this.pieceHandleDownAction(2);
  	}
 	pieceHandleDown4(event){
-		background.notActivate();
-		judge.clearButton();
-
-		this.pieceButton[3].children[0].uncache();
-		this.pieceButton[3].children[0].alpha = 1.0;
-		this.pieceButton[3].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
-	    this.piecePush   = true;
-	    this.no = 4;
+		this.pieceHandleDownAction(3);
  	}
 	pieceHandleDown5(event){
-		background.notActivate();
-		judge.clearButton();
-
-		this.pieceButton[4].children[0].uncache();
-		this.pieceButton[4].children[0].alpha = 1.0;
-		this.pieceButton[4].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
-	    this.piecePush   = true;
-	    this.no = 5;
+		this.pieceHandleDownAction(4);
  	}
 	pieceHandleDown6(event){
-		background.notActivate();
-		judge.clearButton();
-
-		this.pieceButton[5].children[0].uncache();
-		this.pieceButton[5].children[0].alpha = 1.0;
-		this.pieceButton[5].children[0].cache(0,0,19,30);
-	    this.dragPointX = stage.mouseX;
-	    this.dragPointY = stage.mouseY;
-	    this.piecePush   = true;
-	    this.no = 6;
+		this.pieceHandleDownAction(5);
  	}
 
     pieceHandleMove(event){
@@ -908,3 +949,143 @@ class PieceButton extends createjs.Container{
 
 }
 
+class MinusPieceButton extends createjs.Container{
+	constructor(arg_x, arg_y){
+		super();
+		this.x = arg_x;
+		this.y = arg_y;
+		this.idNo = 0;
+		this.activate = true;
+		
+		this.pieceButton = [];
+
+		for(let i = 0; i < 6; i++){
+			this.pieceButton[i] = new createjs.Container;
+			let pieceButtonShape = new createjs.Shape();
+			//グラデーション指定：[色1,色2,色3],[色2開始割合、色3開始割合、色3終了割合],開始位置x,y,終了位置x,y
+	        pieceButtonShape.graphics.beginLinearGradientFill(["#CC0066","Lavenderblush","#CC0066"],[0.4,0.6,1.0],50,0,50,30);
+			pieceButtonShape.graphics.drawRoundRect(0, 0, 19, 30, 5, 5);
+			pieceButtonShape.x = 20 * i;
+			pieceButtonShape.y = 0;
+			pieceButtonShape.alpha = 0.5;
+			pieceButtonShape.cache(0,0,19,30);
+			this.pieceButton[i].addChild(pieceButtonShape); 
+
+			let xtext = -1 * (i + 1);
+			if (xtext == -6){xtext = -10;};
+		    let pieceButtonText =  new createjs.Text(xtext, "13px sans-serif", "GhostWhite");
+			pieceButtonText.textAlign = "center";
+			pieceButtonText.textBaseline = "middle";
+			pieceButtonText.x = 20 * i + 9.5;
+			pieceButtonText.y = 15;
+			// pieceButtonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+			pieceButtonText.cache(-9.5, -15, 19, 30);
+
+		    let pieceButtonTextShadow =  new createjs.Text(xtext, "13px sans-serif", "dimgray");
+			pieceButtonTextShadow.textAlign = "center";
+			pieceButtonTextShadow.textBaseline = "middle";
+			pieceButtonTextShadow.x = 20 * i + 10.5;
+			pieceButtonTextShadow.y = 16;
+			pieceButtonTextShadow.cache(-8.5, -14, 19, 30);
+			this.pieceButton[i].addChild(pieceButtonTextShadow);
+			this.pieceButton[i].addChild(pieceButtonText);
+
+			this.addChild(this.pieceButton[i]);
+		}
+
+		info.addChild(this);
+
+        // this.on('tick',this.update,this);
+    	this.pieceButton[0].on("mousedown", this.pieceHandleDown1,this);
+    	this.pieceButton[1].on("mousedown", this.pieceHandleDown2,this);
+    	this.pieceButton[2].on("mousedown", this.pieceHandleDown3,this);
+    	this.pieceButton[3].on("mousedown", this.pieceHandleDown4,this);
+    	this.pieceButton[4].on("mousedown", this.pieceHandleDown5,this);
+    	this.pieceButton[5].on("mousedown", this.pieceHandleDown6,this);
+		for(let i = 0; i < 6; i++){
+    	    this.pieceButton[i].on("pressmove", this.pieceHandleMove,this);
+        	this.pieceButton[i].on("pressup", this.pieceHandleUp,this);
+        }
+	}
+	pieceHandleDownAction(arg_i){
+		background.notActivate();
+		judge.clearButton();
+
+		this.pieceButton[arg_i].children[0].uncache();
+		this.pieceButton[arg_i].children[0].alpha = 1.0;
+		this.pieceButton[arg_i].children[0].cache(0,0,19,30);
+	    this.dragPointX = stage.mouseX;
+	    this.dragPointY = stage.mouseY;
+	    this.piecePush   = true;
+	    this.no = -1 * (arg_i + 1);
+ 	}
+	pieceHandleDown1(event){
+		this.pieceHandleDownAction(0);
+ 	}
+	pieceHandleDown2(event){
+		this.pieceHandleDownAction(1);
+ 	}
+	pieceHandleDown3(event){
+		this.pieceHandleDownAction(2);
+ 	}
+	pieceHandleDown4(event){
+		this.pieceHandleDownAction(3);
+ 	}
+	pieceHandleDown5(event){
+		this.pieceHandleDownAction(4);
+ 	}
+	pieceHandleDown6(event){
+		this.pieceHandleDownAction(5);
+ 	}
+
+    pieceHandleMove(event){
+		if(Math.abs(this.dragPointX - stage.mouseX) > 15 || Math.abs(this.dragPointY - stage.mouseY) > 15){
+	        this.piecePush = false;
+			this.pieceButton[-1 * this.no - 1].children[0].uncache();
+			this.pieceButton[-1 * this.no - 1].children[0].alpha = 0.5;
+			this.pieceButton[-1 * this.no - 1].children[0].cache(0,0,19,30);
+        }
+    }
+
+ 	pieceHandleUp(event){
+ 		if(this.piecePush){
+ 			this.idNo = this.idNo + 1;
+ 			let xno = this.no;
+ 			if(xno == -6){xno = -10};
+ 			let xplayer = judge.playerList[cns_myPlayerIndex];
+ 			let newX = 0;
+ 			let newY = 100;
+			let ypiece = judge.otherPlace.pieceList.find(elm => {return Math.sqrt((newX - elm.x)**2 + (newY - elm.y)**2) < 15;});
+			let mrg = false;
+			let mrgId = 0;
+			if(ypiece != null){
+				mrg = true;
+				mrgId = ypiece.id;
+			}
+
+			this.notActivate();
+ 			socket.emit("serverPlayPiece", {
+		 		cmd: "add",
+		 		playerno: xplayer.playerNo,
+		 		id: cns_myPlayerIndex + "/minus/" + this.idNo,
+		 		no: xno,
+		 		mrg: mrg,
+		 		mrgId : mrgId,
+		 		nX: 0,
+		 		nY: 100
+		 	});
+ 		}
+		this.pieceButton[-1 * this.no - 1].children[0].uncache();
+		this.pieceButton[-1 * this.no - 1].children[0].alpha = 0.5;
+		this.pieceButton[-1 * this.no - 1].children[0].cache(0,0,19,30);
+ 	}
+
+	notActivate(){
+		this.activate = false;
+	}
+
+	Activate(){
+		this.activate = true;
+	}
+
+}
