@@ -46,8 +46,13 @@ function init() {
 	createjs.Sound.registerSound("./sounds/dice1.mp3", "dice1");
 	createjs.Sound.registerSound("./sounds/dice2.mp3", "dice2");
 	createjs.Sound.registerSound("./sounds/button.mp3", "button");
-	createjs.Sound.registerSound("./sounds/champion.mp3", "champion");
-	createjs.Sound.registerSound("./sounds/lost.mp3", "lost");
+
+	//うるさいから一旦変更
+	// createjs.Sound.registerSound("./sounds/champion.mp3", "champion");
+	// createjs.Sound.registerSound("./sounds/lost.mp3", "lost");
+	createjs.Sound.registerSound("./sounds/champion.mp3", "flag");
+	createjs.Sound.registerSound("./sounds/lost.mp3", "beep");
+
 	createjs.Sound.registerSound("./sounds/in_out_room.mp3", "inoutroom");
 	createjs.Sound.registerSound("./sounds/glass.mp3", "glass");
 	createjs.Sound.registerSound("./sounds/beep.mp3", "beep");

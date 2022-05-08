@@ -188,7 +188,7 @@ class Judge{
 		this.settingFlag = new SettingFlag(cns_stageWidth - 70,45 + cns_flagHeight / 2);
 		
 		//view
-		this.viewButton = new ViewButton(cns_stageWidth - 100,95);
+		this.viewButton = new ViewButton(cns_stageWidth - 50,95);
 	}
 
 	playCard(data){
@@ -496,8 +496,7 @@ class Judge{
 			this.diceButton.mouseChildren = false;
 			this.pieceButton.mouseChildren = false;
 			this.settingFlag.mouseChildren = false;
-			// this.turn.buttonCommand();
-			// this.turn.buttonDelete();
+
 			createjs.Sound.play("lost");
 		}
 

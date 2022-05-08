@@ -3,6 +3,7 @@ class CancelButton extends createjs.Container{
 		super();
 		this.x = arg_x;
 		this.y = arg_y;
+		this.buttonPush = false;
 		
 		this.buttonShape = new createjs.Shape();
         this.buttonShape.graphics.beginFill("hsl(300, 70%, 50%)");
@@ -30,13 +31,20 @@ class CancelButton extends createjs.Container{
 
         // this.on('tick',this.update,this);
     	this.on("mousedown", this.handleDown,this);
+        this.on("pressup", this.handleUp,this);
 	}
 
  	handleDown(){
 		event.stopPropagation();
 		background.notActivate();
-       	createjs.Sound.play("button");
-		this.parent.deleteButton();
+	    this.buttonPush   = true;
+ 	}
+ 	handleUp(event){
+ 		if(this.buttonPush){
+	       	createjs.Sound.play("button");
+			this.parent.deleteButton();
+ 		}
+ 		background.Activate();
  	}
 }
 
@@ -49,6 +57,7 @@ class AbstButton extends createjs.Container{
 		this.color = arg_color;
 		this.onAlpha = 0.9;
 		this.offAlpha = 0.5;
+		this.buttonPush = false;
 		
 		this.buttonShape = new createjs.Shape();
 				//グラデーション指定：[色1,色2,色3],[色2開始割合、色3開始割合、色3終了割合],開始位置x,y,終了位置x,y
@@ -105,6 +114,7 @@ class AbstButton extends createjs.Container{
  			this.buttonCommand();
 			this.buttonDelete();
  		}
+ 		background.Activate();
  	}
 
  	buttonCommand(){
@@ -267,6 +277,7 @@ class CardDescription extends createjs.Container{
 		this.boxWidth = 345;
 		this.boxHeight = 100;
 		this.textHeight = 13;
+		this.buttonPush = false;
 		
 		this.boxShape = new createjs.Shape();
         this.boxShape.graphics.beginFill("hsl(40, 60%, 98%)");
@@ -298,15 +309,23 @@ class CardDescription extends createjs.Container{
 
 		layer1.addChild(this);
     	this.on("mousedown", this.handleDown,this);
+        this.on("pressup", this.handleUp,this);
 	}
 
  	handleDown(){
 		background.notActivate();
-		this.deleteButton();
+		this.buttonPush = true
+ 	}
+
+ 	handleUp(event){
+ 		if(this.buttonPush){
+	       	createjs.Sound.play("button");
+			this.deleteButton();
+ 		}
+ 		background.Activate();
  	}
 
  	deleteButton(){
-       	createjs.Sound.play("button");
 		this.off();
 		layer1.removeChild(this);
 		judge.forgetButton();
@@ -466,6 +485,7 @@ class SettingFlag extends createjs.Container{
 				this.flag.cache(-2,-2,cns_flagWidth+4, cns_flagHeight+4);
 	 		}
 	 	}
+		background.Activate();
  	}
 
  	deleteButton(){
@@ -615,7 +635,6 @@ class ViewButton extends createjs.Container{
     }
 
  	viewHandleUp(event){
-		background.notActivate();
  		if(this.viewPush){
 			let duration = 500;
 			createjs.Tween.get(layer1, {override:true})
@@ -624,6 +643,7 @@ class ViewButton extends createjs.Container{
 		this.viewButton[this.no].children[0].uncache();
 		this.viewButton[this.no].children[0].alpha = 0.5;
 		this.viewButton[this.no].children[0].cache(0,0,20,20);
+		background.Activate();
  	}
 }
 
@@ -771,7 +791,6 @@ class DiceButton extends createjs.Container{
     }
 
  	diceHandleUp(event){
-		background.notActivate();
  		if(this.dicePush){
  			socket.emit("serverRollDice",{
 				no: this.no,
@@ -788,6 +807,7 @@ class DiceButton extends createjs.Container{
 		this.diceButton[this.no - 1].children[0].uncache();
 		this.diceButton[this.no - 1].children[0].alpha = 0.5;
 		this.diceButton[this.no - 1].children[0].cache(0,0,39,30);
+		background.Activate();
  	}
 }
 
@@ -937,6 +957,7 @@ class PieceButton extends createjs.Container{
 		this.pieceButton[this.no - 1].children[0].uncache();
 		this.pieceButton[this.no - 1].children[0].alpha = 0.5;
 		this.pieceButton[this.no - 1].children[0].cache(0,0,19,30);
+		background.Activate();
  	}
 
 	notActivate(){
@@ -1078,6 +1099,7 @@ class MinusPieceButton extends createjs.Container{
 		this.pieceButton[-1 * this.no - 1].children[0].uncache();
 		this.pieceButton[-1 * this.no - 1].children[0].alpha = 0.5;
 		this.pieceButton[-1 * this.no - 1].children[0].cache(0,0,19,30);
+		background.Activate();
  	}
 
 	notActivate(){

@@ -772,7 +772,7 @@ class Piece extends createjs.Container{
  		}
 
  		this.moving = 0;
-		background.notActivate();
+		background.Activate();
  	}
 
  	movePiece(arg_nX, arg_nY){
