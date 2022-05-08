@@ -185,7 +185,7 @@ class Judge{
 		this.pieceButton2 = new MinusPieceButton(10,190);
 
 		//resign
-		this.settingFlag = new SettingFlag(cns_stageWidth - 70,45 + cns_flagHeight / 2);
+		this.settingFlag = new SettingFlag(cns_stageWidth - 50,45 + cns_flagHeight / 2);
 		
 		//view
 		this.viewButton = new ViewButton(cns_stageWidth - 50,95);
