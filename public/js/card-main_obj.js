@@ -721,10 +721,8 @@ class Piece extends createjs.Container{
 
  		this.backupPointX = this.x;
  		this.backupPointY = this.y;
-        // this.dragPointX = stage.mouseX / cns_scale - this.x;
-        // this.dragPointY = stage.mouseY / cns_scale - this.y;
-        this.dragPointX = stage.mouseX - this.x;
-        this.dragPointY = stage.mouseY - this.y;
+        this.dragPointX = stage.mouseX / background.scale - this.x;
+        this.dragPointY = stage.mouseY / background.scale - this.y;
 	    // 半透明にする
         this.alpha = 0.5;
 	    // ドラッグ中ステータス　（透明化）
@@ -735,10 +733,8 @@ class Piece extends createjs.Container{
     // マウス追従　ドラッグ開始地点との補正あり
 		event.stopPropagation();
     	if(this.moving == 1){
-        	// this.x = stage.mouseX / cns_scale - this.dragPointX;
-        	// this.y = stage.mouseY / cns_scale - this.dragPointY;
-        	this.x = stage.mouseX - this.dragPointX;
-        	this.y = stage.mouseY - this.dragPointY;
+        	this.x = stage.mouseX / background.scale - this.dragPointX;
+        	this.y = stage.mouseY / background.scale - this.dragPointY;
         }
        	this.alpha = 1;
     }
