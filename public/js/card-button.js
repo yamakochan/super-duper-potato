@@ -271,12 +271,12 @@ class HandCardButton extends createjs.Container{
 class CardDescription extends createjs.Container{
 	constructor(arg_card){
 		super();
-		this.x = arg_card.x - 50 ;
-		this.y = arg_card.y - 80;
 		this.card = arg_card;
 		this.boxWidth = 345;
 		this.boxHeight = 100;
 		this.textHeight = 13;
+		this.x = 30;
+		this.y = cns_stageHeight - (this.card.desc.length * this.textHeight) - 30;
 		this.buttonPush = false;
 		
 		this.boxShape = new createjs.Shape();
@@ -307,7 +307,7 @@ class CardDescription extends createjs.Container{
 			i = i + 1;
 		}
 
-		layer1.addChild(this);
+		info.addChild(this);
     	this.on("mousedown", this.handleDown,this);
         this.on("pressup", this.handleUp,this);
 	}
@@ -327,7 +327,7 @@ class CardDescription extends createjs.Container{
 
  	deleteButton(){
 		this.off();
-		layer1.removeChild(this);
+		info.removeChild(this);
 		judge.forgetButton();
  	}
 

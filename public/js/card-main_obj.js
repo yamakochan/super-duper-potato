@@ -439,8 +439,8 @@ class Card extends createjs.Container{
 
  		this.backupPointX = this.x;
  		this.backupPointY = this.y;
-        this.dragPointX = stage.mouseX / cns_scale - this.x;
-        this.dragPointY = stage.mouseY / cns_scale - this.y;
+        this.dragPointX = stage.mouseX / background.scale - this.x;
+        this.dragPointY = stage.mouseY / background.scale - this.y;
 	    // 半透明にする
         this.alpha = 0.5;
 	    // 賢者の夢の呪文中は、動かさない。
@@ -454,8 +454,8 @@ class Card extends createjs.Container{
 		event.stopPropagation();
     // マウス追従　ドラッグ開始地点との補正あり
     	if(this.moving == 1){
-        	this.x = stage.mouseX / cns_scale - this.dragPointX;
-        	this.y = stage.mouseY / cns_scale - this.dragPointY;
+        	this.x = stage.mouseX / background.scale - this.dragPointX;
+        	this.y = stage.mouseY / background.scale - this.dragPointY;
         }
         if(this.y < cns_layer1Height - cns_cardHeight * 2){
         	this.alpha = 1;
