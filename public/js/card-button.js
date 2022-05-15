@@ -275,7 +275,7 @@ class CardDescription extends createjs.Container{
 		this.boxWidth = 345;
 		this.boxHeight = 100;
 		this.textHeight = 13;
-		this.x = 30;
+		this.x = 10;
 		this.y = cns_stageHeight - (this.card.desc.length * this.textHeight) - 30;
 		this.buttonPush = false;
 		
@@ -605,23 +605,23 @@ class ViewButton extends createjs.Container{
  	}
 	viewHandleDown1(event){
 		this.viewHandleDownAction(0);
-		this.nX = cns_layer1TopViewX;
-		this.nY = cns_layer1TopViewY; 
+		this.nX = cns_stageWidth / 2;
+		this.nY = cns_boadHeight * background.scale / 2 - (cns_cardHeight - 10) * background.scale;
  	}
 	viewHandleDown2(event){
 		this.viewHandleDownAction(1);
-		this.nX = cns_layer1LeftViewX;
-		this.nY = cns_layer1LeftViewY; 
+		this.nX = cns_boadWidth * background.scale / 2 - (cns_cardHeight - 10) * background.scale;
+		this.nY = cns_stageHeight / 2;
  	}
 	viewHandleDown3(event){
 		this.viewHandleDownAction(2);
-		this.nX = cns_layer1RightViewX;
-		this.nY = cns_layer1RightViewY; 
+		this.nX = -1 * cns_boadWidth * background.scale / 2 + cns_stageWidth + (cns_cardHeight - 10) * background.scale;
+		this.nY = cns_stageHeight / 2; 
  	}
 	viewHandleDown4(event){
 		this.viewHandleDownAction(3);
-		this.nX = cns_layer1InitX;
-		this.nY = cns_layer1InitY; 
+		this.nX = cns_stageWidth / 2;
+		this.nY = -1 * cns_boadHeight * background.scale / 2 + cns_stageHeight; 
  	}
 
     viewHandleMove(event){

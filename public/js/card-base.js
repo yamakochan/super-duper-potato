@@ -30,12 +30,6 @@ function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCa
 	cns_layer1VertMargin = 100;
 	cns_layer1InitX = cns_stageWidth / 2;
 	cns_layer1InitY = -1 * (cns_layer1Height / 2 - cns_stageHeight);
-	cns_layer1TopViewX = cns_stageWidth / 2;
-	cns_layer1TopViewY = cns_layer1Height / 2;
-	cns_layer1LeftViewX = cns_layer1Width / 2 - (cns_cardHeight - 5)
-	cns_layer1LeftViewY = cns_stageHeight / 2;
-	cns_layer1RightViewX = -1 * cns_layer1Width / 2 + cns_stageWidth + (cns_cardHeight - 5);
-	cns_layer1RightViewY = cns_stageHeight / 2;
 
 	cns_handMargin = 1; //カード間隔 1pt
 	cns_handWidth = (cns_cardWidth + cns_handMargin) * 5; //card５枚分＋間5pt
@@ -902,8 +896,8 @@ class Background extends createjs.Container{
 					if(judge.end == 0){
 						//   自陣への移動ー＞すまほ用
 						if(cns_sp && this.dblTap){
-							let nX = window.innerWidth / 2;
-							let nY = -1 * cns_layer1Height * this.scale / 2 + window.innerHeight - cns_layer1VertMargin; 
+							let nX = cns_stageWidth / 2;
+							let nY = -1 * cns_boadHeight * this.scale / 2 + cns_stageHeight;
 							let duration = 1000;
 							createjs.Tween.get(layer1, {override:true})
 							.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
