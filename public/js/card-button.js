@@ -1,31 +1,33 @@
 class CancelButton extends createjs.Container{
-	constructor(arg_x,arg_y){
+	constructor(arg_x,arg_y,arg_magnification){
 		super();
 		this.x = arg_x;
 		this.y = arg_y;
 		this.buttonPush = false;
 		
+		this.buttonWidth = cns_buttonWidth * arg_magnification;
+
 		this.buttonShape = new createjs.Shape();
         this.buttonShape.graphics.beginFill("hsl(300, 70%, 50%)");
-		this.buttonShape.graphics.drawRoundRect(0, 0, cns_buttonWidth, cns_buttonHeight, 5, 5);
+		this.buttonShape.graphics.drawRoundRect(0, 0, this.buttonWidth, cns_buttonHeight, 5, 5);
 		this.buttonShape.alpha = 0.5;
-		this.buttonShape.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
+		this.buttonShape.cache(-2,-2,this.buttonWidth+4, cns_buttonHeight+4);
 		this.addChild(this.buttonShape); 
 
 	    this.buttonText =  new createjs.Text("cancel", "14px sans-serif", "GhostWhite");
 		this.buttonText.textAlign = "center";
 		this.buttonText.textBaseline = "middle";
-		this.buttonText.x = cns_buttonWidth / 2;
+		this.buttonText.x = this.buttonWidth / 2;
 		this.buttonText.y = cns_buttonHeight / 2;
 		// this.buttonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
-		this.buttonText.cache(-1 * cns_buttonWidth / 2, -1 * cns_buttonHeight / 2, cns_buttonWidth, cns_buttonHeight);
+		this.buttonText.cache(-1 * this.buttonWidth / 2, -1 * cns_buttonHeight / 2, this.buttonWidth, cns_buttonHeight);
 
 	    this.buttonTextShadow =  new createjs.Text("cancel", "14px sans-serif", "dimgray");
 		this.buttonTextShadow.textAlign = "center";
 		this.buttonTextShadow.textBaseline = "middle";
-		this.buttonTextShadow.x = cns_buttonWidth / 2 + 1;
+		this.buttonTextShadow.x = this.buttonWidth / 2 + 1;
 		this.buttonTextShadow.y = cns_buttonHeight / 2 + 1;
-		this.buttonTextShadow.cache(-1 * cns_buttonWidth / 2 + 1, -1 * cns_buttonHeight / 2 + 1, cns_buttonWidth, cns_buttonHeight);
+		this.buttonTextShadow.cache(-1 * this.buttonWidth / 2 + 1, -1 * cns_buttonHeight / 2 + 1, this.buttonWidth, cns_buttonHeight);
 		this.addChild(this.buttonTextShadow);
 		this.addChild(this.buttonText);
 
@@ -49,7 +51,7 @@ class CancelButton extends createjs.Container{
 }
 
 class AbstButton extends createjs.Container{
-	constructor(arg_x,arg_y,arg_text,arg_color){
+	constructor(arg_x,arg_y,arg_text,arg_color,arg_magnification){
 		super();
 		this.x = arg_x;
 		this.y = arg_y;
@@ -59,28 +61,30 @@ class AbstButton extends createjs.Container{
 		this.offAlpha = 0.5;
 		this.buttonPush = false;
 		
+		this.buttonWidth = cns_buttonWidth * arg_magnification;
+
 		this.buttonShape = new createjs.Shape();
 				//グラデーション指定：[色1,色2,色3],[色2開始割合、色3開始割合、色3終了割合],開始位置x,y,終了位置x,y
         this.buttonShape.graphics.beginLinearGradientFill([this.color,"aliceblue",this.color],[0.4,0.6,1.0],50,0,50,30);
-		this.buttonShape.graphics.drawRoundRect(0, 0, cns_buttonWidth, cns_buttonHeight, 5, 5);
+		this.buttonShape.graphics.drawRoundRect(0, 0, this.buttonWidth, cns_buttonHeight, 5, 5);
 		this.buttonShape.alpha = this.offAlpha;
-		this.buttonShape.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
+		this.buttonShape.cache(-2,-2,this.buttonWidth+4, cns_buttonHeight+4);
 		this.addChild(this.buttonShape); 
 
 	    this.buttonText =  new createjs.Text(arg_text, "14px sans-serif", "GhostWhite");
 		this.buttonText.textAlign = "center";
 		this.buttonText.textBaseline = "middle";
-		this.buttonText.x = cns_buttonWidth / 2;
+		this.buttonText.x = this.buttonWidth / 2;
 		this.buttonText.y = cns_buttonHeight / 2;
 		// this.buttonText.shadow = new createjs.Shadow("#000000", 3, 3, 5);
-		this.buttonText.cache(-1 * cns_buttonWidth / 2,-1 * cns_buttonHeight / 2, cns_buttonWidth, cns_buttonHeight);
+		this.buttonText.cache(-1 * this.buttonWidth / 2,-1 * cns_buttonHeight / 2, this.buttonWidth, cns_buttonHeight);
 
 	    this.buttonTextShadow =  new createjs.Text(arg_text, "14px sans-serif", "dimgray");
 		this.buttonTextShadow.textAlign = "center";
 		this.buttonTextShadow.textBaseline = "middle";
-		this.buttonTextShadow.x = cns_buttonWidth / 2 + 1;
+		this.buttonTextShadow.x = this.buttonWidth / 2 + 1;
 		this.buttonTextShadow.y = cns_buttonHeight / 2 + 1;
-		this.buttonTextShadow.cache(-1 * cns_buttonWidth / 2 + 1,-1 * cns_buttonHeight / 2 + 1, cns_buttonWidth, cns_buttonHeight);
+		this.buttonTextShadow.cache(-1 * this.buttonWidth / 2 + 1,-1 * cns_buttonHeight / 2 + 1, this.buttonWidth, cns_buttonHeight);
 		this.addChild(this.buttonTextShadow);
 		this.addChild(this.buttonText);
 
@@ -94,7 +98,7 @@ class AbstButton extends createjs.Container{
 		background.notActivate();
 		this.buttonShape.uncache();
 		this.buttonShape.alpha = this.onAlpha;
-		this.buttonShape.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
+		this.buttonShape.cache(-2,-2,this.buttonWidth+4, cns_buttonHeight+4);
 	    this.dragPointX = stage.mouseX;
 	    this.dragPointY = stage.mouseY;
 	    this.buttonPush   = true;
@@ -105,7 +109,7 @@ class AbstButton extends createjs.Container{
 	        this.buttonPush = false;
 			this.buttonShape.uncache();
 			this.buttonShape.alpha = this.offAlpha;
-			this.buttonShape.cache(-2,-2,cns_buttonWidth+4, cns_buttonHeight+4);
+			this.buttonShape.cache(-2,-2,this.buttonWidth+4, cns_buttonHeight+4);
         }
     }
 
@@ -127,7 +131,7 @@ class AbstButton extends createjs.Container{
 
 class CncrCardButton extends AbstButton{
 	constructor(arg_x,arg_y,arg_text,arg_color,arg_card){
-		super(arg_x,arg_y,arg_text,arg_color);
+		super(arg_x,arg_y,arg_text,arg_color,1);
 		this.card = arg_card;
 		this.text = arg_text;
 
@@ -154,9 +158,49 @@ class CncrCardButton extends AbstButton{
  	}
 }
 
+class CncrCardButtonPiece extends AbstButton{
+	constructor(arg_x,arg_y,arg_text,arg_color,arg_card){
+		super(arg_x,arg_y,arg_text,arg_color,1);
+		this.card = arg_card;
+		this.text = arg_text;
+
+       	createjs.Sound.play("button");
+	}
+
+ 	buttonCommand(){
+ 		this.card.nonreactiveCard();
+	 	this.card.reactiveCard();
+	 	if(Number.isInteger(this.text) && this.text > 0){
+	 		judge.pieceButton.pseudoPushButton(this.text,this.card.x,this.card.y - 100);
+		}else{
+	 		judge.pieceButton2.pseudoPushButton(this.text,this.card.x,this.card.y - 100);
+		}
+ 	}
+}
+
+class CncrCardButtonDice extends AbstButton{
+	constructor(arg_x,arg_y,arg_text,arg_color,arg_card){
+		super(arg_x,arg_y,arg_text,arg_color,1);
+		this.card = arg_card;
+		this.text = arg_text;
+
+       	createjs.Sound.play("button");
+	}
+
+ 	buttonCommand(){
+ 		this.card.nonreactiveCard();
+	 	this.card.reactiveCard();
+	 	if(this.text == "ATK"){
+	 		judge.diceButton.pseudoPushButton(2);
+		}else{
+	 		judge.diceButton.pseudoPushButton(1);
+		}
+ 	}
+}
+
 class DescButton extends AbstButton{
 	constructor(arg_x,arg_y,arg_text,arg_color,arg_card){
-		super(arg_x,arg_y,arg_text,arg_color);
+		super(arg_x,arg_y,arg_text,arg_color,1);
 		this.card = arg_card;
 		this.text = arg_text;
 
@@ -171,7 +215,7 @@ class DescButton extends AbstButton{
 class CardButton extends createjs.Container{
 	constructor(arg_card,arg_x,arg_y,arg_text,arg_color){
 		super();
-		this.x = arg_x - 10 ;
+		this.x = arg_x - 20 ;
 		this.y = arg_y - 15;
 		this.card = arg_card;
 		this.text = arg_text;
@@ -180,7 +224,7 @@ class CardButton extends createjs.Container{
 		
 		this.cardButton = new CncrCardButton(0, 0, this.text, this.color, this.card);
 		this.addChild(this.cardButton);
-		this.cancelButton = new CancelButton(0, cns_buttonHeight + 5);
+		this.cancelButton = new CancelButton(cns_buttonWidth + 5, 0, 1);
 		this.addChild(this.cancelButton);
 
 		layer1.addChild(this);
@@ -197,7 +241,7 @@ class CardButton extends createjs.Container{
 class PlaceCardButton extends createjs.Container{
 	constructor(arg_card,arg_x,arg_y,arg_text,arg_color,arg_text2,arg_color2){
 		super();
-		this.x = arg_x - 10 ;
+		this.x = arg_x - 20 ;
 		this.y = arg_y - 15;
 		this.card = arg_card;
 		this.text = arg_text;
@@ -205,28 +249,57 @@ class PlaceCardButton extends createjs.Container{
 		this.text2 = arg_text2;
 		this.color2 = arg_color2;
 		this.layer = layer1;
+		this.cardButton = [];
+		this.cardButton2 = [];
 		
-		this.cardButton = new CncrCardButton(0, 0, this.text, this.color, this.card);
-		this.addChild(this.cardButton);
-		this.cancelButton = new CancelButton(0, cns_buttonHeight + 5);
-		this.addChild(this.cancelButton);
-		if(this.card.no == 30){	   //賢者の夢の呪文
-			this.cardButton2 = new DescButton(cns_buttonWidth + 5, cns_buttonHeight + 5, this.text2, this.color2, this.card);
-			this.addChild(this.cardButton2);
-			this.cardButton3 = new CncrCardButton(cns_buttonWidth + 5, 0, "kenjya", "hsl(180, 40%, 50%)", this.card);
-			this.addChild(this.cardButton3);
-		}else{
-			this.cardButton2 = new DescButton(cns_buttonWidth + 5, 0, this.text2, this.color2, this.card);
-			this.addChild(this.cardButton2);
+		if(this.card.check){
+			this.cardButton[this.cardButton.length] = new CncrCardButtonDice(0, 0, "CHK", "dimgray", this.card);
+			this.addChild(this.cardButton[this.cardButton.length - 1]);
 		}
+		if(this.card.attack){
+			this.cardButton[this.cardButton.length] = new CncrCardButtonDice((cns_buttonWidth + 5) * this.cardButton.length, 0, "ATK", "dimgray", this.card);
+			this.addChild(this.cardButton[this.cardButton.length - 1]);
+		}
+		if(this.card.damage > 0){
+			this.cardButton[this.cardButton.length] = new CncrCardButtonPiece((cns_buttonWidth + 5) * this.cardButton.length, 0, this.card.damage, "#00cccc", this.card);
+			this.addChild(this.cardButton[this.cardButton.length - 1]);
+		}
+		if(this.card.damage < 0){
+			this.cardButton[this.cardButton.length] = new CncrCardButtonPiece((cns_buttonWidth + 5) * this.cardButton.length, 0, this.card.damage, "#CC0066", this.card);
+			this.addChild(this.cardButton[this.cardButton.length - 1]);
+		}
+		if(this.card.damage2 > 0){
+			this.cardButton[this.cardButton.length] = new CncrCardButtonPiece((cns_buttonWidth + 5) * this.cardButton.length, 0, this.card.damage2, "#00cccc", this.card);
+			this.addChild(this.cardButton[this.cardButton.length - 1]);
+		}
+		if(this.card.damage2 < 0){
+			this.cardButton[this.cardButton.length] = new CncrCardButtonPiece((cns_buttonWidth + 5) * this.cardButton.length, 0, this.card.damage2, "#CC0066", this.card);
+			this.addChild(this.cardButton[this.cardButton.length - 1]);
+		}
+		if(this.card.condition != ""){
+			this.cardButton[this.cardButton.length] = new CncrCardButtonPiece((cns_buttonWidth + 5) * this.cardButton.length, 0, this.card.condition, "#CC9900", this.card);
+			this.addChild(this.cardButton[this.cardButton.length - 1]);
+		}
+		if(this.card.no == 30){	   //賢者の夢の呪文
+			this.cardButton[this.cardButton.length] = new CncrCardButton((cns_buttonWidth + 5) * this.cardButton.length, 0, "kenjya", "hsl(180, 40%, 50%)", this.card);
+			this.addChild(this.cardButton[this.cardButton.length - 1]);
+		}
+
+		let tempY = cns_buttonHeight + 5;
+		if(this.cardButton.length == 0){tempY = 0;};
+		this.cardButton2[this.cardButton2.length] = new DescButton((cns_buttonWidth + 5) * this.cardButton2.length, tempY, this.text2, this.color2, this.card);
+		this.addChild(this.cardButton2[this.cardButton2.length - 1]);
+		this.cardButton2[this.cardButton2.length] = new CncrCardButton((cns_buttonWidth + 5) * this.cardButton2.length, tempY, this.text, this.color, this.card);
+		this.addChild(this.cardButton2[this.cardButton2.length - 1]);
+		this.cardButton2[this.cardButton2.length] = new CancelButton((cns_buttonWidth + 5) * this.cardButton2.length, tempY,1);
+		this.addChild(this.cardButton2[this.cardButton2.length - 1]);
 
 		layer1.addChild(this);
 	}
 
  	deleteButton(){
- 		this.cardButton.off();
- 		this.cancelButton.off();
- 		this.cardButton2.off();
+ 		for(const elem of this.cardButton){elem.off();}
+ 		for(const elem of this.cardButton2){elem.off();}
 		layer1.removeChild(this);
 		// judge.forgetButton();　　//description を選んだらjudge に保管してるcurrentButton が、cardDescriptionに置き換わってるため、コメントアウト
  	}
@@ -235,7 +308,7 @@ class PlaceCardButton extends createjs.Container{
 class HandCardButton extends createjs.Container{
 	constructor(arg_card,arg_x,arg_y,arg_text,arg_color,arg_text2,arg_color2,arg_text3,arg_color3){
 		super();
-		this.x = arg_x - 10 ;
+		this.x = arg_x - 20;
 		this.y = arg_y - 15;
 		this.card = arg_card;
 		this.text = arg_text;
@@ -246,14 +319,14 @@ class HandCardButton extends createjs.Container{
 		this.color3 = arg_color3;
 		this.layer = layer1;
 		
-		this.cardButton2 = new CncrCardButton(0, 0, this.text2, this.color2, this.card);
-		this.addChild(this.cardButton2);
-		this.cancelButton = new CancelButton(0, cns_buttonHeight + 5);
-		this.addChild(this.cancelButton);
-		this.cardButton = new DescButton(cns_buttonWidth + 5, 0, this.text, this.color, this.card);
+		this.cardButton = new DescButton(0, 0, this.text, this.color, this.card);
 		this.addChild(this.cardButton);
-		this.cardButton3 = new CncrCardButton(cns_buttonWidth + 5, cns_buttonHeight + 5, this.text3, this.color3, this.card);
+		this.cardButton2 = new CncrCardButton(cns_buttonWidth + 5, 0, this.text2, this.color2, this.card);
+		this.addChild(this.cardButton2);
+		this.cardButton3 = new CncrCardButton((cns_buttonWidth + 5) * 2, 0, this.text3, this.color3, this.card);
 		this.addChild(this.cardButton3);
+		this.cancelButton = new CancelButton(0, cns_buttonHeight + 5,1);
+		this.addChild(this.cancelButton);
 
 		layer1.addChild(this);
 	}
@@ -297,7 +370,7 @@ class CardDescription extends createjs.Container{
 
 		let i = 0;
 		for (const elem of this.card.desc) {
-		    this.boxText =  new createjs.Text(elem, "10px Meiryo", "black");
+		    this.boxText =  new createjs.Text(elem, "11px Meiryo", "black");
 			this.boxText.textAlign = "left";
 			this.boxText.textBaseline = "top";
 			this.boxText.x = 5;
@@ -337,7 +410,7 @@ class CardDescription extends createjs.Container{
 
 class CncrDelPieceButton extends AbstButton{
 	constructor(arg_x,arg_y,arg_text,arg_color,arg_piece){
-		super(arg_x,arg_y,arg_text,arg_color);
+		super(arg_x,arg_y,arg_text,arg_color,1);
 		this.piece = arg_piece;
 
        	createjs.Sound.play("button");
@@ -361,7 +434,7 @@ class DelPieceButton extends createjs.Container{
 		
 		this.delPieceButton = new CncrDelPieceButton(0, 0, "delete", "darkgray", this.piece);
 		this.addChild(this.delPieceButton);
-		this.cancelButton = new CancelButton(0, cns_buttonHeight + 5);
+		this.cancelButton = new CancelButton(0, cns_buttonHeight + 5,1);
 		this.addChild(this.cancelButton);
 
 		layer1.addChild(this);
@@ -377,7 +450,7 @@ class DelPieceButton extends createjs.Container{
 
 class TurnButton extends AbstButton{
 	constructor(arg_x,arg_y){
-		super(arg_x, arg_y, "ターン終了", "navy");
+		super(arg_x, arg_y, "ターン終了", "navy",2);
 		info.addChild(this);
 	}
 
@@ -396,7 +469,7 @@ class TurnButton extends AbstButton{
 
 class PermitRevokeButton extends AbstButton{
 	constructor(arg_x,arg_y,arg_playerNo){
-		super(arg_x, arg_y, "操作許可", "hsl(" + arg_playerNo*99 + ", 90%, 50%)");
+		super(arg_x, arg_y, "操作許可", "hsl(" + arg_playerNo*99 + ", 90%, 50%)",2);
 		info.addChild(this);
 		this.player = arg_playerNo;
 		this.swich = true;
@@ -477,7 +550,7 @@ class SettingFlag extends createjs.Container{
 
 				this.resignButton = new ResignButton(cns_stageWidth / 2 - cns_buttonWidth / 2 - this.x,cns_stageHeight / 2 - cns_buttonHeight - this.y);
 				this.addChild(this.resignButton);
-				this.cancelButton = new CancelButton(cns_stageWidth / 2 - cns_buttonWidth / 2 - this.x,cns_stageHeight / 2 + 5 - this.y);
+				this.cancelButton = new CancelButton(cns_stageWidth / 2 - cns_buttonWidth / 2 - this.x,cns_stageHeight / 2 + 5 - this.y,2);
 				this.addChild(this.cancelButton);
 
 				this.flag.uncache();
@@ -505,7 +578,7 @@ class SettingFlag extends createjs.Container{
 
 class ResignButton extends AbstButton{
 	constructor(arg_x,arg_y){
-		super(arg_x, arg_y, " 降参 ", "dimgray");
+		super(arg_x, arg_y, " 降参 ", "dimgray",2);
 		info.addChild(this);
 	}
 
@@ -809,6 +882,20 @@ class DiceButton extends createjs.Container{
 		this.diceButton[this.no - 1].children[0].cache(0,0,39,30);
 		background.Activate();
  	}
+
+	pseudoPushButton(arg_no){
+		socket.emit("serverRollDice",{
+			no: arg_no,
+			nX: 10,
+			nY: 100,
+			faces:  [Math.floor(Math.random() * 6) + 1,
+					 Math.floor(Math.random() * 6) + 1,
+					 Math.floor(Math.random() * 6) + 1,
+					 Math.floor(Math.random() * 6) + 1,
+					 Math.floor(Math.random() * 6) + 1,
+					 Math.floor(Math.random() * 6) + 1]
+		});
+	}
 }
 
 
@@ -968,6 +1055,33 @@ class PieceButton extends createjs.Container{
 		this.activate = true;
 	}
 
+	pseudoPushButton(arg_no,arg_x,arg_y){
+		this.idNo = this.idNo + 1;
+		let xno = arg_no;
+		let xplayer = judge.playerList[cns_myPlayerIndex];
+		let newX = arg_x;
+		let newY = arg_y;
+		let ypiece = judge.otherPlace.pieceList.find(elm => {return Math.sqrt((newX - elm.x)**2 + (newY - elm.y)**2) < 15;});
+		let mrg = false;
+		let mrgId = 0;
+		if(ypiece != null){
+			mrg = true;
+			mrgId = ypiece.id;
+		}
+
+		this.notActivate();
+ 		socket.emit("serverPlayPiece", {
+	 		cmd: "add",
+	 		playerno: xplayer.playerNo,
+	 		id: cns_myPlayerIndex + "/" + this.idNo,
+	 		no: xno,
+	 		mrg: mrg,
+	 		mrgId : mrgId,
+	 		nX: arg_x,
+	 		nY: arg_y
+	 	});
+	}
+
 }
 
 class MinusPieceButton extends createjs.Container{
@@ -1108,6 +1222,33 @@ class MinusPieceButton extends createjs.Container{
 
 	Activate(){
 		this.activate = true;
+	}
+
+	pseudoPushButton(arg_no,arg_x,arg_y){
+		this.idNo = this.idNo + 1;
+		let xno = arg_no;
+		let xplayer = judge.playerList[cns_myPlayerIndex];
+		let newX = arg_x;
+		let newY = arg_y;
+		let ypiece = judge.otherPlace.pieceList.find(elm => {return Math.sqrt((newX - elm.x)**2 + (newY - elm.y)**2) < 15;});
+		let mrg = false;
+		let mrgId = 0;
+		if(ypiece != null && Number.isInteger(xno) && Number.isInteger(ypiece.no)){
+			mrg = true;
+			mrgId = ypiece.id;
+		}
+
+		this.notActivate();
+ 		socket.emit("serverPlayPiece", {
+	 		cmd: "add",
+	 		playerno: xplayer.playerNo,
+	 		id: cns_myPlayerIndex + "/minus/" + this.idNo,
+	 		no: xno,
+	 		mrg: mrg,
+	 		mrgId : mrgId,
+	 		nX: arg_x,
+	 		nY: arg_y
+	 	});
 	}
 
 }

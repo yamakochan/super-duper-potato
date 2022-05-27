@@ -32,9 +32,9 @@ const nameList = require('./name_list.js');
 // handCardNumber
 const handCardNumber = 5;
 
-// desc リスト
+// cardAttr リスト
 const descList = require('./desc_list.js');
-let descArray = descList.descArray;
+let cardAttr = descList.cardAttr;
 
 // オブジェクト deck　リスト
 let deckArray = [];
@@ -239,6 +239,9 @@ io.on('connection', (socket) => {
 
     socket.on("serverGameStart", () => {
         //deckArrayのソート
+        for(let i = 0; i < 93; i++){
+          xxArray[i][2] = Math.random();
+        }
         xxArray.sort((a,b)=>{
             if( a[2] < b[2] ) return -1;
             if( a[2] > b[2] ) return 1;
@@ -253,7 +256,7 @@ io.on('connection', (socket) => {
 	        	io.to(roomNo).emit("gameStart",{
 	        		deck: JSON.stringify(deckArray),
 	        		cemetary: JSON.stringify(cemetaryArray),
-                    desc: JSON.stringify(descArray),
+                    cattr: JSON.stringify(cardAttr),
                     handCardNumber: handCardNumber
 	        	});
         	}else{

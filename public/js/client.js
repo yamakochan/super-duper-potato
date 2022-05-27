@@ -8,7 +8,7 @@ let userNo = 0;             //userlistの添え字に対応
 let userToken = null;       //入室時にサーバから受領して保管。（reconnect検証用）
 let selectRoom = null;
 let memArray = new Array(2);
-let descArray = [];
+let cardAttr = [];
 let deckArray = new Array(99);
 let cemetaryArray = new Array(99);
 
@@ -144,11 +144,11 @@ socket.on("gameStart", function(data){
 
     deckArray = JSON.parse(data.deck);
     cemetaryArray = JSON.parse(data.cemetary);
-    descArray = JSON.parse(data.desc);
+    cardAttr = JSON.parse(data.cattr);
 
     document.getElementById("view_login").style.display ="none";
     document.getElementById("view_canvas").style.display ="block";
-    initStage(memArray,deckArray,cemetaryArray,descArray,data.handCardNumber);
+    initStage(memArray,deckArray,cemetaryArray,cardAttr,data.handCardNumber);
 });
 
 

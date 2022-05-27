@@ -386,7 +386,12 @@ class Card extends createjs.Container{
 		this.headortail = 0;    // 0:表、1:裏
 		this.moving = 0;  		// 0:静止中、1:操作中
 		this.status = 0;  		// 0:deck、1:hand、2:place、9:cemetary、5:kenjyayume
-		this.desc = arg_desc;	// 説明書き
+		this.desc = arg_desc[0];	// 0:desc 1:Check 2:Dice 3:Damage 4:Damage 5:Condition
+		this.check = arg_desc[1];	// 0:desc 1:Check 2:Dice 3:Damage 4:Damage 5:Condition
+		this.attack = arg_desc[2];	// 0:desc 1:Check 2:Dice 3:Damage 4:Damage 5:Condition
+		this.damage = arg_desc[3];	// 0:desc 1:Check 2:Dice 3:Damage 4:Damage 5:Condition
+		this.damage2 = arg_desc[4];	// 0:desc 1:Check 2:Dice 3:Damage 4:Damage 5:Condition
+		this.condition = arg_desc[5];	// 0:desc 1:Check 2:Dice 3:Damage 4:Damage 5:Condition
 
 		this.tail = new createjs.Bitmap(cns_tailImage);
 		// this.tail.shadow = new createjs.Shadow("#000000", 1, 1, 1);
@@ -474,7 +479,7 @@ class Card extends createjs.Container{
 					judge.registerButton( this.drawButton = new CardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"draw","hsl(200, 70%, 50%)") );
 					break;
 				case 1:
-					judge.registerButton(new HandCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"desc","hsl(90, 40%, 50%)","trash2","hsl(250, 40%, 50%)","reverse","hsl(280, 40%, 50%)"));
+					judge.registerButton(new HandCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"desc","hsl(90, 40%, 50%)","Trash","hsl(250, 40%, 50%)","rvrse","hsl(280, 40%, 50%)"));
 					break;
 				case 2:
 					judge.registerButton(new PlaceCardButton(this, stage.mouseX - layer1.x, stage.mouseY - layer1.y,"trash","hsl(250, 40%, 50%)","desc","hsl(90, 40%, 50%)"));
@@ -648,6 +653,17 @@ class OtherPlace extends createjs.Container{
 
     	this.removeChild(arg_piece);
     	this.addChild(arg_piece);
+
+     	if(arg_piece.no == 0){
+	 		arg_piece.off();
+			setTimeout(()=>{
+		 		createjs.Tween.get(arg_piece, {override:true})
+				.to({alpha:0}, cns_duration + 300, createjs.Ease.cubicOut);
+				setTimeout(()=>{
+			   		this.delPiece(arg_piece);
+				}, 200);
+			}, 500);
+	 	}
 	}
 }
 
@@ -682,10 +698,10 @@ class Piece extends createjs.Container{
         this.addChild(this.shapeShadow); // 表示リストに追加
         this.addChild(this.shape); // 表示リストに追加
 
-		if(this.no > 0){
-		    this.text =  new createjs.Text(arg_no, "14px sans-serif", "GhostWhite");
-		}else{
+		if(Number.isInteger(this.no) && this.no < 0){
 		    this.text =  new createjs.Text(arg_no, "14px sans-serif", "red");
+		}else{
+		    this.text =  new createjs.Text(arg_no, "14px sans-serif", "GhostWhite");
 		}
 		this.text.textAlign = "center";
 		this.text.textBaseline = "middle";
@@ -753,7 +769,7 @@ class Piece extends createjs.Container{
 				let ypiece = xPieceList.find(elm => {return Math.sqrt((this.x - elm.x)**2 + (this.y - elm.y)**2) < 15;});
 				let mrg = false;
 				let mrgId = 0;
-				if(ypiece != null){
+				if(Number.isInteger(this.no) && ypiece != null && Number.isInteger(ypiece.no)){
 					mrg = true;
 					mrgId = ypiece.id;
 				}

@@ -36,7 +36,7 @@ function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCa
 	cns_handLeft = -1 * cns_handWidth / 2 + cns_cardWidth / 2;               //手札置き場のX座標
 	cns_handTop = cns_layer1Bottom - cns_cardHeight / 2 - 5;  //手札置き場のY座標
 
-	cns_buttonWidth = 100;
+	cns_buttonWidth = 40;
 	cns_buttonHeight = 30;
 
 	cns_flagWidth = 35;
@@ -350,7 +350,7 @@ class Judge{
 			this.playerList[data.player].place.delPlaceCard(tempCard);
 			this.cemetary.addCemetaryCard(tempCard);
 		}
-		if(data.text == "trash2"){
+		if(data.text == "Trash"){
 		    tempArray = this.playerList[data.player].hand.handCard;
 			let tempCard = tempArray.find(elm => {return elm.no == data.no;});
 	
@@ -358,7 +358,7 @@ class Judge{
 			this.playerList[data.player].hand.delHandCard(tempCard);
 			this.cemetary.addCemetaryCard(tempCard);
 		}
-		if(data.text == "reverse"){
+		if(data.text == "rvrse"){
 		    tempArray = this.playerList[data.player].hand.handCard;
 			let tempCard = tempArray.find(elm => {return elm.no == data.no;});
 	
