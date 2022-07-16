@@ -171,6 +171,7 @@ socket.on("gameStart", function(data){
 socket.on("playerDisconnect", function (data) {
     judge.playerDisconnect(data);
 });
+
 //-------------------------------------------------------------
 
 socket.on("playCard", function (data) {
