@@ -11,8 +11,11 @@ let memArray = new Array(2);
 let cardAttr = [];
 let deckArray = new Array(99);
 let cemetaryArray = new Array(99);
+let commandCount = 0;
 
-let roomState = false;
+let roomState = false;  //true:入室、false：退出
+
+let gameStart = false;
 
 document.getElementById("view_canvas").style.display ="none";
 
@@ -27,27 +30,37 @@ const dummyConnect = () => {
 // サーバーとクライアントの接続が確立すると、サーバー側で'connection'イベント、クライアント側で'connect'イベントが発生する
 socket.on('connect', () => {
     console.log('connect');
-    
-    //部屋選択UI
-    $("#room_in_out").text("in");
-    $("#room_list").prop("disabled", false);
-    $("#username_text").prop("disabled", false);
+    if(!gameStart){
+        //部屋選択UI
+        $("#room_in_out").text("in");
+        $("#room_list").prop("disabled", false);
+        $("#username_text").prop("disabled", false);
 
-    //メッセージ送信UI
-    $("#message_text").prop("disabled", true);
-    $("#message_send").prop("disabled", true);
+        //メッセージ送信UI
+        $("#message_text").prop("disabled", true);
+        $("#message_send").prop("disabled", true);
 
-    $("#game_start").prop("disabled", true);
+        $("#game_start").prop("disabled", true);
 
-    //メッセージリストを削除
-    $("#message_list").empty();
+        //メッセージリストを削除
+        $("#message_list").empty();
 
-    roomState = false;
+        roomState = false;
 
-    selectRoom = $("#room_list").val();  
-    socket.emit("selectRoom", { room: selectRoom });　　　　//サーバへルーム情報（ユーザリスト）の送信依頼
+        selectRoom = $("#room_list").val();  
+        socket.emit("selectRoom", { room: selectRoom });　　　　//サーバへルーム情報（ユーザリスト）の送信依頼
 
-    dummyConnect();
+        dummyConnect();
+    }else{
+        setTimeout(() => {
+            socket.emit("serverReconnect", { room: selectRoom, no: userNo, token: userToken, cnt: commandCount});   //リコネクト時のコマンド再送要求
+        }, 500);        
+    }
+});
+
+//切断時、自動再接続
+socket.on('disconnect', () => {
+    socket.connect();
 });
 
 //メッセージの送信用関数定義
@@ -120,18 +133,21 @@ socket.on("inRoomOk", function (data) {
 });
 
 socket.on("inRoomNg", function (strMessage) {
-    //in-outボタンはinのまま
     roomState = false;
     lobbyWaitForEntry();
-    //ngmsg表示
+    //トークンを初期化
+    userToken = null;
+    //NGmsg表示
     $("#message_list").prepend($("<p>").text(strMessage));
 });
 
 socket.on("dismissRoom", function () {
-    //in-outボタンはinのまま
+    gameStart = false;
     roomState = false;
     socket.emit("outRoom");
     lobbyWaitForEntry();
+    //トークンを初期化
+    userToken = null;
 });
 
 //ゲームスタート
@@ -141,6 +157,7 @@ $("#game_start").click(function () {
 
 socket.on("gameStart", function(data){
     createjs.Sound.play("inoutroom");
+    gameStart = true;
 
     deckArray = JSON.parse(data.deck);
     cemetaryArray = JSON.parse(data.cemetary);
@@ -151,45 +168,54 @@ socket.on("gameStart", function(data){
     initStage(memArray,deckArray,cemetaryArray,cardAttr,data.handCardNumber);
 });
 
+socket.on("playerDisconnect", function (data) {
+    judge.playerDisconnect(data);
+});
+//-------------------------------------------------------------
 
 socket.on("playCard", function (data) {
     judge.playCard(data);
+    commandCount++;
 });
 
 socket.on("buttonAction", function (data) {
     judge.buttonAction(data);
+    commandCount++;
 });
 
 socket.on("changeTurn", function () {
     judge.changeTurn();
+    commandCount++;
 });
 
 socket.on("rollDice", function (data) {
     judge.rollDice(data);
+    commandCount++;
 });
 
 socket.on("playPiece", function (data) {
     judge.playPiece(data);
+    commandCount++;
 });
 
 socket.on("deletePiece", function (data) {
     judge.deletePiece(data);
+    commandCount++;
 });
 
 socket.on("resign", function (data) {
     judge.resign(data);
-});
-
-socket.on("playerDisconnect", function (data) {
-    judge.playerDisconnect(data);
+    commandCount++;
 });
 
 socket.on("permitRevoke", function (data) {
     judge.permitRevoke(data);
+    commandCount++;
 });
 
 //ゲーム終了
 const endGame = function () {
+    gameStart = true;
     document.getElementById("view_login").style.display ="block";
     document.getElementById("view_canvas").style.display ="none";
 
@@ -228,9 +254,6 @@ const lobbyWaitForEntry = function () {
 
     //メッセージリストを削除
     $("#message_list").empty();
-
-    //トークンを初期化
-    userToken = null;
 }
 
 

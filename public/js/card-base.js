@@ -534,23 +534,29 @@ class Judge{
 		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",50,120);
 		let notice2 = new Notice(0,200,"が切断","GhostWhite",50,120);
 
-		let liveCount = 0;
-		let winner = 0;
-		for(let i = 0; i < this.playerList.length; i++){
-			if(this.playerList[i].live){
-				winner = i;
-				liveCount++;
-			}
+		if(xplayerNo == this.currentPlayer){
+			this.changeTurn();
 		}
-		if(liveCount == 1){
-			if(cns_myPlayerIndex == winner){
-				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",60,2000);
-				createjs.Sound.play("champion");
-			}else{
-			}
-			this.end = 2;
-			background.Activate();
-		}
+
+		// 切断によって一人になったら勝ち。。は、切断後３０秒とかの退場確定処理に移動すること
+
+		// let liveCount = 0;
+		// let winner = 0;
+		// for(let i = 0; i < this.playerList.length; i++){
+		// 	if(this.playerList[i].live){
+		// 		winner = i;
+		// 		liveCount++;
+		// 	}
+		// }
+		// if(liveCount == 1){
+		// 	if(cns_myPlayerIndex == winner){
+		// 		let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",60,2000);
+		// 		createjs.Sound.play("champion");
+		// 	}else{
+		// 	}
+		// 	this.end = 2;
+		// 	background.Activate();
+		// }
 	}
 
 	rollDice(data){

@@ -74,10 +74,16 @@ for (let i=0; i<userList.length; i++){
 // ルームステータス　0:受付中　1:ゲーム中
 const roomStatus = [0,0,0];
 
+// コマンドリスト
+let commandList = [];
+
+// コマンドの遅延設定
+let commandHold = false;
+
 // ポート番号	||は左がtrueなら左、以外は右を返す。（null,0以外はtrue）
 const PORT = process.env.PORT || 3000;
 
-  // グローバル変数
+// グローバル変数
 let MEMBER_COUNT = 0; // ユーザー数
 
 // //httpのレスポンス
@@ -114,6 +120,7 @@ function getLocalAddress() {
 // サーバーとクライアントの接続が確立すると、サーバー側で'connection'イベント、クライアント側で'connect'イベントが発生する
 io.on('connection', (socket) => {
     console.log('connection');
+
     //クライアント毎情報の退避領域
     let roomNo = null;        　　　　//クライアントのルームNo
     let userName = null;            //クライアントのユーザー名
@@ -158,6 +165,7 @@ io.on('connection', (socket) => {
                 userList[roomNo][i][2] = token;     //userListにトークンを記録
 
 	            io.to(socket.id).emit("inRoomOk", {name: userName, no: i ,token: token}); //入室ok時の該当クライアント処理
+
 	        }else{
 	            //入室ng時の該当クライアント処理
 	            io.to(socket.id).emit("inRoomNg", '定員オーバー入室不可'); //入室ng時の該当クライアント処理
@@ -202,6 +210,7 @@ io.on('connection', (socket) => {
         console.log("dummyconnect",userName);
     });
 
+//-------------------------------------------------------------
     // 切断時の処理
     // クライアントが切断したら、サーバー側では'disconnect'イベントが発生する
     socket.on('disconnect', () => {
@@ -225,7 +234,23 @@ io.on('connection', (socket) => {
             //サーバー操作を記録、再コネクト時にそれまでの操作を反映させる。※
             //※特定クライアントに貯めたｍｓgを送信　io.to('socetID').emit('event', param);
             //→取り合えずloseにする。
+            
             io.to(roomNo).emit("playerDisconnect", {userNo: userNo});
+        }
+    });
+
+    socket.on('serverReconnect', (data) => {
+        //リコネクトかどうかをユーザリスト　userList[roomNo][i][2] でチェックし、
+        //リコネクトならサーバ側の状態を入室、ゲーム中に変えて、みんなの操作をホールド、切断中のコマンドを送信、ホールド解除を行う。
+        if(userList[data.room][data.no][2] == data.token){
+            commandHold = true;     //みんなの操作を時間差実行設定。
+
+            for(let i = data.cnt; i < commandList.length; i++){
+                io.to(socket.id).emit(commandList[i][0], commandList[i][1]);
+            }
+            commandHold = false;    //みんなの操作を解放
+        }else{
+            io.to(socket.id).emit("dismissRoom");
         }
     });
 
@@ -234,6 +259,11 @@ io.on('connection', (socket) => {
         if(roomNo != null){
             io.to(roomNo).emit("dismissRoom");
 	    	roomStatus[roomNo] = 0;
+            for(let i = 0; i < 4; i++){
+                for(let j = 0; j < 3; j++){
+                    userList[roomNo][i][j] = null;
+                }
+            }
         }
     });
 
@@ -265,38 +295,95 @@ io.on('connection', (socket) => {
     	}
     });
 
+//-------------------------------------------------------------
+
     // カード移動msgの送信（全員）
     socket.on("serverPlayCard", (data) => {
-        io.to(roomNo).emit("playCard", data);
+        if(!commandHold){
+            io.to(roomNo).emit("playCard", data);
+        }else{
+            setTimeout(() => {
+                io.to(roomNo).emit("playCard", data);
+            }, 500);        
+        }
+        commandList[commandList.length] = ["playCard", data];
     });
 
     socket.on("serverButtonAction", (data) => {
-        io.to(roomNo).emit("buttonAction", data);
+        if(!commandHold){
+            io.to(roomNo).emit("buttonAction", data);
+        }else{
+            setTimeout(() => {
+                io.to(roomNo).emit("buttonAction", data);
+            }, 500);        
+        }
+        commandList[commandList.length] = ["buttonAction", data];
         console.log(data);
     });
 
     socket.on("serverChangeTurn", () => {
-        io.to(roomNo).emit("changeTurn");
+        if(!commandHold){
+            io.to(roomNo).emit("changeTurn");
+        }else{
+            setTimeout(() => {
+                io.to(roomNo).emit("changeTurn");
+            }, 500);        
+        }
+        commandList[commandList.length] = ["changeTurn", null];
     });
 
     socket.on("serverRollDice", (data) => {
-        io.to(roomNo).emit("rollDice", data);
+        if(!commandHold){
+            io.to(roomNo).emit("rollDice", data);
+        }else{
+            setTimeout(() => {
+                io.to(roomNo).emit("rollDice", data);
+            }, 500);        
+        }
+        commandList[commandList.length] = ["rollDice", data];
     });
 
     socket.on("serverPlayPiece", (data) => {
-        io.to(roomNo).emit("playPiece", data);
+        if(!commandHold){
+            io.to(roomNo).emit("playPiece", data);
+        }else{
+            setTimeout(() => {
+                io.to(roomNo).emit("playPiece", data);
+            }, 500);        
+        }
     });
 
     socket.on("serverDeletePiece", (data) => {
-        io.to(roomNo).emit("deletePiece", data);
+        if(!commandHold){
+            io.to(roomNo).emit("deletePiece", data);
+        }else{
+            setTimeout(() => {
+                io.to(roomNo).emit("deletePiece", data);
+            }, 500);        
+        }
+        commandList[commandList.length] = ["deletePiece", data];
     });
 
     socket.on("serverResign", (data) => {
-        io.to(roomNo).emit("resign", data);
+        if(!commandHold){
+            io.to(roomNo).emit("resign", data);
+        }else{
+            setTimeout(() => {
+                io.to(roomNo).emit("resign", data);
+            }, 500);        
+        }
+        commandList[commandList.length] = ["resign", data];
     });
 
     socket.on("serverPermitRevoke", (data) => {
-        io.to(roomNo).emit("permitRevoke", data);
+        if(!commandHold){
+            io.to(roomNo).emit("permitRevoke", data);
+        }else{
+            setTimeout(() => {
+                io.to(roomNo).emit("permitRevoke", data);
+            }, 500);        
+        }
+       commandList[commandList.length] = ["permitRevoke", data];
     });
 
     // msgの送信（送信元以外）
