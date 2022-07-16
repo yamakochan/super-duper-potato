@@ -242,6 +242,7 @@ io.on('connection', (socket) => {
     socket.on('serverReconnect', (data) => {
         //リコネクトかどうかをユーザリスト　userList[roomNo][i][2] でチェックし、
         //リコネクトならサーバ側の状態を入室、ゲーム中に変えて、みんなの操作をホールド、切断中のコマンドを送信、ホールド解除を行う。
+        socket.join(roomNo);
         if(userList[data.room][data.no][2] == data.token){
             commandHold = true;     //みんなの操作を時間差実行設定。
 
