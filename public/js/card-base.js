@@ -428,8 +428,10 @@ class Judge{
 				}
 			}
 		}else{
-	 		this.turn.off();
- 			info.removeChild(this.turn);
+	 		if(this.turn != null){
+	 			this.turn.off();
+	 			info.removeChild(this.turn);
+	 		}
 
 			for(let i = 0; i < this.perm.length; i++){
 				if(this.perm[i] != null){
