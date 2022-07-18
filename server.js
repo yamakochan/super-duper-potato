@@ -248,11 +248,15 @@ io.on('connection', (socket) => {
         if(userList[data.room][data.no][2] == data.token){
             socket.join(roomNo);
             userName = userList[data.room][data.no][0]
+            io.to(socket.id).emit("playerDisconnect", {userNo: userNo});
+
             commandHold = true;     //みんなの操作を時間差実行設定。
             for(let i = data.cnt; i < commandList.length; i++){
                 io.to(socket.id).emit(commandList[i][0], commandList[i][1]);
             }
+
             io.to(roomNo).emit("playerReconnect", {userNo: userNo});
+            
             commandHold = false;    //みんなの操作を解放
         }else{
             io.to(socket.id).emit("displacement");

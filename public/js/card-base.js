@@ -532,8 +532,10 @@ class Judge{
 		this.playerList[xplayerNo].hand.mouseChildren = false;
 		this.playerList[xplayerNo].place.mouseChildren = false;
 
-		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",25,120);
-		let notice2 = new Notice(0,200,"が切断","GhostWhite",25,120);
+		if(cns_myPlayerIndex == xplayerNo){
+			let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",25,120);
+			let notice2 = new Notice(0,200,"が切断","GhostWhite",25,120);			
+		}
 
 		if(xplayerNo == this.currentPlayer){
 			this.changeTurn();
