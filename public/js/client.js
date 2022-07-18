@@ -59,7 +59,7 @@ socket.on('connect', () => {
 
 //切断時、自動再接続
 socket.on('disconnect', () => {
-     socket.disconnect();
+     socket.close();
 });
 
 //メッセージの送信用関数定義
