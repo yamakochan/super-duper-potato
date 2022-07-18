@@ -3,7 +3,7 @@
 //deckリスト（画像png）cemetaryリスト（画像png）を受け取る。手札数制限を受け取る
 function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCards) {
 	// verとか書かないとglobal変数
-	for(let i = 0; i < argUserList.length; i++){
+	for(let i = 0; i < argUserList.length; i++){  //argUserList == memarray
 		if(argUserList[i][1] == userNo){
 			cns_myPlayerIndex = i;	
 		}
@@ -515,12 +515,7 @@ class Judge{
 	}
 
 	playerDisconnect(data){
-		let xplayerNo = 0;
-		for(let i = 0; i < memArray.length; i++){
-			if(memArray[i][1] == data.userNo){
-				xplayerNo = i;
-			}
-		}
+		let xplayerNo = data.userNo;
 		this.playerList[xplayerNo].live = false;
 
 		this.xscore[xplayerNo] = this.score[xplayerNo].clone();
@@ -563,12 +558,7 @@ class Judge{
 	}
 
 	playerReconnect(data){
-		let xplayerNo = 0;
-		for(let i = 0; i < memArray.length; i++){
-			if(memArray[i][1] == data.userNo){
-				xplayerNo = i;
-			}
-		}
+		let xplayerNo = data.userNo;
 		this.playerList[xplayerNo].live = true;
 
 		info.removeChild(this.xscore[xplayerNo]);
