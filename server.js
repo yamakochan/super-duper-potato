@@ -215,7 +215,7 @@ io.on('connection', (socket) => {
     // クライアントが切断したら、サーバー側では'disconnect'イベントが発生する
     socket.on('disconnect', () => {
         console.log('disconnect');
-        if(roomStatus[roomNo] == 0){
+        if(roomStatus[roomNo] == 0){    //ロビー
             if(userName != null){
                 io.to(roomNo).emit("message", `${userName}が切断`);
                 userList[roomNo][userNo][0] = null;
@@ -227,7 +227,7 @@ io.on('connection', (socket) => {
                 //     roomStatus[roomNo] = 0;
                 // }
             }
-        }else{
+        }else{　 //ゲーム中
             //※＊＊＊中断＊＊＊＊
             //切断されたメンバーをloseにするか、
             //復活させる仕組みをつくるなら、disconnectメンバありフラグをたてて、その間の
@@ -243,19 +243,19 @@ io.on('connection', (socket) => {
         //リコネクトかどうかをユーザリスト　userList[roomNo][i][2] でチェックし、
         //リコネクトならサーバ側の状態を入室、ゲーム中に変えて、みんなの操作をホールド、切断中のコマンドを送信、ホールド解除を行う。
         console.log('serverReconnect',data);
-        socket.join(roomNo);
-        console.log('serverReconnect',userList[data.room][data.no][2]);
+        roomNo = data.room
+        userNo = data.no
         if(userList[data.room][data.no][2] == data.token){
-            console.log('then');
+            socket.join(roomNo);
+            userName = userList[data.room][data.no][0]
             commandHold = true;     //みんなの操作を時間差実行設定。
-
             for(let i = data.cnt; i < commandList.length; i++){
                 io.to(socket.id).emit(commandList[i][0], commandList[i][1]);
             }
+            io.to(roomNo).emit("playerReconnect", {userNo: userNo});
             commandHold = false;    //みんなの操作を解放
         }else{
-            console.log('else');
-            io.to(socket.id).emit("dismissRoom");
+            io.to(socket.id).emit("displacement");
         }
     });
 

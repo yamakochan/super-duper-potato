@@ -94,6 +94,7 @@ class Judge{
 		this.playerList = [];		
 		this.currentPlayer = -1;	//userNo と対応
 		this.score = [];
+		this.xscore = [];
 		this.perm = Array();
 		this.kenjyaYumeMode = false;
 
@@ -522,17 +523,17 @@ class Judge{
 		}
 		this.playerList[xplayerNo].live = false;
 
-		let xscore = this.score[xplayerNo].clone();
-		xscore.color = "dimgray";
-		xscore.outline = 1;
-		xscore.cache(-2,-2,150,30);
-		info.addChild(xscore);
+		this.xscore[xplayerNo] = this.score[xplayerNo].clone();
+		this.xscore[xplayerNo].color = "dimgray";
+		this.xscore[xplayerNo].outline = 1;
+		this.xscore[xplayerNo].cache(-2,-2,150,30);
+		info.addChild(this.xscore[xplayerNo]);
 
 		this.playerList[xplayerNo].hand.mouseChildren = false;
 		this.playerList[xplayerNo].place.mouseChildren = false;
 
-		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",50,120);
-		let notice2 = new Notice(0,200,"が切断","GhostWhite",50,120);
+		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",25,120);
+		let notice2 = new Notice(0,200,"が切断","GhostWhite",25,120);
 
 		if(xplayerNo == this.currentPlayer){
 			this.changeTurn();
@@ -557,6 +558,25 @@ class Judge{
 		// 	this.end = 2;
 		// 	background.Activate();
 		// }
+	}
+
+	playerReconnect(data){
+		let xplayerNo = 0;
+		for(let i = 0; i < memArray.length; i++){
+			if(memArray[i][1] == data.userNo){
+				xplayerNo = i;
+			}
+		}
+		this.playerList[xplayerNo].live = true;
+
+		info.removeChild(this.xscore[xplayerNo]);
+
+		this.playerList[xplayerNo].hand.mouseChildren = true;
+		this.playerList[xplayerNo].place.mouseChildren = true;
+
+		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",25,120);
+		let notice2 = new Notice(0,200,"が再接続","GhostWhite",25,120);
+
 	}
 
 	rollDice(data){

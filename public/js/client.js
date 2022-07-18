@@ -26,6 +26,7 @@ const dummyConnect = () => {
     }, 28000);
 }
 
+
 // 接続時の処理
 // サーバーとクライアントの接続が確立すると、サーバー側で'connection'イベント、クライアント側で'connect'イベントが発生する
 socket.on('connect', () => {
@@ -59,9 +60,9 @@ socket.on('connect', () => {
 });
 
 //切断時、自動再接続
-socket.on('disconnect', () => {
-    socket.connect();
-});
+// socket.on('disconnect', () => {
+//     socket.connect();
+// });
 
 //メッセージの送信用関数定義
 const sendMessage = function () {
@@ -141,14 +142,39 @@ socket.on("inRoomNg", function (strMessage) {
     $("#message_list").prepend($("<p>").text(strMessage));
 });
 
-socket.on("dismissRoom", function () {
-    gameStart = false;
-    roomState = false;
-    socket.emit("outRoom");
-    lobbyWaitForEntry();
-    //トークンを初期化
-    userToken = null;
-});
+const lobbyEntering = function () {
+      //部屋選択UI
+    $("#room_in_out").text("out");
+    $("#room_list").prop("disabled", true);
+    $("#username_text").prop("disabled", true);
+
+    //メッセージ送信UI
+    $("#message_text").prop("disabled", false);
+    $("#message_send").prop("disabled", false);
+
+    $("#game_start").prop("disabled", false);
+
+    //メッセージリストを削除
+    $("#message_list").empty();
+}
+
+const lobbyWaitForEntry = function () {
+    //部屋選択UI
+    $("#room_in_out").text("in");
+    $("#room_list").prop("disabled", false);
+    $("#username_text").prop("disabled", false);
+
+    //メッセージ送信UI
+    $("#message_text").prop("disabled", true);
+    $("#message_send").prop("disabled", true);
+
+    $("#game_start").prop("disabled", true);
+
+    //メッセージリストを削除
+    $("#message_list").empty();
+}
+
+//-------------------------------------------------------------
 
 //ゲームスタート
 $("#game_start").click(function () {
@@ -168,9 +194,47 @@ socket.on("gameStart", function(data){
     initStage(memArray,deckArray,cemetaryArray,cardAttr,data.handCardNumber);
 });
 
+socket.on("dismissRoom", function () {
+    gameStart = false;
+    roomState = false;
+    socket.emit("outRoom");
+    lobbyWaitForEntry();
+    //トークンを初期化
+    userToken = null;
+});
+
+//他プレイヤー切断時処理
 socket.on("playerDisconnect", function (data) {
     judge.playerDisconnect(data);
 });
+
+//他プレイヤー接続時処理
+socket.on("playerReconnect", function (data) {
+    judge.playerReconnect(data);
+});
+
+//強制退去（reconnect失敗）
+socket.on("displacement", function () {
+    document.getElementById("view_login").style.display ="block";
+    document.getElementById("view_canvas").style.display ="none";
+    gameStart = false;
+    roomState = false;
+    socket.emit("outRoom");
+    lobbyWaitForEntry();
+    //トークンを初期化
+    userToken = null;
+});
+
+//ゲーム終了
+const endGame = function () {
+    gameStart = true;
+    document.getElementById("view_login").style.display ="block";
+    document.getElementById("view_canvas").style.display ="none";
+
+    roomState = false;
+    socket.emit("serverDismissRoom");    //!!一人づつ抜けると、抜ける前にゲームスタートされる懸念あり。
+    lobbyWaitForEntry();
+}
 
 //-------------------------------------------------------------
 
@@ -213,48 +277,4 @@ socket.on("permitRevoke", function (data) {
     judge.permitRevoke(data);
     commandCount++;
 });
-
-//ゲーム終了
-const endGame = function () {
-    gameStart = true;
-    document.getElementById("view_login").style.display ="block";
-    document.getElementById("view_canvas").style.display ="none";
-
-    roomState = false;
-    socket.emit("serverDismissRoom");    //!!一人づつ抜けると、抜ける前にゲームスタートされる懸念あり。
-    lobbyWaitForEntry();
-}
-
-const lobbyEntering = function () {
-      //部屋選択UI
-    $("#room_in_out").text("out");
-    $("#room_list").prop("disabled", true);
-    $("#username_text").prop("disabled", true);
-
-    //メッセージ送信UI
-    $("#message_text").prop("disabled", false);
-    $("#message_send").prop("disabled", false);
-
-    $("#game_start").prop("disabled", false);
-
-    //メッセージリストを削除
-    $("#message_list").empty();
-}
-
-const lobbyWaitForEntry = function () {
-    //部屋選択UI
-    $("#room_in_out").text("in");
-    $("#room_list").prop("disabled", false);
-    $("#username_text").prop("disabled", false);
-
-    //メッセージ送信UI
-    $("#message_text").prop("disabled", true);
-    $("#message_send").prop("disabled", true);
-
-    $("#game_start").prop("disabled", true);
-
-    //メッセージリストを削除
-    $("#message_list").empty();
-}
-
 
