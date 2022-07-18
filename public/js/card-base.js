@@ -429,11 +429,6 @@ class Judge{
 				}
 			}
 		}else{
-	 		if(preCurrentPlayer == cns_myPlayerIndex){	//ターン変更前、自分のターンだった場合。
-	 			this.turn.off();
-	 			info.removeChild(this.turn);
-	 		}
-
 			for(let i = 0; i < this.perm.length; i++){
 				if(this.perm[i] != null){
 			 		this.perm[i].off();
@@ -540,9 +535,15 @@ class Judge{
 			let notice2 = new Notice(0,200,"が切断","GhostWhite",25,120);			
 		}
 
+ 		if(xplayerNo == this.currentPlayer && cns_myPlayerIndex == this.currentPlayer){
+ 			this.turn.off();
+ 			info.removeChild(this.turn);
+ 		}
+
 		if(xplayerNo == this.currentPlayer){
 			this.changeTurn();
 		}
+
 
 		// 切断によって一人になったら勝ち。。は、切断後３０秒とかの退場確定処理に移動すること
 
@@ -578,6 +579,7 @@ class Judge{
 
 		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",25,120);
 		let notice2 = new Notice(0,200,"が再接続","GhostWhite",25,120);
+
 	}
 
 	rollDice(data){
