@@ -398,6 +398,7 @@ class Judge{
 		}
 
 		//カレントプレイヤー変更
+		let preCurrentPlayer = this.currentPlayer;
 		this.currentPlayer += 1;
 		if(this.currentPlayer >= cns_players){
 			this.currentPlayer = 0;
@@ -428,7 +429,7 @@ class Judge{
 				}
 			}
 		}else{
-	 		if(this.turn != null){
+	 		if(preCurrentPlayer == cns_myPlayerIndex){	//ターン変更前、自分のターンだった場合。
 	 			this.turn.off();
 	 			info.removeChild(this.turn);
 	 		}
