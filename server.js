@@ -244,7 +244,9 @@ io.on('connection', (socket) => {
         //リコネクトならサーバ側の状態を入室、ゲーム中に変えて、みんなの操作をホールド、切断中のコマンドを送信、ホールド解除を行う。
         console.log('serverReconnect',data);
         socket.join(roomNo);
+        console.log('serverReconnect',userList[data.room][data.no][2]);
         if(userList[data.room][data.no][2] == data.token){
+            console.log('then');
             commandHold = true;     //みんなの操作を時間差実行設定。
 
             for(let i = data.cnt; i < commandList.length; i++){
@@ -252,6 +254,7 @@ io.on('connection', (socket) => {
             }
             commandHold = false;    //みんなの操作を解放
         }else{
+            console.log('else');
             io.to(socket.id).emit("dismissRoom");
         }
     });
