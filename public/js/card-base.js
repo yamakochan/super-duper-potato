@@ -521,7 +521,9 @@ class Judge{
 	}
 
 	playerDisconnect(data){
-		let xplayerNo = data.userNo;
+        console.log('playerDisconnect',data);
+        console.log('cns_myPlayerIndex',cns_myPlayerIndex);
+        let xplayerNo = data.userNo;
 		this.playerList[xplayerNo].live = false;
 
 		this.xscore[xplayerNo] = this.score[xplayerNo].clone();
@@ -564,6 +566,8 @@ class Judge{
 	}
 
 	playerReconnect(data){
+        console.log('playerResconnect',data);
+        console.log('cns_myPlayerIndex',cns_myPlayerIndex);
 		let xplayerNo = data.userNo;
 		this.playerList[xplayerNo].live = true;
 
