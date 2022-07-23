@@ -533,7 +533,7 @@ class Judge{
 			let notice2 = new Notice(0,200,"が切断","GhostWhite",25,120);			
 		}
 
-		//if(xplayerNo == this.currentPlayer && cns_myPlayerIndex == this.currentPlayer){
+		//自分のターンに切断した場合、ターンを移動させるが、ボタンを押さないため、個別にターンボタンを消す。
 		if(this.turn != null && xplayerNo == cns_myPlayerIndex ){
  			this.turn.off();
  			info.removeChild(this.turn);
@@ -544,26 +544,30 @@ class Judge{
 			this.changeTurn();
 		}
 
+	    setTimeout(() => {
+	        this.playerReconnectTimeOut();
+	    }, 20000);
+	}
 
-		// 切断によって一人になったら勝ち。。は、切断後３０秒とかの退場確定処理に移動すること
-
-		// let liveCount = 0;
-		// let winner = 0;
-		// for(let i = 0; i < this.playerList.length; i++){
-		// 	if(this.playerList[i].live){
-		// 		winner = i;
-		// 		liveCount++;
-		// 	}
-		// }
-		// if(liveCount == 1){
-		// 	if(cns_myPlayerIndex == winner){
-		// 		let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",60,2000);
-		// 		createjs.Sound.play("champion");
-		// 	}else{
-		// 	}
-		// 	this.end = 2;
-		// 	background.Activate();
-		// }
+	// 切断によって一人になったら勝ち。。は、切断の２０秒後に判定
+	playerReconnectTimeOut(){
+		let liveCount = 0;
+		let winner = 0;
+		for(let i = 0; i < this.playerList.length; i++){
+			if(this.playerList[i].live){
+				winner = i;
+				liveCount++;
+			}
+		}
+		if(liveCount == 1){
+			if(cns_myPlayerIndex == winner){
+				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",60,2000);
+				createjs.Sound.play("champion");
+			}else{
+			}
+			this.end = 2;
+			background.Activate();
+		}
 	}
 
 	playerReconnect(data){
@@ -571,6 +575,10 @@ class Judge{
         console.log('cns_myPlayerIndex',cns_myPlayerIndex);
 		let xplayerNo = data.userNo;
 		this.playerList[xplayerNo].live = true;
+		if(xplayerNo == cns_myPlayerIndex){
+			this.playerList[cns_myPlayerIndex].place.mouseChildren = true;
+			this.playerList[cns_myPlayerIndex].hand.mouseChildren = true;
+		}
 
 		info.removeChild(this.xscore[xplayerNo]);
 
