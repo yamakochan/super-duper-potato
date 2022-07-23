@@ -51,7 +51,7 @@ socket.on('connect', () => {
         selectRoom = $("#room_list").val();  
         socket.emit("selectRoom", { room: selectRoom });　　　　//サーバへルーム情報（ユーザリスト）の送信依頼
 
-        // dummyConnect();
+        dummyConnect();
     }else{
         socket.emit("serverReconnect", { room: selectRoom, no: userNo, token: userToken, cnt: commandCount});   //リコネクト時のコマンド再送要求
     }

@@ -536,7 +536,7 @@ class Judge{
 		}
 
 		//if(xplayerNo == this.currentPlayer && cns_myPlayerIndex == this.currentPlayer){
-		if(this.turn != null){
+		if(this.turn != null && xplayerNo == cns_myPlayerIndex ){
  			this.turn.off();
  			info.removeChild(this.turn);
  			this.turn = null;
