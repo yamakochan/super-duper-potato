@@ -317,6 +317,7 @@ io.on('connection', (socket) => {
             }, 500);        
         }
         commandList[commandList.length] = ["playCard", data];
+        console.log('serverPlayCard',commandList.length);
     });
 
     socket.on("serverButtonAction", (data) => {
@@ -328,7 +329,7 @@ io.on('connection', (socket) => {
             }, 500);        
         }
         commandList[commandList.length] = ["buttonAction", data];
-        console.log(data);
+        console.log('serverButtonAction',commandList.length);
     });
 
     socket.on("serverChangeTurn", () => {
@@ -340,6 +341,7 @@ io.on('connection', (socket) => {
             }, 500);        
         }
         commandList[commandList.length] = ["changeTurn", null];
+        console.log('serverChangeTurn',commandList.length);
     });
 
     socket.on("serverRollDice", (data) => {
@@ -351,6 +353,7 @@ io.on('connection', (socket) => {
             }, 500);        
         }
         commandList[commandList.length] = ["rollDice", data];
+        console.log('serverChangeTurn',commandList.length);
     });
 
     socket.on("serverPlayPiece", (data) => {
@@ -361,6 +364,8 @@ io.on('connection', (socket) => {
                 io.to(roomNo).emit("playPiece", data);
             }, 500);        
         }
+        commandList[commandList.length] = ["playPiece", data];
+        console.log('serverPlayPiece',commandList.length);
     });
 
     socket.on("serverDeletePiece", (data) => {
@@ -372,6 +377,7 @@ io.on('connection', (socket) => {
             }, 500);        
         }
         commandList[commandList.length] = ["deletePiece", data];
+        console.log('serverDeletePiece',commandList.length);
     });
 
     socket.on("serverResign", (data) => {
@@ -383,6 +389,7 @@ io.on('connection', (socket) => {
             }, 500);        
         }
         commandList[commandList.length] = ["resign", data];
+        console.log('serverResign',commandList.length);
     });
 
     socket.on("serverPermitRevoke", (data) => {
@@ -393,7 +400,8 @@ io.on('connection', (socket) => {
                 io.to(roomNo).emit("permitRevoke", data);
             }, 500);        
         }
-       commandList[commandList.length] = ["permitRevoke", data];
+        commandList[commandList.length] = ["permitRevoke", data];
+        console.log('serverPermitRevoke',commandList.length);
     });
 
     // msgの送信（送信元以外）

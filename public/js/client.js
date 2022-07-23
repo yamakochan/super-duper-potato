@@ -239,40 +239,48 @@ const endGame = function () {
 socket.on("playCard", function (data) {
     judge.playCard(data);
     commandCount++;
+    console.log('playCard',commandCount);
 });
 
 socket.on("buttonAction", function (data) {
     judge.buttonAction(data);
     commandCount++;
+    console.log('buttonAction',commandCount);
 });
 
 socket.on("changeTurn", function () {
     judge.changeTurn();
     commandCount++;
+    console.log('changeTurn',commandCount);
 });
 
 socket.on("rollDice", function (data) {
     judge.rollDice(data);
     commandCount++;
+    console.log('rollDice',commandCount);
 });
 
 socket.on("playPiece", function (data) {
     judge.playPiece(data);
     commandCount++;
+    console.log('playPiece',commandCount);
 });
 
 socket.on("deletePiece", function (data) {
     judge.deletePiece(data);
     commandCount++;
+    console.log('deletePiece',commandCount);
 });
 
 socket.on("resign", function (data) {
     judge.resign(data);
     commandCount++;
+    console.log('resign',commandCount);
 });
 
 socket.on("permitRevoke", function (data) {
     judge.permitRevoke(data);
     commandCount++;
+    console.log('permitRevoke',commandCount);
 });
 
