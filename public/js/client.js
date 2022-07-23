@@ -59,11 +59,11 @@ socket.on('connect', () => {
     }
 });
 
-socket.io.on("reconnect", (attempt) => {
+socket.on("reconnect", (attempt) => {
     console.log('reconnect',attempt);
 });
 
-socket.io.on("reconnect_error", (error) => {
+socket.on("reconnect_error", (error) => {
     console.log('reconnect_error',error);
     socket.connect();
 });
