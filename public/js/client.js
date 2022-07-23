@@ -59,16 +59,7 @@ socket.on('connect', () => {
     }
 });
 
-socket.on("reconnect", (attempt) => {
-    console.log('reconnect',attempt);
-});
-
-socket.on("reconnect_error", (error) => {
-    console.log('reconnect_error',error);
-    socket.connect();
-});
-
-// 切断時、自動再接続
+// 切断時、自動再接続。　これがないと、２回目の再接続がされない!!!
 socket.on('disconnect', () => {
     console.log('disconnect');
     socket.close();

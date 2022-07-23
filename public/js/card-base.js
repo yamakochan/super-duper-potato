@@ -410,7 +410,7 @@ class Judge{
 			}
 		}
 
-		//自分のはターンだけ、deck,cemetaryの操作可
+		//自分のターンだけ、deck,cemetaryの操作可
 		if(this.currentPlayer == cns_myPlayerIndex){
 			this.playerList[this.currentPlayer].mouseChildren = true;
 			this.deck.mouseChildren = true;
@@ -515,6 +515,7 @@ class Judge{
 		}
 	}
 
+	// 切断したプレイヤー以外は切断時にdisconnectから呼び出し。　切断プレイヤーはreconnect時に呼び出し。
 	playerDisconnect(data){
         console.log('playerDisconnect',data);
         console.log('cns_myPlayerIndex',cns_myPlayerIndex);
@@ -526,9 +527,6 @@ class Judge{
 		this.xscore[xplayerNo].outline = 1;
 		this.xscore[xplayerNo].cache(-2,-2,150,30);
 		info.addChild(this.xscore[xplayerNo]);
-
-		this.playerList[xplayerNo].hand.mouseChildren = false;
-		this.playerList[xplayerNo].place.mouseChildren = false;
 
 		if(cns_myPlayerIndex != xplayerNo){
 			let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",25,120);
@@ -575,9 +573,6 @@ class Judge{
 		this.playerList[xplayerNo].live = true;
 
 		info.removeChild(this.xscore[xplayerNo]);
-
-		this.playerList[xplayerNo].hand.mouseChildren = true;
-		this.playerList[xplayerNo].place.mouseChildren = true;
 
 		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",25,120);
 		let notice2 = new Notice(0,200,"が再接続","GhostWhite",25,120);
