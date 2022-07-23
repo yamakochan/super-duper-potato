@@ -32,6 +32,7 @@ const dummyConnect = () => {
 socket.on('connect', () => {
     console.log('connect');
     if(!gameStart){
+        //初回コネクト、リコネクト共通のロビー初期設定。　ロビーで切断時、入室しててもサーバー側disconnectの処理で退出になる。
         //部屋選択UI
         $("#room_in_out").text("in");
         $("#room_list").prop("disabled", false);
@@ -53,13 +54,23 @@ socket.on('connect', () => {
 
         dummyConnect();
     }else{
+        //ゲーム中のリコネクト処理。
         socket.emit("serverReconnect", { room: selectRoom, no: userNo, token: userToken, cnt: commandCount});   //リコネクト時のコマンド再送要求
     }
 });
 
+socket.io.on("reconnect", (attempt) => {
+    console.log('reconnect',attempt);
+});
+
+socket.io.on("reconnect_error", (error) => {
+    console.log('reconnect_error',error);
+    socket.connect();
+});
+
 // 切断時、自動再接続
 socket.on('disconnect', () => {
-      socket.connect();
+    socket.connect();
 });
 
 //メッセージの送信用関数定義
@@ -182,6 +193,7 @@ $("#game_start").click(function () {
 socket.on("gameStart", function(data){
     createjs.Sound.play("inoutroom");
     gameStart = true;
+    commandCount = 0;
 
     deckArray = JSON.parse(data.deck);
     cemetaryArray = JSON.parse(data.cemetary);

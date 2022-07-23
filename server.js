@@ -295,7 +295,8 @@ io.on('connection', (socket) => {
         if(roomNo != null){
 	    	let xuserList = userList[roomNo].filter(elm =>{return elm[0] != null});
         	if(xuserList.length > 1){
-	    		roomStatus[roomNo] = 1;
+	    		roomStatus[roomNo] = 1;      //ゲーム中
+                commandList[roomNo] = [];
 	        	io.to(roomNo).emit("gameStart",{
 	        		deck: JSON.stringify(deckArray),
 	        		cemetary: JSON.stringify(cemetaryArray),
