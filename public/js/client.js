@@ -70,7 +70,9 @@ socket.on("reconnect_error", (error) => {
 
 // 切断時、自動再接続
 socket.on('disconnect', () => {
-    socket.connect();
+    console.log('disconnect');
+    socket.close();
+    socket.open();
 });
 
 //メッセージの送信用関数定義
