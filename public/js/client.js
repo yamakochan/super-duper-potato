@@ -23,7 +23,7 @@ const dummyConnect = () => {
     setTimeout(() => {
         socket.emit("dummyConnect");   //（herokuの30秒切断対策として、接続維持のためサーバへダミー通信）
         dummyConnect();
-    }, 28000);
+    }, 10000);
 }
 
 

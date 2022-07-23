@@ -535,9 +535,11 @@ class Judge{
 			let notice2 = new Notice(0,200,"が切断","GhostWhite",25,120);			
 		}
 
- 		if(xplayerNo == this.currentPlayer && cns_myPlayerIndex == this.currentPlayer){
+		//if(xplayerNo == this.currentPlayer && cns_myPlayerIndex == this.currentPlayer){
+		if(this.turn != null){
  			this.turn.off();
  			info.removeChild(this.turn);
+ 			this.turn = null;
  		}
 
 		if(xplayerNo == this.currentPlayer){

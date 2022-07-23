@@ -250,6 +250,7 @@ io.on('connection', (socket) => {
             userName = userList[data.room][data.no][0]
             io.to(socket.id).emit("playerDisconnect", {userNo: userNo});
 
+            console.log('commandList.length',commandList.length);
             commandHold = true;     //みんなの操作を時間差実行設定。
             for(let i = data.cnt; i < commandList.length; i++){
                 io.to(socket.id).emit(commandList[i][0], commandList[i][1]);
