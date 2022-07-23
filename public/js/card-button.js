@@ -464,6 +464,7 @@ class TurnButton extends AbstButton{
 		judge.clearButton();
  		this.off();
  		info.removeChild(this);
+ 		judge.turn = null;
  	}
 }
 
