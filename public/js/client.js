@@ -198,7 +198,6 @@ socket.on("gameStart", function(data){
 });
 
 socket.on("dismissRoom", function () {
-    gameStart = false;
     roomState = false;
     socket.emit("outRoom");
     lobbyWaitForEntry();
@@ -218,6 +217,7 @@ socket.on("playerReconnect", function (data) {
 
 //強制退去（reconnect失敗）
 socket.on("displacement", function () {
+    console.log('displacement');
     document.getElementById("view_login").style.display ="block";
     document.getElementById("view_canvas").style.display ="none";
     gameStart = false;
@@ -230,13 +230,9 @@ socket.on("displacement", function () {
 
 //ゲーム終了
 const endGame = function () {
-    gameStart = true;
     document.getElementById("view_login").style.display ="block";
     document.getElementById("view_canvas").style.display ="none";
-
-    roomState = false;
-    socket.emit("serverDismissRoom");    //!!一人づつ抜けると、抜ける前にゲームスタートされる懸念あり。
-    lobbyWaitForEntry();
+    gameStart = false;
 }
 
 //-------------------------------------------------------------

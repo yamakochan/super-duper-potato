@@ -382,6 +382,24 @@ class Judge{
 	}
 
 	changeTurn(){  //みんなから呼ばれる前提
+		//turn時、手札がcns_handCards(5枚)に満たない場合、補充する。
+		if(this.currentPlayer !< 0){
+			let j = this.deck.deckCard.length - 1;
+			for(let i = 0; i < cns_handCards - this.playerList[this.currentPlayer].hand.handCard.length; i++){
+				let tempCard = this.deck.deckCard[j - i];
+		 		tempCard.nonreactiveCard();
+			 	tempCard.reactiveCard();
+				socket.emit("serverButtonAction", {
+					player: this.currentPlayer,
+			 		no: tempCard.no,
+			 		text: "draw",
+			 		nX: 0,	//未使用
+			 		nY: 0	//未使用
+				});	
+
+			}
+		}
+			
 		//子要素にマウスイベントが伝搬されないようにする。
 		for (let i = 0; i < cns_players; i++){
 			this.playerList[i].mouseChildren = false;
@@ -447,8 +465,8 @@ class Judge{
 		this.currentscore.cache(-2,-2,150,30);
 		info.addChild(this.currentscore);
 
-		let notice1 = new Notice(0,0,this.playerList[this.currentPlayer].playerName,"hsl(" + judge.currentPlayer*99 + ", 90%, 50%)",50,120);
-		let notice2 = new Notice(0,50,"のターン","hsl(" + judge.currentPlayer*99 + ", 90%, 50%)",50,120);
+		let notice1 = new Notice(0,0,this.playerList[this.currentPlayer].playerName,"hsl(" + judge.currentPlayer*99 + ", 90%, 50%)",40,120);
+		let notice2 = new Notice(0,50,"のターン","hsl(" + judge.currentPlayer*99 + ", 90%, 50%)",40,120);
 	
     	createjs.Sound.play("turn");
 	}
@@ -483,8 +501,8 @@ class Judge{
 		this.playerList[data.player].hand.mouseChildren = false;
 		this.playerList[data.player].place.mouseChildren = false;
 
-		let notice1 = new Notice(0,150,this.playerList[data.player].playerName,"GhostWhite",50,120);
-		let notice2 = new Notice(0,200,"は、負け！","GhostWhite",50,120);
+		let notice1 = new Notice(0,150,this.playerList[data.player].playerName,"GhostWhite",40,120);
+		let notice2 = new Notice(0,200,"は、負け！","GhostWhite",40,120);
 
 		if(data.player == cns_myPlayerIndex){
 			this.deck.mouseChildren = false;
@@ -506,7 +524,7 @@ class Judge{
 		}
 		if(liveCount == 1){
 			if(cns_myPlayerIndex == winner){
-				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",60,2000);
+				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",50,2000);
 				createjs.Sound.play("champion");
 			}else{
 			}
@@ -561,8 +579,9 @@ class Judge{
 		}
 		if(liveCount == 1){
 			if(cns_myPlayerIndex == winner){
-				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",60,2000);
+				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",50,2000);
 				createjs.Sound.play("champion");
+			    socket.emit("serverDismissRoom");    //Room解散。一人づつ抜けると、抜ける前にゲームスタートされる懸念あり。
 			}else{
 			}
 			this.end = 2;
