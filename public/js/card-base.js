@@ -383,7 +383,7 @@ class Judge{
 
 	changeTurn(){  //みんなから呼ばれる前提
 		//turn時、手札がcns_handCards(5枚)に満たない場合、補充する。
-		if(this.currentPlayer >= 0){
+		if(this.currentPlayer == cns_myPlayerIndex){
 			let j = this.deck.deckCard.length - 1;
 			for(let i = 0; i < cns_handCards - this.playerList[this.currentPlayer].hand.handCard.length; i++){
 				let tempCard = this.deck.deckCard[j - i];
