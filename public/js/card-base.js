@@ -58,6 +58,7 @@ function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCa
 		cns_rotation = -90;
 	}
 
+	clearStage();
 
 	// layer1 = new createjs.Container();
 	layer1 = new createjs.Container();
@@ -85,8 +86,6 @@ function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCa
 function clearStage() {
 	stage.removeChild(layer1); 
 	stage.removeChild(info);
-
-	endGame();
 }
 
 class Judge{
@@ -957,8 +956,8 @@ class Background extends createjs.Container{
 						}
 					}else{
 						judge.end = 2;
-						clearStage();
 						createjs.Sound.stop("champion");
+						endGame();
 					}
 				}
 			}

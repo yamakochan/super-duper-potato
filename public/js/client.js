@@ -218,9 +218,8 @@ socket.on("playerReconnect", function (data) {
 //強制退去（reconnect失敗）
 socket.on("displacement", function () {
     console.log('displacement');
-    document.getElementById("view_login").style.display ="block";
-    document.getElementById("view_canvas").style.display ="none";
-    gameStart = false;
+    endGame();
+
     roomState = false;
     socket.emit("outRoom");
     lobbyWaitForEntry();
@@ -230,6 +229,8 @@ socket.on("displacement", function () {
 
 //ゲーム終了
 const endGame = function () {
+    clearStage();
+    
     document.getElementById("view_login").style.display ="block";
     document.getElementById("view_canvas").style.display ="none";
     gameStart = false;
