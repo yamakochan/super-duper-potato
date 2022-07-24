@@ -58,8 +58,6 @@ function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCa
 		cns_rotation = -90;
 	}
 
-	clearStage();
-
 	// layer1 = new createjs.Container();
 	layer1 = new createjs.Container();
 	stage.addChild(layer1); 
