@@ -400,7 +400,7 @@ io.on('connection', (socket) => {
             }, 500);        
         }
         commandList[roomNo][commandList[roomNo].length] = ["rollDice", data];
-        console.log('serverChangeTurn',commandList[roomNo].length);
+        console.log('serverRollDice',commandList[roomNo].length);
     });
 
     socket.on("serverPlayPiece", (data) => {
