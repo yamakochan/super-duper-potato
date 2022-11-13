@@ -456,7 +456,7 @@ class TurnButton extends AbstButton{
 
 	buttonCommand(){
 		if(judge.kenjyaYumeMode == false){
-			socket.emit("serverChangeTurn");
+			judge.changeTurn();
 		}
  	}
 

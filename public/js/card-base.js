@@ -1,14 +1,14 @@
 
 //自分の部屋のユーザリストを受け取る。自分のplayerNoはグローバルのuserNoをつかう。
 //deckリスト（画像png）cemetaryリスト（画像png）を受け取る。手札数制限を受け取る
-function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCards) {
+function initStage(argPlayerList,argDeckList,argCemetaryList,argDescList,argHandCards) {
 	// verとか書かないとglobal変数
-	for(let i = 0; i < argUserList.length; i++){  //argUserList == memarray
-		if(argUserList[i][1] == userNo){
+	for(let i = 0; i < argPlayerList.length; i++){  //argPlayerList == memarray
+		if(argPlayerList[i][1] == userNo){
 			cns_myPlayerIndex = i;	
 		}
 	}
-	cns_players = argUserList.length;		//プレイヤー数
+	cns_players = argPlayerList.length;		//プレイヤー数
 	cns_handCards = argHandCards;           //手札の数制限、あとで直す。（外からもらう）
 
 	cns_cardWidth = 100;
@@ -73,7 +73,7 @@ function initStage(argUserList,argDeckList,argCemetaryList,argDescList,argHandCa
 	layer1.addChild(background); //背景
 
     // 審判を作成
-    judge = new Judge(argUserList,argDeckList,argCemetaryList,argDescList);
+    judge = new Judge(argPlayerList,argDeckList,argCemetaryList,argDescList);
 
 	//stage の描画を更新
 	stage.update();	
@@ -87,7 +87,7 @@ function clearStage() {
 }
 
 class Judge{
-	constructor(argUserList, argDeckList, argCemetaryList, argDescList){
+	constructor(argPlayerList, argDeckList, argCemetaryList, argDescList){
 		this.playerList = [];		
 		this.currentPlayer = -1;	//userNo と対応
 		this.score = [];
@@ -134,7 +134,7 @@ class Judge{
 
 		// playerを作成　（hand , placeを含む）
     	for (let i = 0; i < cns_players; i++){
-    		let xplayer = new Player(i,argUserList[i][0],90 * i)
+    		let xplayer = new Player(i,argPlayerList[i][0],90 * i)
     	// playerを描画
 	    	// layer1.addChild(xplayer);
 	    // 審判に登録
@@ -378,25 +378,28 @@ class Judge{
 		}
 	}
 
-	changeTurn(){  //みんなから呼ばれる前提
+	changeTurn(data){  //みんなから呼ばれる前提
 		//turn時、手札がcns_handCards(5枚)に満たない場合、補充する。
-		if(this.currentPlayer == cns_myPlayerIndex){
-			let j = this.deck.deckCard.length - 1;
-			for(let i = 0; i < cns_handCards - this.playerList[this.currentPlayer].hand.handCard.length; i++){
-				let tempCard = this.deck.deckCard[j - i];
-		 		tempCard.nonreactiveCard();
-			 	tempCard.reactiveCard();
-				socket.emit("serverButtonAction", {
-					player: this.currentPlayer,
-			 		no: tempCard.no,
-			 		text: "draw",
-			 		nX: 0,	//未使用
-			 		nY: 0	//未使用
-				});	
-
-			}
+		let j = this.deck.deckCard.length - 1;
+		for(let i = 0; i < cns_handCards - this.playerList[cns_myPlayerIndex].hand.handCard.length; i++){
+			let tempCard = this.deck.deckCard[j - i];
+	 		tempCard.nonreactiveCard();
+		 	tempCard.reactiveCard();
+			socket.emit("serverButtonAction", {
+				player: cns_myPlayerIndex,
+		 		no: tempCard.no,
+		 		text: "draw",
+		 		nX: 0,	//未使用
+		 		nY: 0	//未使用
+			});	
 		}
 			
+		socket.emit("serverReadyNextTurn", { player: cns_myPlayerIndex });
+	}
+
+	readyNextTurn(data){
+		this.currentPlayer = data.playerIndex;
+
 		//子要素にマウスイベントが伝搬されないようにする。
 		for (let i = 0; i < cns_players; i++){
 			this.playerList[i].mouseChildren = false;
@@ -412,18 +415,12 @@ class Judge{
 			this.playerList[cns_myPlayerIndex].hand.mouseChildren = true;
 		}
 
-		//カレントプレイヤー変更
-		let preCurrentPlayer = this.currentPlayer;
-		this.currentPlayer += 1;
-		if(this.currentPlayer >= cns_players){
-			this.currentPlayer = 0;
-		}
-		while(!this.playerList[this.currentPlayer].live){
-			this.currentPlayer += 1;
-			if(this.currentPlayer >= cns_players){
-				this.currentPlayer = 0;
-			}
-		}
+		//自分のターンに切断した場合など、ターンボタンが消えてなかった場合、個別にターンボタンを消す。
+		if(this.turn != null){
+ 			this.turn.off();
+ 			info.removeChild(this.turn);
+ 			this.turn = null;
+ 		}
 
 		//自分のターンだけ、deck,cemetaryの操作可
 		if(this.currentPlayer == cns_myPlayerIndex){
@@ -530,7 +527,7 @@ class Judge{
 		}
 	}
 
-	// 切断したプレイヤー以外は切断時にdisconnectから呼び出し。　切断プレイヤーはreconnect時に呼び出し。
+	// 切断したプレイヤー以外は切断時にdisconnectから呼び出し。
 	playerDisconnect(data){
         console.log('playerDisconnect',data);
         console.log('cns_myPlayerIndex',cns_myPlayerIndex);
@@ -546,17 +543,6 @@ class Judge{
 		if(cns_myPlayerIndex != xplayerNo){
 			let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",25,120);
 			let notice2 = new Notice(0,200,"が切断","GhostWhite",25,120);			
-		}
-
-		//自分のターンに切断した場合、ターンを移動させるが、ボタンを押さないため、個別にターンボタンを消す。
-		if(this.turn != null && xplayerNo == cns_myPlayerIndex ){
- 			this.turn.off();
- 			info.removeChild(this.turn);
- 			this.turn = null;
- 		}
-
-		if(xplayerNo == this.currentPlayer){
-			this.changeTurn();
 		}
 
 	    setTimeout(() => {
@@ -600,7 +586,6 @@ class Judge{
 
 		let notice1 = new Notice(0,150,this.playerList[xplayerNo].playerName,"GhostWhite",25,120);
 		let notice2 = new Notice(0,200,"が再接続","GhostWhite",25,120);
-
 	}
 
 	rollDice(data){

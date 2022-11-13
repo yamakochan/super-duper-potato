@@ -4,10 +4,10 @@
 const socket = io.connect();
 
 let userName = null;
-let userNo = 0;             //userlistの添え字に対応
+let userNo = 0;             //playerArrayの添え字に対応
 let userToken = null;       //入室時にサーバから受領して保管。（reconnect検証用）
 let selectRoom = null;
-let memArray = new Array(2);
+let playerArray = new Array(2);
 let cardAttr = [];
 let deckArray = new Array(99);
 let cemetaryArray = new Array(99);
@@ -87,12 +87,12 @@ $("#room_list").change(function () {
 });
 
 //サーバーからのユーザリスト配信に対する処理
-socket.on("renewUserList", function (data) {
+socket.on("renewPlayerList", function (data) {
     $("#member_list").empty();
-    memArray = JSON.parse(data);
-    if(memArray != null){
-        for(let i=0; i < memArray.length; i++){
-            $("#member_list").prepend($("<li>").text(memArray[i][0]));
+    playerArray = JSON.parse(data);
+    if(playerArray != null){
+        for(let i=0; i < playerArray.length; i++){
+            $("#member_list").prepend($("<li>").text(playerArray[i][0]));
         }
     }
 });
@@ -194,7 +194,7 @@ socket.on("gameStart", function(data){
 
     document.getElementById("view_login").style.display ="none";
     document.getElementById("view_canvas").style.display ="block";
-    initStage(memArray,deckArray,cemetaryArray,cardAttr,data.handCardNumber);
+    initStage(playerArray,deckArray,cemetaryArray,cardAttr,data.handCardNumber);
 });
 
 socket.on("dismissRoom", function () {
@@ -250,10 +250,10 @@ socket.on("buttonAction", function (data) {
     console.log('buttonAction',commandCount);
 });
 
-socket.on("changeTurn", function () {
-    judge.changeTurn();
+socket.on("readyNextTurn", function (data) {
+    judge.readyNextTurn(data);
     commandCount++;
-    console.log('changeTurn',commandCount);
+    console.log('readyNextTurn',commandCount);
 });
 
 socket.on("rollDice", function (data) {
