@@ -379,7 +379,7 @@ io.on('connection', (socket) => {
                 io.to(roomNo).emit("readyNextTurn", {currentPlayer : currentPlayer[roomNo]});
             }, 500);        
         }
-        commandList[roomNo][commandList[roomNo].length] = ["readyNextTurn", null];
+        commandList[roomNo][commandList[roomNo].length] = ["readyNextTurn", {currentPlayer : currentPlayer[roomNo]}];
         console.log('serverReadyNextTurn',commandList[roomNo].length);
     });
 
