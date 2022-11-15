@@ -467,11 +467,13 @@ class Judge{
 				if(data.permit){
 					this.playerList[data.player].mouseChildren = true;
 					this.playerList[data.player].hand.mouseChildren = true;
+					this.playerList[data.player].place.mouseChildren = true;
 					this.deck.mouseChildren = true;
 					this.cemetary.mouseChildren = true;
 				}else{
 					this.playerList[data.player].mouseChildren = false;
-					this.playerList[data.player].hand.mouseChildren = false;
+					this.playerList[data.player].hand.mouseChildren = true;
+					this.playerList[data.player].place.mouseChildren = true;
 					this.deck.mouseChildren = false;
 					this.cemetary.mouseChildren = false;
 				}
