@@ -1,13 +1,9 @@
 
 //自分の部屋のユーザリストを受け取る。自分のplayerNoはグローバルのuserNoをつかう。
 //deckリスト（画像png）cemetaryリスト（画像png）を受け取る。手札数制限を受け取る
-function initStage(argPlayerList,argDeckList,argCemetaryList,argDescList,argHandCards) {
+function initStage(argPlayerIndex,argCurrentPlayer,argPlayerList,argDeckList,argCemetaryList,argDescList,argHandCards) {
 	// verとか書かないとglobal変数
-	for(let i = 0; i < argPlayerList.length; i++){  //argPlayerList == memarray
-		if(argPlayerList[i][1] == userNo){
-			cns_myPlayerIndex = i;	
-		}
-	}
+	cns_myPlayerIndex = argPlayerIndex;		//自分のプレイヤーインデックス
 	cns_players = argPlayerList.length;		//プレイヤー数
 	cns_handCards = argHandCards;           //手札の数制限、あとで直す。（外からもらう）
 
@@ -78,7 +74,7 @@ function initStage(argPlayerList,argDeckList,argCemetaryList,argDescList,argHand
 	//stage の描画を更新
 	stage.update();	
 
-	judge.changeTurn();
+	judge.readyNextTurn({currentPlayer : argCurrentPlayer})
 }
 
 function clearStage() {
@@ -89,7 +85,7 @@ function clearStage() {
 class Judge{
 	constructor(argPlayerList, argDeckList, argCemetaryList, argDescList){
 		this.playerList = [];		
-		this.currentPlayer = -1;	//userNo と対応
+		this.currentPlayer = 0;	
 		this.score = [];
 		this.xscore = [];
 		this.perm = Array();
@@ -98,7 +94,7 @@ class Judge{
 		//current button
 		this.currentButton = null;
 
-		//0:試合中　1:操作終了　2:試合終了
+		//0:試合中　1:終了負け　2:終了勝ち
 		//judgeでwinnerが決まったら一旦操作終了とする。
 		//操作終了となったら、駒操作不可とする。（hitした他方のpieceから呼ばれたjudge,または運動中の駒がhitした場合に呼ばれたjudgeでdrawとなる可能性あり）
 		//操作終了となり、かつ運動中の駒がなくなったら、試合終了。→背景クリックでロビーに戻る。
@@ -394,11 +390,11 @@ class Judge{
 			});	
 		}
 			
-		socket.emit("serverReadyNextTurn", { player: cns_myPlayerIndex });
+		socket.emit("serverReadyNextTurn");
 	}
 
 	readyNextTurn(data){
-		this.currentPlayer = data.playerIndex;
+		this.currentPlayer = data.currentPlayer;
 
 		//子要素にマウスイベントが伝搬されないようにする。
 		for (let i = 0; i < cns_players; i++){
@@ -520,9 +516,10 @@ class Judge{
 			if(cns_myPlayerIndex == winner){
 				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",50,2000);
 				createjs.Sound.play("champion");
+				this.end = 2;
 			}else{
+				this.end = 1;
 			}
-			this.end = 2;
 			background.Activate();
 		}
 	}
@@ -531,7 +528,7 @@ class Judge{
 	playerDisconnect(data){
         console.log('playerDisconnect',data);
         console.log('cns_myPlayerIndex',cns_myPlayerIndex);
-        let xplayerNo = data.userNo;
+        let xplayerNo = data.playerIndex;
 		this.playerList[xplayerNo].live = false;
 
 		this.xscore[xplayerNo] = this.score[xplayerNo].clone();
@@ -564,10 +561,10 @@ class Judge{
 			if(cns_myPlayerIndex == winner){
 				let notice1 = new Notice(0,-100,"CHANPION!!","GhostWhite",50,2000);
 				createjs.Sound.play("champion");
-			    socket.emit("serverDismissRoom");    //Room解散。一人づつ抜けると、抜ける前にゲームスタートされる懸念あり。
+				this.end = 2;
 			}else{
+				this.end = 1;
 			}
-			this.end = 2;
 			background.Activate();
 		}
 	}
@@ -575,7 +572,7 @@ class Judge{
 	playerReconnect(data){
         console.log('playerResconnect',data);
         console.log('cns_myPlayerIndex',cns_myPlayerIndex);
-		let xplayerNo = data.userNo;
+		let xplayerNo = data.playerIndex;
 		this.playerList[xplayerNo].live = true;
 		if(xplayerNo == cns_myPlayerIndex){
 			this.playerList[cns_myPlayerIndex].place.mouseChildren = true;
@@ -915,13 +912,15 @@ class Background extends createjs.Container{
 	handleUp(event) {
 		if(background.activate){
 			if(!this.pinch){
-				this.dx = (this.prex - this.prex2) / 20 * cns_speed;
-				this.dy = (this.prey - this.prey2) / 20 * cns_speed;
-				if(Math.abs(this.dx) > 5){this.dx = this.dx / Math.abs(this.dx) * 5};
-				if(Math.abs(this.dy) > 5){this.dy = this.dy / Math.abs(this.dy) * 5};
+				this.dx = (this.prex - this.prex2) / 20 * cns_speedRate;
+				this.dy = (this.prey - this.prey2) / 20 * cns_speedRate;
+				if(Math.abs(this.dx) > cns_speedLimit){this.dx = this.dx / Math.abs(this.dx) * cns_speedLimit};
+				if(Math.abs(this.dy) > cns_speedLimit){this.dy = this.dy / Math.abs(this.dy) * cns_speedLimit};
 				if(this.dx != 0 || this.dy != 0){
-					this.accx = this.dx / (Math.abs(this.dx) + Math.abs(this.dy)) * cns_friction;
-					this.accy = this.dy / (Math.abs(this.dx) + Math.abs(this.dy)) * cns_friction;
+					this.accx = this.dx * cns_friction;
+					this.accy = this.dy * cns_friction;
+					// this.accx = this.dx / (Math.abs(this.dx) + Math.abs(this.dy)) * cns_friction;
+					// this.accy = this.dy / (Math.abs(this.dx) + Math.abs(this.dy)) * cns_friction;
 				}else{
 					this.accx = 0;
 					this.accy = 0;
@@ -938,9 +937,12 @@ class Background extends createjs.Container{
 							.to({x:nX, y:nY}, duration, createjs.Ease.cubicOut);
 						}
 					}else{
-						judge.end = 2;
-						createjs.Sound.stop("champion");
-						endGame();
+						if(judge.end == 2){
+							createjs.Sound.stop("champion");
+						    socket.emit("serverDismissRoom");    //Room解散。一人づつ抜けると、抜ける前にゲームスタートされる懸念あり。
+						}else{
+						    socket.emit("serverDismissRoom");    //Room解散。一人づつ抜けると、抜ける前にゲームスタートされる懸念あり。							
+						}
 					}
 				}
 			}

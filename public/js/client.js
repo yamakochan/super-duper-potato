@@ -7,7 +7,7 @@ let userName = null;
 let userNo = 0;             //playerArrayの添え字に対応
 let userToken = null;       //入室時にサーバから受領して保管。（reconnect検証用）
 let selectRoom = null;
-let playerArray = new Array(2);
+let playerArray = [];
 let cardAttr = [];
 let deckArray = new Array(99);
 let cemetaryArray = new Array(99);
@@ -86,7 +86,7 @@ $("#room_list").change(function () {
     $("#message_list").empty();  　　　　　　　　　　　　　　　//メッセージリストを削除
 });
 
-//サーバーからのユーザリスト配信に対する処理
+//サーバーからのユーザリスト配信に対する処理。　playerArrayの更新はココ（重要）
 socket.on("renewPlayerList", function (data) {
     $("#member_list").empty();
     playerArray = JSON.parse(data);
@@ -192,14 +192,21 @@ socket.on("gameStart", function(data){
     cemetaryArray = JSON.parse(data.cemetary);
     cardAttr = JSON.parse(data.cattr);
 
+    //playerArrayは、renewPlayerList にて適宜更新（同期）済みのため、そのままinitstageに引き渡す。
+    //playerIndexは、以下の通り取得。
+    console.log("playerArray",playerArray);
+    let xplayerIndex = playerArray.findIndex((elm) => elm[1] == userNo);  //playerIndex取得
+
     document.getElementById("view_login").style.display ="none";
     document.getElementById("view_canvas").style.display ="block";
-    initStage(playerArray,deckArray,cemetaryArray,cardAttr,data.handCardNumber);
+    initStage(xplayerIndex, data.currentPlayer, playerArray, deckArray, cemetaryArray, cardAttr, data.handCardNumber);
 });
 
 socket.on("dismissRoom", function () {
+    endGame();
     roomState = false;
     socket.emit("outRoom");
+    playerArray = null;
     lobbyWaitForEntry();
     //トークンを初期化
     userToken = null;

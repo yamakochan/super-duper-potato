@@ -59,8 +59,9 @@ function init() {
 	createjs.Sound.registerSound("./sounds/flag.mp3", "flag");
 
 	// スピード
-	cns_speed = 1;          //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  
-	cns_friction = 1 / 50;  //background 摩擦係数（fps60のとき1/50。fpsが小さいと係数は大きくする必要がある）
+	cns_speedRate = 1;      //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  
+	cns_speedLimit = 7;      //background 速さのリミット値  
+	cns_friction = 1 / 70;  //background 摩擦係数（fps60のとき1/50。fpsが小さいと係数は大きくする必要がある）
 	cns_duration = 300;     //teenの期間　
 
 

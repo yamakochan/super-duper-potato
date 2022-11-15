@@ -37,60 +37,67 @@ const descList = require('./desc_list.js');
 let cardAttr = descList.cardAttr;
 
 // オブジェクト deck　リスト
+const deckCardsNumber = 93;
 let deckArray = [];
-let xxArray = new Array(93);
-for(let i = 0; i < 93; i++){
-  let xtext = "./image/card01/mm" + ('000' + (i+1)).slice(-2) + ".png";
-  xxArray[i] = new Array(xtext,i,Math.random());
+for(let i = 0; i < deckCardsNumber; i++){
+  let xtext = "./image/card01/mm" + ('000' + (i + 1)).slice(-2) + ".png";
+  deckArray[i] = new Array(xtext, i, Math.random());
 }
 
 // オブジェクト cemetary　リスト
+const cemetaryCardsNumber = 5;
 let cemetaryArray = [];
-let yyArray = new Array(5);
-for(let i = 0; i < 5; i++){
-  let xtext = "./image/card01/ima" + ('000' + (i+1)).slice(-2) + ".png";
-  yyArray[i] = new Array(xtext,i+93,Math.random());
+for(let i = 0; i < cemetaryCardsNumber; i++){
+  let xtext = "./image/card01/ima" + ('000' + (i + 1)).slice(-2) + ".png";
+  cemetaryArray[i] = new Array(xtext, i + deckCardsNumber);
 }
-yyArray.sort((a,b)=>{
-        if( a[2] < b[2] ) return -1;
-        if( a[2] > b[2] ) return 1;
-        return 0;
-});
-// cemetaryArray = yyArray.map(item => item[0]);
-cemetaryArray = yyArray.map(item => {return new Array(item[0],item[1]);});
 
+// room,各部屋のユーザ
+const roomsNumber = 3;
+const usersNumberLimit = 4;
 // ユーザーリスト
-const userList = new Array(3);  //room
-for (let i=0; i<userList.length; i++){
-    userList[i] = new Array(4);  //user
-    for(let j=0; j<userList[i].length; j++){
-        userList[i][j] = new Array(3); //username , live(false:死,true:生) , token
-	    for(let k=0; k<userList[i][j].length; k++){
+let userList = new Array(roomsNumber);  //room
+for (let i = 0; i < userList.length; i++){
+    userList[i] = new Array(usersNumberLimit);  //user
+    for(let j = 0; j < userList[i].length; j++){
+        userList[i][j] = new Array(4); //username , userno , token　,枠だけー＞live(false:死,true:生)
+	    for(let k = 0; k < userList[i][j].length; k++){
 	        userList[i][j][k] = null;
 	    }
     }
 }
 
-// カレントプレーヤーはサーバ管理とする。（disconnect等を考慮）
-let currentPlayer = 0;
+// プレイヤーリスト
+let playerArray = new Array(roomsNumber);  //room毎
+for (let i = 0; i < playerArray.length; i++){
+    playerArray[i] = [];  
+};
 
-// ルームステータス　0:受付中　1:ゲーム中
-const roomStatus = [0,0,0];
+// カレントプレーヤーはサーバ管理とする。（disconnect等を考慮）
+let currentPlayer = new Array(roomsNumber);   //room毎
+
+// ルームステータス　0:ロビー　1:ゲーム中
+const status_lobby = 0;
+const status_game = 1;
+let roomStatus = new Array(roomsNumber);   //room毎;
+for (let i = 0; i < roomStatus.length; i++){
+    roomStatus[i] = status_lobby;  
+};
 
 // コマンドリスト
-let commandList = new Array(3);  //room
-for (let i=0; i<commandList.length; i++){
+let commandList = new Array(roomsNumber);  //room毎
+for (let i = 0; i < commandList.length; i++){
     commandList[i] = [];  //command
 };
 
 // コマンドの遅延設定
-let commandHold = false;
+let commandHold = new Array(roomsNumber);  //room毎
+for (let i = 0; i < commandHold.length; i++){
+    commandHold[i] = false;
+};
 
 // ポート番号	||は左がtrueなら左、以外は右を返す。（null,0以外はtrue）
 const PORT = process.env.PORT || 3000;
-
-// グローバル変数
-let MEMBER_COUNT = 0; // ユーザー数
 
 // //httpのレスポンス
 // app.get("/", (req, res) => {
@@ -126,6 +133,8 @@ function getLocalAddress() {
 // サーバーとクライアントの接続が確立すると、サーバー側で'connection'イベント、クライアント側で'connect'イベントが発生する
 io.on('connection', (socket) => {
     console.log('connection');
+    //socket.broadcast.to(room).emit('server_to_client', {value : data.value});  自分以外に送る
+    //メッセージのブロードキャスト
 
     //クライアント毎情報の退避領域
     let roomNo = null;        　　　　//クライアントのルームNo
@@ -134,35 +143,32 @@ io.on('connection', (socket) => {
 
     //セレクトルームによる部屋メンバリスト更新
     socket.on("selectRoom", (data) => {
-    	let xplayerList = userList[data.room].filter(elm =>{return elm[0] != null});
-        console.log(xplayerList);
-        io.to(socket.id).emit("renewPlayerList",  JSON.stringify(xplayerList));
+    	// let xplayerList = userList[roomNo].filter(elm =>{return elm[0] != null});
+        console.log(playerArray[data.room]);
+        io.to(socket.id).emit("renewPlayerList",  JSON.stringify(playerArray[data.room]));
     });
 
 	//部屋に入る
 	socket.on("inRoom", (data) => {
-		if(roomStatus[data.room] == 0){  //受付中
-	        //入ろうとしている部屋の空きを確認
-	        let i = 0;
-	        while(i < userList[data.room].length && userList[data.room][i][0] != null){
-	            i += 1;
-	        };
+		if(roomStatus[data.room] == status_lobby){  //ロビー
+            //入ろうとしている部屋の空きを確認
+            let i = 0;
+            while(i < userList[data.room].length && userList[data.room][i][0] != null){
+                i += 1;
+            };
+            //対象roomに空きがあったか？
+            console.log('i=',i);
+            console.log('userList[data.room].length=',userList[data.room].length);
 	        //対象roomに空きがあったか？
-	        console.log('i=',i);
-	        console.log('userList[data.room].length=',userList[data.room].length);
-	        if(i < userList[data.room].length){
+	        if(i < usersNumberLimit){
+                //入室＆ユーザリスト更新
 	            roomNo = data.room;                 //部屋番号を退避
 	            socket.join(roomNo);                //★部屋分け
 	            userNo   = i;                       //クライアントのuserList[roomNo]内indexを退避
 	            userName = data.name || nameList.getNiceName();      //ユーザ名を退避（ユーザ名が空の場合、tokenをユーザ名にする）
 	            userList[roomNo][i][0] = userName;     //userListにユーザ名を記録
-	            userList[roomNo][i][1] = true;     　//userListに生存中aliveを設定
-
-		    	let xplayerList = userList[roomNo].filter(elm =>{return elm[0] != null});
-	            io.to(roomNo).emit("renewPlayerList", JSON.stringify(xplayerList));   //同室メンバーにユーザ名リストを配布
-
-	            io.to(roomNo).emit("message", `${userName}が入室`);                        //同室メンバーに新規メンバー入室のメッセージ送信
-
+                userList[roomNo][i][1] = userNo;     　//userListにindexを格納（playerArrayとuserListの紐つけに必要）
+	            userList[roomNo][i][3] = true;     　//userListに生存中aliveを設定
             　　//トークン生成　→　クライアントの識別情報
                 const time = new Date();
                 const md5 = crypto.createHash("MD5");
@@ -170,8 +176,13 @@ io.on('connection', (socket) => {
                 let token = md5.digest("hex");
                 userList[roomNo][i][2] = token;     //userListにトークンを記録
 
-	            io.to(socket.id).emit("inRoomOk", {name: userName, no: userNo ,token: token}); //入室ok時の該当クライアント処理
+		    	playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
+	            io.to(roomNo).emit("renewPlayerList", JSON.stringify(playerArray[roomNo]));   //同室メンバーにplayerArrayを配布
+                console.log("playerArray[roomNo]",playerArray[roomNo]);
 
+	            io.to(roomNo).emit("message", `${userName}が入室`);                        //同室メンバーに新規メンバー入室のメッセージ送信
+
+	            io.to(socket.id).emit("inRoomOk", {name: userName, no: userNo, token: token}); //該当クライアントの入室ok処理
 	        }else{
 	            //入室ng時の該当クライアント処理
 	            io.to(socket.id).emit("inRoomNg", '定員オーバー入室不可'); //入室ng時の該当クライアント処理
@@ -184,25 +195,16 @@ io.on('connection', (socket) => {
 	//部屋を出る
 	socket.on("outRoom", () => {
         if(roomNo != null && userNo != null && userList[roomNo][userNo][0] != null){
+            //ユーザリスト更新
     	    io.to(roomNo).emit("message", `${userName}が退室`);
             userList[roomNo][userNo][0] = null;
             userList[roomNo][userNo][1] = null;
             userList[roomNo][userNo][2] = null;
+            userList[roomNo][userNo][3] = null;
 
-	    	let xplayerList = userList[roomNo].filter(elm =>{return elm[0] != null});
+            playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
+            io.to(roomNo).emit("renewPlayerList", JSON.stringify(playerArray[roomNo]));   //同室メンバーにユーザ名リストを配布
 
-            //userListを前詰め。（clientのplayerListとindexを合わせるため
-            let i = 0;
-            for(i = 0; i < xplayerList.length; i++){
-                userList[roomNo][i] = xplayerList[i];
-            }
-            for(let j = i; j < userList[roomNo].length; j++){
-                for(let k = 0; k < userList[roomNo][j].length; k++){
-                    userList[roomNo][j][k] = null;
-                }
-            }
-
-            io.to(roomNo).emit("renewPlayerList", JSON.stringify(xplayerList));   //同室メンバーにユーザ名リストを配布
             socket.leave(roomNo);
             roomNo = null;
             userName = null;
@@ -215,50 +217,49 @@ io.on('connection', (socket) => {
         }
 	});
 
-    //socket.broadcast.to(room).emit('server_to_client', {value : data.value});  自分以外に送る
-	//メッセージのブロードキャスト
-
 	socket.on("message", (strMessage) => {
-        // 同じ部屋のクライアント全員に送信
-        io.to(roomNo).emit("message", strMessage);
+        io.to(roomNo).emit("message", strMessage); // 同じ部屋のクライアント全員にメッセージ送信
 	});
 
-    // ダミーコネクト
+    // ダミーコネクト　heroku の30秒タイムアウト対応
     socket.on("dummyConnect", () => {
-        console.log("dummyconnect",userName);
+        // console.log("dummyconnect",userName);
     });
 
 //-------------------------------------------------------------
     // 切断時の処理
     // クライアントが切断したら、サーバー側では'disconnect'イベントが発生する
     socket.on('disconnect', () => {
-        console.log('disconnect');
-        if(roomStatus[roomNo] == 0){    //ロビー
+        console.log("disconnect");
+        console.log("roomStatus",roomStatus);
+        console.log('userList',userList);
+        console.log('roomNo',roomNo,"  userNo",userNo);        
+        if(roomNo == null || userNo == null || roomStatus[roomNo] == status_lobby){    //ロビー
             if(userName != null){
+                //ユーザリスト更新
                 io.to(roomNo).emit("message", `${userName}が切断`);
                 userList[roomNo][userNo][0] = null;
                 userList[roomNo][userNo][1] = null;
                 userList[roomNo][userNo][2] = null;
-                let xplayerList = userList[roomNo].filter(elm =>{return elm[0] != null});
-                io.to(roomNo).emit("renewPlayerList", JSON.stringify(xplayerList));
-                // if(xuserList.length == 0){
-                //     roomStatus[roomNo] = 0;
-                // }
+                userList[roomNo][userNo][3] = null;
+
+                playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
+                io.to(roomNo).emit("renewPlayerList", JSON.stringify(playerArray[roomNo]));
             }
         }else{　 //ゲーム中
-            //※＊＊＊中断＊＊＊＊
-            //切断されたメンバーをloseにするか、
-            //復活させる仕組みをつくるなら、disconnectメンバありフラグをたてて、その間の
-            //サーバー操作を記録、再コネクト時にそれまでの操作を反映させる。※
-            //※特定クライアントに貯めたｍｓgを送信　io.to('socetID').emit('event', param);
-            //→取り合えずloseにする。
-            userList[roomNo][userNo][1] = false;
-            io.to(roomNo).emit("playerDisconnect", {userNo: userNo});
+            //・該当クライアント以外のルームメンバー以外に対して、該当クライアントが切断時の処理を要求
+            //・該当クライアントがカレントプレイヤーだった場合は、カレントプレイヤー、ターンを更新
+            userList[roomNo][userNo][3] = false;
+            playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
+            // io.to(roomNo).emit("renewPlayerList", JSON.stringify(playerArray[roomNo])); //クライアント側ではplayerarrayの生死パラメタを使用しないため、配信なし。
+
+            let xplayerIndex = playerArray[roomNo].findIndex((elm) => elm[1] == userNo);  //playerIndex取得
+            io.to(roomNo).emit("playerDisconnect", {playerIndex: xplayerIndex});
 
             //切断したのがカレントプレイヤーだったら、他のプレイヤーに対してreadyNextTurn実行指示
-            if(userNo == currentPlayer){
-                updateCurrentPlayer(data);
-                io.to(roomNo).emit("readyNextTurn", {playerIndex : currentPlayer});
+            if(xplayerIndex == currentPlayer[roomNo]){
+                updateCurrentPlayer();
+                io.to(roomNo).emit("readyNextTurn", {currentPlayer : currentPlayer[roomNo]});
             }
         }
     });
@@ -269,24 +270,28 @@ io.on('connection', (socket) => {
         console.log('serverReconnect',data);
         roomNo = data.room
         userNo = data.no
-        userList[roomNo][userNo][1] = true;
-        if(userList[roomNo][userNo][2] == data.token){
-            socket.join(roomNo);
+        if(roomNo != null && userNo != null && userList[roomNo][userNo][2] == data.token){
             userName = userList[roomNo][userNo][0]
+            socket.join(roomNo);
 
             console.log('commandList[roomNo].length',commandList[roomNo].length);
-            commandHold = true;     //みんなの操作を時間差実行設定。
+            commandHold[roomNo] = true;     //みんなの操作を時間差実行設定。
             for(let i = data.cnt; i < commandList[roomNo].length; i++){
                 io.to(socket.id).emit(commandList[roomNo][i][0], commandList[roomNo][i][1]);
             }
 
+            userList[roomNo][userNo][3] = true;
+            playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
+            io.to(roomNo).emit("renewPlayerList", JSON.stringify(playerArray[roomNo]));
+
             //みんなに対してリコネクト通知。
-            io.to(roomNo).emit("playerReconnect", {userNo: userNo});
+            let xplayerIndex = playerArray[roomNo].findIndex((elm) => elm[1] == userNo);  //playerIndex取得
+            io.to(roomNo).emit("playerReconnect", {playerIndex: xplayerIndex});
 
             //自分に対してカレントプレイヤー設定。
-            io.to(socket.id).emit("readyNextTurn", {playerIndex : currentPlayer});
+            io.to(socket.id).emit("readyNextTurn", {currentPlayer : currentPlayer[roomNo]});
             
-            commandHold = false;    //みんなの操作を解放
+            commandHold[roomNo] = false;    //みんなの操作を解放
         }else{
             io.to(socket.id).emit("displacement");
         }
@@ -296,9 +301,9 @@ io.on('connection', (socket) => {
     socket.on("serverDismissRoom", () => {
         if(roomNo != null){
             io.to(roomNo).emit("dismissRoom");
-	    	roomStatus[roomNo] = 0;
-            for(let i = 0; i < 4; i++){
-                for(let j = 0; j < 3; j++){
+	    	roomStatus[roomNo] = status_lobby;
+            for(let i = 0; i < usersNumberLimit; i++){
+                for(let j = 0; j < userList[roomNo][i].length; j++){
                     userList[roomNo][i][j] = null;
                 }
             }
@@ -307,23 +312,24 @@ io.on('connection', (socket) => {
 
     socket.on("serverGameStart", () => {
         //deckArrayのソート
-        for(let i = 0; i < 93; i++){
-          xxArray[i][2] = Math.random();
+        for(let i = 0; i < deckCardsNumber; i++){
+          deckArray[i][2] = Math.random();
         }
-        xxArray.sort((a,b)=>{
+        deckArray.sort((a,b)=>{
             if( a[2] < b[2] ) return -1;
             if( a[2] > b[2] ) return 1;
             return 0;
         });
-        deckArray = xxArray.map(item => {return new Array(item[0],item[1]);});
+        let sortDeckArray = deckArray.map(item => {return new Array(item[0],item[1]);});
 
         if(roomNo != null){
-	    	let xplayerList = userList[roomNo].filter(elm =>{return elm[0] != null});
-        	if(xplayerList.length > 1){
-	    		roomStatus[roomNo] = 1;      //ゲーム中
+        	if(playerArray[roomNo].length > 1){
+                roomStatus[roomNo] = status_game;      //ゲーム中
+                currentPlayer[roomNo] = 0; //カレントプレイヤーの初期化
                 commandList[roomNo] = [];
 	        	io.to(roomNo).emit("gameStart",{
-	        		deck: JSON.stringify(deckArray),
+                    currentPlayer: currentPlayer[roomNo],
+	        		deck: JSON.stringify(sortDeckArray),
 	        		cemetary: JSON.stringify(cemetaryArray),
                     cattr: JSON.stringify(cardAttr),
                     handCardNumber: handCardNumber
@@ -338,7 +344,7 @@ io.on('connection', (socket) => {
 
     // カード移動msgの送信（全員）
     socket.on("serverPlayCard", (data) => {
-        if(!commandHold){
+        if(!commandHold[roomNo]){
             io.to(roomNo).emit("playCard", data);
         }else{
             setTimeout(() => {
@@ -350,7 +356,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("serverButtonAction", (data) => {
-        if(!commandHold){
+        if(!commandHold[roomNo]){
             io.to(roomNo).emit("buttonAction", data);
         }else{
             setTimeout(() => {
@@ -361,38 +367,38 @@ io.on('connection', (socket) => {
         console.log('serverButtonAction',commandList[roomNo].length);
     });
 
-    socket.on("serverReadyNextTurn", (data) => {
-        if(!commandHold){
+    socket.on("serverReadyNextTurn", () => {
+        if(!commandHold[roomNo]){
             //currentPlayerを更新
-            updateCurrentPlayer(data);
-            io.to(roomNo).emit("readyNextTurn", {playerIndex : currentPlayer});
+            updateCurrentPlayer();
+            io.to(roomNo).emit("readyNextTurn", {currentPlayer : currentPlayer[roomNo]});
         }else{
             setTimeout(() => {
                 //currentPlayerを更新
-                updateCurrentPlayer(data);
-                io.to(roomNo).emit("readyNextTurn", {playerIndex : currentPlayer});
+                updateCurrentPlayer();
+                io.to(roomNo).emit("readyNextTurn", {currentPlayer : currentPlayer[roomNo]});
             }, 500);        
         }
-        commandList[roomNo][commandList[roomNo].length] = ["readyNextTurn", data];
+        commandList[roomNo][commandList[roomNo].length] = ["readyNextTurn", null];
         console.log('serverReadyNextTurn',commandList[roomNo].length);
     });
 
-    function updateCurrentPlayer(data){
-        let xplayerList = userList[roomNo].filter(elm =>{return elm[0] != null});
-        currentPlayer = data.player + 1;
-        if(currentPlayer >= xplayerList.length){
-            currentPlayer = 0;
+    function updateCurrentPlayer(){
+        let preCrrentPlayer = currentPlayer[roomNo];
+        currentPlayer[roomNo] = currentPlayer[roomNo] + 1;
+        if(currentPlayer[roomNo] >= playerArray[roomNo].length){
+            currentPlayer[roomNo] = 0;
         }
-        while(!xplayerList[currentPlayer][1]){
-            currentPlayer += 1;
-            if(currentPlayer >= xplayerList.length){
-                currentPlayer = 0;
+        while(!playerArray[roomNo][currentPlayer[roomNo]][3] && preCrrentPlayer != currentPlayer[roomNo]){  //死んだプレイヤーをスキップ
+            currentPlayer[roomNo] += 1;
+            if(currentPlayer[roomNo] >= playerArray[roomNo].length){
+                currentPlayer[roomNo] = 0;
             }
         }
     }
 
     socket.on("serverRollDice", (data) => {
-        if(!commandHold){
+        if(!commandHold[roomNo]){
             io.to(roomNo).emit("rollDice", data);
         }else{
             setTimeout(() => {
@@ -404,7 +410,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("serverPlayPiece", (data) => {
-        if(!commandHold){
+        if(!commandHold[roomNo]){
             io.to(roomNo).emit("playPiece", data);
         }else{
             setTimeout(() => {
@@ -416,7 +422,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("serverDeletePiece", (data) => {
-        if(!commandHold){
+        if(!commandHold[roomNo]){
             io.to(roomNo).emit("deletePiece", data);
         }else{
             setTimeout(() => {
@@ -428,12 +434,14 @@ io.on('connection', (socket) => {
     });
 
     socket.on("serverResign", (data) => {
-        if(!commandHold){
-            userList[roomNo][data.player][1] = false;
+        if(!commandHold[roomNo]){
+            userList[roomNo][data.player][3] = false;
+            playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
             io.to(roomNo).emit("resign", data);
         }else{
             setTimeout(() => {
-                userList[roomNo][data.player][1] = false;
+                userList[roomNo][data.player][3] = false;
+                playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
                 io.to(roomNo).emit("resign", data);
             }, 500);        
         }
@@ -442,7 +450,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("serverPermitRevoke", (data) => {
-        if(!commandHold){
+        if(!commandHold[roomNo]){
             io.to(roomNo).emit("permitRevoke", data);
         }else{
             setTimeout(() => {
