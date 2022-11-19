@@ -1,0 +1,11 @@
+.htaccess　を使用し、リダイレクトしようとしたが、
+heroku ではうまく動作せず。
+
+結局initjsに記載のリンク書き換えで代替。
+	if (window.innerWidth <= 767) {
+		let xlocarr  = document.location.href.split("/");
+		let xlocarr1 = xlocarr.slice(0,-1);
+		let xlocation = xlocarr1.join("/");
+    	document.location.href = xlocation + "/sp/";
+	}
+

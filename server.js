@@ -60,7 +60,7 @@ let userList = new Array(roomsNumber);  //room
 for (let i = 0; i < userList.length; i++){
     userList[i] = new Array(usersNumberLimit);  //user
     for(let j = 0; j < userList[i].length; j++){
-        userList[i][j] = new Array(4); //username , userno , token　,枠だけー＞live(false:死,true:生)
+        userList[i][j] = new Array(5); //username , userno , token　,枠だけー＞live(false:死,true:生) ,peer
 	    for(let k = 0; k < userList[i][j].length; k++){
 	        userList[i][j][k] = null;
 	    }
@@ -166,15 +166,17 @@ io.on('connection', (socket) => {
 	            socket.join(roomNo);                //★部屋分け
 	            userNo   = i;                       //クライアントのuserList[roomNo]内indexを退避
 	            userName = data.name || nameList.getNiceName();      //ユーザ名を退避（ユーザ名が空の場合、tokenをユーザ名にする）
-	            userList[roomNo][i][0] = userName;     //userListにユーザ名を記録
-                userList[roomNo][i][1] = userNo;     　//userListにindexを格納（playerArrayとuserListの紐つけに必要）
-	            userList[roomNo][i][3] = true;     　//userListに生存中aliveを設定
+	            userList[roomNo][userNo][0] = userName;     //userListにユーザ名を記録
+                userList[roomNo][userNo][1] = userNo;     　//userListにindexを格納（playerArrayとuserListの紐つけに必要）
+	            userList[roomNo][userNo][3] = true;     　//userListに生存中aliveを設定
             　　//トークン生成　→　クライアントの識別情報
                 const time = new Date();
                 const md5 = crypto.createHash("MD5");
                 md5.update(time.toString());
                 let token = md5.digest("hex");
-                userList[roomNo][i][2] = token;     //userListにトークンを記録
+                userList[roomNo][userNo][2] = token;     //userListにトークンを記録
+
+                userList[roomNo][userNo][4] = data.peerId;  //peerIdを記録
 
 		    	playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
 	            io.to(roomNo).emit("renewPlayerList", JSON.stringify(playerArray[roomNo]));   //同室メンバーにplayerArrayを配布
@@ -201,6 +203,8 @@ io.on('connection', (socket) => {
             userList[roomNo][userNo][1] = null;
             userList[roomNo][userNo][2] = null;
             userList[roomNo][userNo][3] = null;
+
+            userList[roomNo][userNo][4] = null;  //peerIdを削除
 
             playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
             io.to(roomNo).emit("renewPlayerList", JSON.stringify(playerArray[roomNo]));   //同室メンバーにユーザ名リストを配布
@@ -243,6 +247,8 @@ io.on('connection', (socket) => {
                 userList[roomNo][userNo][2] = null;
                 userList[roomNo][userNo][3] = null;
 
+                userList[roomNo][userNo][4]= null;  //peerIdを削除
+
                 playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新
                 io.to(roomNo).emit("renewPlayerList", JSON.stringify(playerArray[roomNo]));
             }
@@ -279,6 +285,8 @@ io.on('connection', (socket) => {
             for(let i = data.cnt; i < commandList[roomNo].length; i++){
                 io.to(socket.id).emit(commandList[roomNo][i][0], commandList[roomNo][i][1]);
             }
+
+            userList[roomNo][userNo][4] = data.peerId;  //peerIdを更新
 
             userList[roomNo][userNo][3] = true;
             playerArray[roomNo] = userList[roomNo].filter(elm =>{return elm[0] != null});  //playerArray更新

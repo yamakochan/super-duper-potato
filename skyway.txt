@@ -1,0 +1,3 @@
+cardgame_peer用
+
+APIキー:77f721d7-cebf-4f72-8a88-630f8e9a04d7
