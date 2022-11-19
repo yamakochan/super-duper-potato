@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes">
     <link rel="canonical" href="https://infinite-scrubland-02817.herokuapp.com/index.html">
     <title>CardGame</title>
+    <script src="https://cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script>
 </head>
 <body>
     <div id="view_canvas" class="canvasHolder" style="display: none;">
@@ -49,6 +50,10 @@
 
     	<div>
             <button type="button" id="game_start" class="start_btn" >Start Game</button>
+            <video id="my-video" width="100px" autoplay muted playsinline></video>
+            <video id="their-video0" width="100px" autoplay playsinline></video>
+            <video id="their-video1" width="100px" autoplay playsinline></video>
+            <video id="their-video2" width="100px" autoplay playsinline></video>
     	</div>
 
         <div id="footer">
@@ -74,8 +79,8 @@
     <script src="../socket.io/socket.io.js"></script>  <!--左記は自動生成される　jsに　var io = socketIO.listen(app);を書く必要あり-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
-    <script src="../js/client.js"></script>
     <script src="./init.js"></script>
+    <script src="../js/client.js"></script>
     <script src="../js/card-base.js"></script>
     <script src="../js/card-main_obj.js"></script>
     <script src="../js/card-button.js"></script>

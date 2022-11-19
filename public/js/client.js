@@ -3,6 +3,9 @@
 // クライアントからサーバーへの接続要求
 const socket = io.connect();
 
+const roomsNumber = 3;
+const usersNumberLimit = 4;
+
 let userName = null;
 let userNo = 0;             //playerArrayの添え字に対応
 let userToken = null;       //入室時にサーバから受領して保管。（reconnect検証用）
@@ -26,6 +29,56 @@ const dummyConnect = () => {
     }, 10000);
 }
 
+//Peer作成　（通信拠点の単位=peer）　
+//debug 3の場合は、開発用に全てのログを出力
+const peer = new Peer({
+    key: '77f721d7-cebf-4f72-8a88-630f8e9a04d7',
+    debug: 3
+});
+
+let myPeerId = null;
+//PeerID取得　open = SkyWayのシグナリングサーバとの接続イベント
+peer.on('open', () => {
+    myPeerId = peer.id;
+    console.log('skyway signaling open peer.id=',myPeerId);
+});
+
+let videoIndex = 0;
+//peerEventListener関数内で、mediaConnectionのonメソッドにて、相手の映像を取得したときに発生するstreamイベントのリスナを用意します。
+//イベントリスナ内に、相手の映像をvideo要素にセットする処理を記載します。
+const peerPlayEventListener = (mediaConnection, vidx) => {
+  mediaConnection.on('stream', stream => {
+    console.log('play  their-video' + vidx);
+    // video要素にカメラ映像をセットして再生
+    const videoElm = document.getElementById('their-video' + vidx)
+    videoElm.srcObject = stream;
+    videoElm.play();
+  });
+}
+const peerPauseEventListener = vidx => {
+    const videoElm = document.getElementById('their-video' + vidx);
+    console.log('load  their-video' + vidx);
+    if(videoElm.srcObject != null){
+        videoElm.srcObject = null;       
+        videoElm.load();        
+    }
+}
+
+// 相手から接続要求が来たタイミングの処理
+// mediaConnectionオブジェクトのanswerメソッドにて、カメラ映像取得時に保存しておいたlocalStream変数を引数にとり、 自分のカメラ映像を相手に返す
+peer.on('call', mediaConnection => {
+    mediaConnection.answer(cns_localStream);
+    let xmyPlayerIndex = playerArray.findIndex((elm) => elm[1] == userNo);  //myplayerIndex取得
+    let xtheirPlayerIndex = playerArray.findIndex((elm) => elm[4] == mediaConnection.remoteId);  //theirPlayerIndex取得
+    let videoIndex = 0;
+    if(xmyPlayerIndex < xtheirPlayerIndex){
+        videoIndex = xtheirPlayerIndex - 1;
+    }else{
+        videoIndex = xtheirPlayerIndex;
+    }
+    peerPlayEventListener(mediaConnection, videoIndex);
+    console.log('call  mediaconnection peerid ,videoidx', mediaConnection.remoteId,videoIndex);
+});
 
 // 接続時の処理
 // サーバーとクライアントの接続が確立すると、サーバー側で'connection'イベント、クライアント側で'connect'イベントが発生する
@@ -55,7 +108,7 @@ socket.on('connect', () => {
         dummyConnect();
     }else{
         //ゲーム中のリコネクト処理。
-        socket.emit("serverReconnect", { room: selectRoom, no: userNo, token: userToken, cnt: commandCount});   //リコネクト時のコマンド再送要求
+        socket.emit("serverReconnect", { room: selectRoom, no: userNo, token: userToken, cnt: commandCount, peerId: myPeerId});   //リコネクト時のコマンド再送要求
     }
 });
 
@@ -90,12 +143,36 @@ $("#room_list").change(function () {
 socket.on("renewPlayerList", function (data) {
     $("#member_list").empty();
     playerArray = JSON.parse(data);
+    let myPlayerIdx = 0;
+    let myPlayerExist = false;
     if(playerArray != null){
         for(let i=0; i < playerArray.length; i++){
             $("#member_list").prepend($("<li>").text(playerArray[i][0]));
+            if(playerArray[i][2] == userToken){
+                myPlayerIdx = i;
+                myPlayerExist = true;
+            } 
         }
     }
+    let xxclearStart = 0;
+    if(myPlayerExist){
+        for(let i = myPlayerIdx + 1; i < playerArray.length; i++){     //myplayeridxよりidxが大きい相手全員に能動的なpeer接続（peer call）
+            let videoIndex = i - 1;
+            const mediaConnection = peer.call(playerArray[i][4], cns_localStream);
+            console.log('peer.call i, playerArray[i][4], videoIndex',i, playerArray[i][4], videoIndex);
+            peerPlayEventListener(mediaConnection, videoIndex);
+            //callメソッドで接続時にmediaconnectionオブジェクトを取得。（このオブジェクトに相手の映像が含まれる）
+            //相手の映像を画面に表示するため、MediaConnectionオブジェクトを引数に取るユーザ関数setEventListenerを呼び出し。
+        }
+        xxclearStart = playerArray.length - 1;
+    }else{
+        xxclearStart = playerArray.length;
+    }
+    for(let i = xxclearStart; i < usersNumberLimit - 1; i++){
+        peerPauseEventListener(i);
+    }
 });
+
 
 //メッセージボックスでのenter
 //テキストボックスとボタンの動作（13はenterキー）
@@ -119,7 +196,7 @@ $("#room_in_out").click(function () {
 
     if (roomState) {
         userName = $("#username_text").val();
-        socket.emit("inRoom", { room: selectRoom ,name: userName});
+        socket.emit("inRoom", { room: selectRoom, name: userName, peerId: myPeerId});
     } else {
         socket.emit("outRoom");
         lobbyWaitForEntry();

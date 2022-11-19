@@ -1,0 +1,16 @@
+cd C:\Users\tomyu\OneDrive\ドキュメント\JSstudy\cardgame
+
+flyctl auth login
+>tom.yum.yum.k@gmail.com
+>ttt000rrr_
+
+flyctl launch --name cardgame --region nrt
+
+
+--
+flyctl help COMMAND	ヘルプ
+
+flyctl platform regions	リージョンリスト。。東京がnrt
+
+その他、参考url
+https://note.com/10mohi6/n/n1b25ea213ea3#3Oqdu

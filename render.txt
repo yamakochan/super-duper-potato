@@ -1,0 +1,13 @@
+https://dashboard.render.com/
+render   -> githubアカウント連携
+
+web service <- git public repo を連携（urlを指定）
+
+build command:yarn
+start command:yarn start
+
+→create web service でサービス作成。
+
+github連携で勝手にデプロイ
+
+https://super-duper-potato.onrender.com

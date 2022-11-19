@@ -1,0 +1,11 @@
+アカウント作成（github連携）
+https://app.cyclic.sh/#/
+
+gitリポジトリの連携..github上の対象リポを選ぶ。
+
+cyclicのmyapp url
+https://lazy-pink-raven-boot.cyclic.app
+
+変更はgithubのoriginにpushすればいいだけ
+
+Click around on the app dashboard for logs and config
