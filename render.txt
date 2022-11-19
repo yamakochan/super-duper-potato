@@ -10,4 +10,4 @@ start command:yarn start
 
 github連携で勝手にデプロイ
 
-https://super-duper-potato.onrender.com
+https://super-duper-potato.onrender.com 
