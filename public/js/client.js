@@ -1,4 +1,4 @@
-'use strict';
+'use strict';  //変数の形無し宣言（global)禁止など。
 
 // クライアントからサーバーへの接続要求
 const socket = io.connect();
@@ -19,6 +19,13 @@ let commandCount = 0;
 let roomState = false;  //true:入室、false：退出
 
 let gameStart = false;
+
+let videoElm = [];  //i:videoNo, j:0:videoObj,1:peerID
+for(let i = 0; i < 3; i++){
+    videoElm[i] = [];
+    videoElm[i][0] = document.getElementById('their-video' + i);
+    videoElm[i][1] = null;    
+}
 
 document.getElementById("view_canvas").style.display ="none";
 
@@ -43,25 +50,21 @@ peer.on('open', () => {
     console.log('skyway signaling open peer.id=',myPeerId);
 });
 
-let videoIndex = 0;
 //peerEventListener関数内で、mediaConnectionのonメソッドにて、相手の映像を取得したときに発生するstreamイベントのリスナを用意します。
 //イベントリスナ内に、相手の映像をvideo要素にセットする処理を記載します。
 const peerPlayEventListener = (mediaConnection, vidx) => {
   mediaConnection.on('stream', stream => {
     console.log('play  their-video' + vidx);
-    // video要素にカメラ映像をセットして再生
-    const videoElm = document.getElementById('their-video' + vidx)
-    videoElm.srcObject = stream;
-    videoElm.play();
+    // video要素にカメラ映像をセットして再生..ビデオが空、または別peeridに繋ぎ直す場合?
+    videoElm[vidx][1] = mediaConnection.remoteId;
+    videoElm[vidx][0].srcObject = stream;
+    videoElm[vidx][0].play();
   });
 }
-const peerPauseEventListener = vidx => {
-    const videoElm = document.getElementById('their-video' + vidx);
+const peerInitEventListener = vidx => {
     console.log('load  their-video' + vidx);
-    if(videoElm.srcObject != null){
-        videoElm.srcObject = null;       
-        videoElm.load();        
-    }
+    videoElm[vidx][0].srcObject = null;       
+    videoElm[vidx][0].load();        
 }
 
 // 相手から接続要求が来たタイミングの処理
@@ -169,7 +172,7 @@ socket.on("renewPlayerList", function (data) {
         xxclearStart = playerArray.length;
     }
     for(let i = xxclearStart; i < usersNumberLimit - 1; i++){
-        peerPauseEventListener(i);
+        peerInitEventListener(i);
     }
 });
 
@@ -320,6 +323,16 @@ const endGame = function () {
     gameStart = false;
 }
 
+//-------------------------------------------------------------
+socket.on("initialProcedure", function (data) {
+    if(data.playerNo < playerArray.length){
+        if(playerArray[data.playerNo][1] == userNo){
+            judge.replenishingHandCard(); //5枚づつカードを配る
+            judge.placeImawashikimono();
+            socket.emit("serverInitialProcedure",{playerNo : data.playerNo + 1});
+        }
+    }
+});
 //-------------------------------------------------------------
 
 socket.on("playCard", function (data) {

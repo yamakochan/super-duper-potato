@@ -74,6 +74,9 @@ function initStage(argPlayerIndex,argCurrentPlayer,argPlayerList,argDeckList,arg
 	//stage の描画を更新
 	stage.update();	
 
+	if(cns_myPlayerIndex == 0){
+		socket.emit("serverInitialProcedure",{playerNo : 0}); //5枚づつカードを配る、忌まわしきものを配置。
+	}
 	judge.readyNextTurn({currentPlayer : argCurrentPlayer})
 }
 
@@ -376,6 +379,29 @@ class Judge{
 
 	changeTurn(){  //みんなから呼ばれる前提
 		//turn時、手札がcns_handCards(5枚)に満たない場合、補充する。
+		this.replenishingHandCard();
+			
+		socket.emit("serverReadyNextTurn");
+	}
+	
+	placeImawashikimono(){
+		let j = this.cemetary.cemetaryCard.length - 1;
+		let tempCard = this.cemetary.cemetaryCard[j];
+   		tempCard.nonreactiveCard();
+		tempCard.reactiveCard();
+		socket.emit("serverPlayCard", {
+			player: cns_myPlayerIndex,
+	 		no: tempCard.no,
+	 		status: tempCard.status,
+	 		nX: 0,
+	 		nY: cns_cardHeight + 100,
+	 		location: 1   //カード配置　0:hand , 1:place , xxx2:cemetary
+		});
+		console.log('j tempCard.no',j,tempCard.no);
+	}
+
+	replenishingHandCard(){
+		//turn時、手札がcns_handCards(5枚)に満たない場合、補充する。
 		let j = this.deck.deckCard.length - 1;
 		for(let i = 0; i < cns_handCards - this.playerList[cns_myPlayerIndex].hand.handCard.length; i++){
 			let tempCard = this.deck.deckCard[j - i];
@@ -389,8 +415,6 @@ class Judge{
 		 		nY: 0	//未使用
 			});	
 		}
-			
-		socket.emit("serverReadyNextTurn");
 	}
 
 	readyNextTurn(data){

@@ -349,7 +349,10 @@ io.on('connection', (socket) => {
     });
 
 //-------------------------------------------------------------
-
+    socket.on("serverInitialProcedure", (data) => {
+        io.to(roomNo).emit("initialProcedure", data);
+    });
+//-------------------------------------------------------------
     // カード移動msgの送信（全員）
     socket.on("serverPlayCard", (data) => {
         if(!commandHold[roomNo]){

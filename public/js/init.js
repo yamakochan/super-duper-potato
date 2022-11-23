@@ -1,3 +1,34 @@
+'use strict';  //変数の形無し宣言（global)禁止など。
+
+//スマホフラグ、スケール、ボードサイズ
+const	cns_sp = false;
+const	cns_scale = 1.0;
+const	cns_boadWidth = 1281;
+const	cns_boadHeight = 1281;
+
+//ステージ
+let		stage;
+let		cns_stageWidth;
+let		cns_stageHeight;
+
+//パスプレフィックス　カードパスのプレフィックス
+const	cns_passPrefix = "";
+
+//イメージ定義
+const	cns_diceImage = "./image/dice2.png";
+const	cns_boadImage = "./image/boad1281.png";
+const	cns_tailImage = "./image/card01/tails01.png";
+const	cns_flagImage = "./image/flag.png";
+
+// スピード
+const	cns_speedRate = 1;      //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  
+const	cns_speedLimit = 7;      //background 速さのリミット値  
+const	cns_friction = 1 / 70;  //background 摩擦係数（fps60のとき1/50。fpsが小さいと係数は大きくする必要がある）
+const	cns_duration = 300;     //teenの期間　
+
+// 自分ビデオ映像
+let		cns_localStream
+
 window.addEventListener('load',init);
 function init() {
 	if (window.innerWidth <= 767) {
@@ -7,10 +38,6 @@ function init() {
     	document.location.href = xlocation + "/sp/";
 	}
 
-	cns_sp = false;
-    cns_boadWidth = 1281;
-    cns_boadHeight = 1281;
-    cns_scale = 1;
 	if(window.innerWidth < cns_boadWidth){
 		cns_stageWidth = window.innerWidth;
 	}else{
@@ -28,14 +55,10 @@ function init() {
 
 	stage = new createjs.StageGL(canvasElement);
 
-	//パスプレフィックス　カードパスのプレフィックス
-	cns_passPrefix = "";
-
-	//イメージ定義
-	cns_diceImage = "./image/dice2.png";
-	cns_boadImage = "./image/boad1281.png";
-	cns_tailImage = "./image/card01/tails01.png";
-	cns_flagImage = "./image/flag.png";
+	// タッチ操作をサポートしているブラウザーならばタッチ操作を有効にします。
+	if(createjs.Touch.isSupported() == true){
+ 		createjs.Touch.enable(stage);
+	}
 
 	//サウンド定義
 	createjs.Sound.registerSound("./sounds/piece.mp3", "piece");
@@ -58,17 +81,6 @@ function init() {
 	createjs.Sound.registerSound("./sounds/beep.mp3", "beep");
 	createjs.Sound.registerSound("./sounds/flag.mp3", "flag");
 
-	// スピード
-	cns_speedRate = 1;      //background 速さ係数（fps60のとき1。fpsが小さいと係数は大きくする必要がある）  
-	cns_speedLimit = 7;      //background 速さのリミット値  
-	cns_friction = 1 / 70;  //background 摩擦係数（fps60のとき1/50。fpsが小さいと係数は大きくする必要がある）
-	cns_duration = 300;     //teenの期間　
-
-
-	// タッチ操作をサポートしているブラウザーならばタッチ操作を有効にします。
-	if(createjs.Touch.isSupported() == true){
- 		createjs.Touch.enable(stage);
-	}
 
 	createjs.Ticker.addEventListener("tick",stage); //自動更新を有効にする
 
@@ -84,6 +96,7 @@ function init() {
 	    // 成功時にvideo要素にカメラ映像をセットし、再生
 	    const videoElm = document.getElementById('my-video')
 	    videoElm.srcObject = stream;
+	    videoElm.muted = true;
 	    videoElm.play();
 	    // 着信時に相手にカメラ映像を返せるように、グローバル変数に保存しておく
 	    cns_localStream = stream;
